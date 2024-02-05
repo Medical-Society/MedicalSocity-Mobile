@@ -10,6 +10,25 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
+const InputField = ({
+  value,
+  label,
+  placeholder,
+  onChangeText,
+  secureTextEntry,
+}) => (
+  <View>
+    <Text style={styles.label}>{label}</Text>
+    <TextInput
+      style={styles.input}
+      placeholder={placeholder}
+      value={value}
+      onChangeText={onChangeText}
+      secureTextEntry={secureTextEntry}
+    />
+  </View>
+);
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,25 +36,6 @@ const Login = () => {
   const handleLogin = () => {
     // Perform login logic here
   };
-
-  const InputField = ({
-    label,
-    placeholder,
-    value,
-    onChangeText,
-    secureTextEntry,
-  }) => (
-    <View>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={secureTextEntry}
-      />
-    </View>
-  );
 
   const GradientButton = ({ onPress, buttonText }) => (
     <TouchableOpacity onPress={onPress}>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     paddingTop: StatusBar.currentHeight,
   },
   form: {
-    paddingHorizontal: 5,
+    marginHorizontal: 5,
   },
   head: {
     fontSize: 25,
