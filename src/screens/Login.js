@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -75,7 +76,6 @@ const Login = () => {
             Sign Up
           </Text>
         </Text>
-        {/* create a line that is centered and cut by "or login using" */}
         <View style={styles.lineContainer}>
           <View style={styles.line} />
           <Text style={styles.orText}>or login using</Text>
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingTop: StatusBar.currentHeight,
   },
   form: {
     paddingHorizontal: 5,
@@ -97,10 +98,7 @@ const styles = StyleSheet.create({
   head: {
     fontSize: 25,
     textAlign: "center",
-    margin: 10,
-    marginBottom: 50,
     color: "#128393",
-    fontWeight: "bold",
   },
   label: {
     marginTop: 10,
