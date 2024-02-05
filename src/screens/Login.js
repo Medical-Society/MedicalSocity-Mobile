@@ -38,16 +38,16 @@ const Login = () => {
   );
 
   const GradientButton = ({ onPress, buttonText }) => (
-    <LinearGradient
-      colors={["#45CCCF", "#006472"]}
-      end={[0, 0.5]}
-      start={[1, 0.5]}
-      style={styles.gradientButton}
-    >
-      <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress}>
+      <LinearGradient
+        colors={["#45CCCF", "#006472"]}
+        end={[0, 0.5]}
+        start={[1, 0.5]}
+        style={styles.gradientButton}
+      >
         <Text style={styles.buttonText}>{buttonText}</Text>
-      </TouchableOpacity>
-    </LinearGradient>
+      </LinearGradient>
+    </TouchableOpacity>
   );
 
   return (
@@ -146,7 +146,5 @@ const styles = StyleSheet.create({
     color: "#7B7B7B",
   },
 });
-
-export { styles };
 
 export default Login;
