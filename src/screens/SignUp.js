@@ -30,26 +30,26 @@ const SignUp = () => {
           label="Username" 
           placeholder="Enter your username" 
           value={signUpData.username} 
-          onChangeText={(text) => handleInputChange("username", text)} // Pass field name and text to the function
+          onChangeText={(text) => handleInputChange("username", text)}
         />
         <InputField 
           label="Email" 
           placeholder="Enter your email" 
           value={signUpData.email} 
-          onChangeText={(text) => handleInputChange("email", text)} // Pass field name and text to the function
+          onChangeText={(text) => handleInputChange("email", text)}
         />
         <InputField
           label="Password"
           placeholder="Enter your password"
           value={signUpData.password}
-          onChangeText={(text) => handleInputChange("password", text)} // Pass field name and text to the function
+          onChangeText={(text) => handleInputChange("password", text)}
           secureTextEntry
         />
         <InputField
           label="Confirm Password"
           placeholder="Enter your password again"
           value={signUpData.confirmPassword}
-          onChangeText={(text) => handleInputChange("confirmPassword", text)} // Pass field name and text to the function
+          onChangeText={(text) => handleInputChange("confirmPassword", text)}
           secureTextEntry
         />
         <Button onPress={handleSignUp} buttonText="SignUp" />
