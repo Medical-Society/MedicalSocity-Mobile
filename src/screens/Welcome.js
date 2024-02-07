@@ -41,7 +41,7 @@ const Welcome = ({ navigation }) => {
     if (step < 3) {
       setStep(step + 1);
     } else {
-      navigation.navigate("Login");
+      navigation.navigate("SignUp");
     }
   };
 
