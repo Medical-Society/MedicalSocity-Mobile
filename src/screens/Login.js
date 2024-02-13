@@ -1,33 +1,39 @@
-import React, { useState } from "react";
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  View,
-  StatusBar,
-} from "react-native";
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import { SafeAreaView, Text, StyleSheet, View, StatusBar } from "react-native";
 
 import Button from "../components/auth/Button";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import OrLine from "../components/auth/OrLine";
+import { Context as AuthContext } from "../context/AuthContext";
 
-const Login = () => {
+const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    // Perform login logic here
-  };
+  const { state, login, clearMessage } = useContext(AuthContext);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      clearMessage();
+      setEmail("");
+      setPassword("");
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const handleLogin = useCallback(() => {
+    login({ email, password });
+  }, [email, password, login]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.head}>Login</Text>
       <View style={styles.form}>
-        <InputField 
-          label="Email" 
-          placeholder="Enter your email" 
-          value={email} 
+        <InputField
+          label="Email"
+          placeholder="Enter your email"
+          value={email}
           onChangeText={setEmail}
         />
         <InputField
@@ -39,7 +45,15 @@ const Login = () => {
         />
         <Text style={styles.forgetPassword}>Forget your password</Text>
         <Button onPress={handleLogin} buttonText="Login" />
-        <HaveAccOrNot type="login" />
+        {state.errorMessage ? (
+          <Text style={styles.errorMessage}>{state.errorMessage}</Text>
+        ) : null}
+        <HaveAccOrNot
+          type="login"
+          text="Don't have an account?"
+          routeName="SignUp"
+          navigation={navigation}
+        />
         <OrLine />
       </View>
     </SafeAreaView>
@@ -66,7 +80,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#7B7B7B",
   },
-  
+  errorMessage: {
+    fontSize: 16,
+    color: "red",
+    textAlign: "center",
+  },
 });
 
-export default Login;
+export default React.memo(Login);
