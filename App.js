@@ -1,80 +1,56 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import Welcome from "./src/screens/Welcome";
-import Login from "./src/screens/Login";
-import SignUp from "./src/screens/SignUp";
-
-import Home from "./src/screens/Home";
-import Profile from "./src/screens/Profile";
+import AuthStack from "./src/components/auth/AuthStack";
+import MainTab from "./src/components/home/MainTab";
 import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
-
+import React, { useContext, useMemo } from "react";
 import {
   Context as AuthContext,
   Provider as AuthProvider,
 } from "./src/context/AuthContext";
-import { useContext } from "react";
 
-const AuthStack = () => {
-  return (
-    <Stack.Navigator initialRouteName="Welcome">
-      <Stack.Screen
-        name="Welcome"
-        component={Welcome}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SignUp"
-        component={SignUp}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const MainTab = () => {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
-    </Tab.Navigator>
-  );
-};
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   const { state } = useContext(AuthContext);
 
+  const resolvedScreen = useMemo(() => {
+    if (state.isLoading) {
+      return (
+        <Stack.Screen
+          name="ResolveAuth"
+          component={ResolveAuthScreen}
+          options={{ headerShown: false }}
+        />
+      );
+    }
+    return null;
+  }, [state.isLoading]);
+
+  const authOrMainFlowScreen = useMemo(() => {
+    if (state.token) {
+      return (
+        <Stack.Screen
+          name="mainFlow"
+          component={MainTab}
+          options={{ headerShown: false }}
+        />
+      );
+    }
+    return (
+      <Stack.Screen
+        name="authFlow"
+        component={AuthStack}
+        options={{ headerShown: false }}
+      />
+    );
+  }, [state.token]);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome">
-        {state.isLoading ? (
-          <Stack.Screen
-            name="ResolveAuth"
-            component={ResolveAuthScreen}
-            options={{ headerShown: false }}
-          />
-        ) : null}
-        {state.token ? (
-          <Stack.Screen
-            name="mainFlow"
-            component={MainTab}
-            options={{ headerShown: false }}
-          />
-        ) : (
-          <Stack.Screen
-            name="authFlow"
-            component={AuthStack}
-            options={{ headerShown: false }}
-          />
-        )}
+        {resolvedScreen}
+        {authOrMainFlowScreen}
       </Stack.Navigator>
     </NavigationContainer>
   );
