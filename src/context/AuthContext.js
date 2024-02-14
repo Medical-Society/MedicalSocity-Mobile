@@ -35,7 +35,6 @@ const signup = (dispatch) => {
         payload:
           "A verification link has been sent to your email. Please verify your email to login.",
       });
-      // wait for 3 seconds
       setTimeout(() => {
         navigation.navigate("Login");
       }, 3000);
@@ -87,5 +86,5 @@ const clearMessage = (dispatch) => () => {
 export const { Provider, Context } = createDataContext(
   authReducer,
   { signup, login, tryLocalSignin, signout, clearMessage },
-  { token: null, errorMessage: "", isLoading: true }
+  { token: null, errorMessage: "", isLoading: true, successMessage: "" }
 );

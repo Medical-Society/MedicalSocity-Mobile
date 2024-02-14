@@ -1,18 +1,26 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { SafeAreaView, Text, StyleSheet, View, StatusBar } from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  View,
+  StatusBar,
+  Alert,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 
 import Button from "../components/auth/Button";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import OrLine from "../components/auth/OrLine";
 import { Context as AuthContext } from "../context/AuthContext";
+import MessagesModal from "../components/auth/MessagesModal";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const { state, login, clearMessage } = useContext(AuthContext);
-
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       clearMessage();
@@ -46,7 +54,11 @@ const Login = ({ navigation }) => {
         <Text style={styles.forgetPassword}>Forget your password</Text>
         <Button onPress={handleLogin} buttonText="Login" />
         {state.errorMessage ? (
-          <Text style={styles.errorMessage}>{state.errorMessage}</Text>
+          <MessagesModal
+            type="error"
+            errorMessage={state.errorMessage}
+            clearMessage={clearMessage}
+          />
         ) : null}
         <HaveAccOrNot
           type="login"

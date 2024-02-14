@@ -5,7 +5,7 @@ import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import OrLine from "../components/auth/OrLine";
 import { Context as AuthContext } from "../context/AuthContext";
-
+import MessagesModal from "../components/auth/MessagesModal";
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
 
@@ -91,12 +91,12 @@ const SignUp = ({ navigation }) => {
           routeName="Login"
           navigation={navigation}
         />
-        {state.errorMessage ? (
-          <Text style={styles.errorMessage}>{state.errorMessage}</Text>
-        ) : null}
-
-        {state.successMessage ? (
-          <Text style={styles.successMessage}>{state.successMessage}</Text>
+        {state.errorMessage || state.successMessage ? (
+          <MessagesModal
+            errorMessage={state.errorMessage}
+            successMessage={state.successMessage}
+            clearMessage={clearMessage}
+          />
         ) : null}
 
         <OrLine />
