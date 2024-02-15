@@ -26,8 +26,9 @@ const signup = (dispatch) => {
     patientObject.birthdate = "2002-03-01";
     patientObject.gender = "male";
     patientObject.address = "Ism";
-    patientObject.mobile = "01211036617";
+    patientObject.email = patientObject.email.toLowerCase();
 
+    console.log(patientObject);
     try {
       const response = await patientApi.post("/signup", patientObject);
       dispatch({
@@ -37,7 +38,7 @@ const signup = (dispatch) => {
       });
       setTimeout(() => {
         navigation.navigate("Login");
-      }, 3000);
+      }, 2000);
     } catch (err) {
       dispatch({
         type: "add_error",
@@ -59,10 +60,33 @@ const tryLocalSignin = (dispatch) => {
 
 const login = (dispatch) => {
   return async (patientObject) => {
+    patientObject.email = patientObject.email.toLowerCase();
     try {
       const response = await patientApi.post("/login", patientObject);
       await AsyncStorage.setItem("token", response.data.data.token);
       dispatch({ type: "login", payload: response.data.data.token });
+    } catch (err) {
+      dispatch({
+        type: "add_error",
+        payload: err.response.data.message,
+      });
+    }
+  };
+};
+
+const forgetPassword = (dispatch) => {
+  return async (email, navigation) => {
+    console.log(email);
+    try {
+      const response = await patientApi.post("/forgot-password", email);
+      dispatch({
+        type: "add_success",
+        payload: "A reset password link has been sent to your email.",
+      });
+
+      setTimeout(() => {
+        navigation.navigate("Login");
+      }, 2000);
     } catch (err) {
       dispatch({
         type: "add_error",
@@ -85,6 +109,6 @@ const clearMessage = (dispatch) => () => {
 
 export const { Provider, Context } = createDataContext(
   authReducer,
-  { signup, login, tryLocalSignin, signout, clearMessage },
+  { signup, login, tryLocalSignin, signout, clearMessage, forgetPassword },
   { token: null, errorMessage: "", isLoading: true, successMessage: "" }
 );

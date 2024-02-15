@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 
-
 const InputField = ({
   value,
   label,
@@ -9,7 +8,7 @@ const InputField = ({
   onChangeText,
   secureTextEntry,
 }) => (
-  <View>
+  <View style={styles.inputContainer}>
     <Text style={styles.label}>{label}</Text>
     <TextInput
       style={styles.input}
@@ -26,15 +25,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 18,
     color: "#7B7B7B",
-    fontWeight: "bold",
+    fontFamily: "Roboto-Medium",
   },
   input: {
     height: 48,
-    margin: 12,
+    marginVertical: 12,
     borderWidth: StyleSheet.hairlineWidth,
     padding: 10,
     fontSize: 16,
     borderRadius: 10,
+    fontFamily: "Roboto-Regular",
   },
 });
 

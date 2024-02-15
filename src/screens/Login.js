@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import Button from "../components/auth/Button";
+import Button from "../components/auth/SubmitButton";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import OrLine from "../components/auth/OrLine";
@@ -21,6 +21,7 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { state, login, clearMessage } = useContext(AuthContext);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       clearMessage();
@@ -51,7 +52,9 @@ const Login = ({ navigation }) => {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <Text style={styles.forgetPassword}>Forget your password</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
+          <Text style={styles.forgetPassword}>Forget your password</Text>
+        </TouchableOpacity>
         <Button onPress={handleLogin} buttonText="Login" />
         {state.errorMessage ? (
           <MessagesModal
@@ -61,12 +64,11 @@ const Login = ({ navigation }) => {
           />
         ) : null}
         <HaveAccOrNot
-          type="login"
           text="Don't have an account?"
           routeName="SignUp"
           navigation={navigation}
         />
-        <OrLine />
+        {/* <OrLine /> */}
       </View>
     </SafeAreaView>
   );
@@ -79,12 +81,13 @@ const styles = StyleSheet.create({
     paddingTop: StatusBar.currentHeight,
   },
   form: {
-    marginHorizontal: 5,
+    marginHorizontal: 15,
   },
   head: {
     fontSize: 25,
     textAlign: "center",
     color: "#128393",
+    fontFamily: "Roboto-Medium",
   },
   forgetPassword: {
     textAlign: "left",

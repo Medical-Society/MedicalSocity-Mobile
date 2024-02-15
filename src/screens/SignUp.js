@@ -1,11 +1,19 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import { View, Text, StyleSheet, SafeAreaView, StatusBar } from "react-native";
-import Button from "../components/auth/Button";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  ScrollView,
+} from "react-native";
+import Button from "../components/auth/SubmitButton";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import OrLine from "../components/auth/OrLine";
 import { Context as AuthContext } from "../context/AuthContext";
 import MessagesModal from "../components/auth/MessagesModal";
+
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
 
@@ -64,6 +72,12 @@ const SignUp = ({ navigation }) => {
       onChangeText: (text) => handleInputChange("confirmPassword", text),
       secureTextEntry: true,
     },
+    {
+      label: "Phone Number",
+      placeholder: "Enter your phone number",
+      value: signUpData.mobile,
+      onChangeText: (text) => handleInputChange("mobile", text),
+    },
   ];
 
   const signupInputs = inputsData.map((input, index) => {
@@ -82,11 +96,10 @@ const SignUp = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.head}>SignUp</Text>
-      <View style={styles.form}>
+      <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
         {signupInputs}
         <Button onPress={handleSignUp} buttonText="SignUp" />
         <HaveAccOrNot
-          type="login"
           text="Already have an account?"
           routeName="Login"
           navigation={navigation}
@@ -99,8 +112,8 @@ const SignUp = ({ navigation }) => {
           />
         ) : null}
 
-        <OrLine />
-      </View>
+        {/* <OrLine /> */}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -115,9 +128,10 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
     color: "#128393",
+    fontFamily: "Roboto-Medium",
   },
   form: {
-    marginHorizontal: 5,
+    marginHorizontal: 15,
   },
   errorMessage: {
     fontSize: 16,

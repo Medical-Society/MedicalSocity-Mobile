@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
-const HaveAccOrNot = ({ navigation, text, routeName, type }) => {
+const HaveAccOrNot = ({ navigation, text, routeName }) => {
   return (
     <TouchableOpacity style={styles.haveAccOrNot}>
       <Text>{text}</Text>
