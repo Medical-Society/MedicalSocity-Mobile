@@ -26,9 +26,17 @@ const signup = (dispatch) => {
     patientObject.birthdate = "2002-03-01";
     patientObject.gender = "male";
     patientObject.address = "Ism";
+
     patientObject.email = patientObject.email.toLowerCase();
 
-    console.log(patientObject);
+    if (patientObject.password !== patientObject.confirmPassword) {
+      dispatch({
+        type: "add_error",
+        payload: "Password and confirm password must be same.",
+      });
+      return;
+    }
+
     try {
       const response = await patientApi.post("/signup", patientObject);
       dispatch({
@@ -75,10 +83,11 @@ const login = (dispatch) => {
 };
 
 const forgetPassword = (dispatch) => {
-  return async (email, navigation) => {
-    console.log(email);
+  return async (personEmail, navigation) => {
+    personEmail.email = personEmail.email.toLowerCase();
+
     try {
-      const response = await patientApi.post("/forgot-password", email);
+      const response = await patientApi.post("/forgot-password", personEmail);
       dispatch({
         type: "add_success",
         payload: "A reset password link has been sent to your email.",
