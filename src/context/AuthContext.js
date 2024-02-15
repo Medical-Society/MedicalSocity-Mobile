@@ -23,7 +23,7 @@ const authReducer = (state, action) => {
 
 const signup = (dispatch) => {
   return async (patientObject, navigation) => {
-    patientObject.age = "21";
+    patientObject.birthdate = "2002-03-01";
     patientObject.gender = "male";
     patientObject.address = "Ism";
     patientObject.mobile = "01211036617";
