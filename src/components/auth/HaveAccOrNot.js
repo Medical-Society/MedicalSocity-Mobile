@@ -1,22 +1,27 @@
-import { Text, StyleSheet } from "react-native";
-const HaveAccOrNot = ({type}) => {
-    
-    return (
-        <Text style={styles.haveAccOrNot}>
-          {type === "login" ? "Don't have an account?" : "Already have an account?"}
-            <Text style={{ color: "#128393" }} onPress={() => alert("SignUp")}>
-                {type === "login" ? " Sign Up" : " Login"}
-            </Text>
-        </Text>
-    );
-    };
-    
-    const styles = StyleSheet.create({
-        haveAccOrNot: {
-            textAlign: "left",
-            marginBottom: 10,
-            fontSize: 16,
-            color: "#7B7B7B",
-        },
-    });
-    export default HaveAccOrNot;
+import React from "react";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
+
+const HaveAccOrNot = ({ navigation, text, routeName, type }) => {
+  return (
+    <TouchableOpacity style={styles.haveAccOrNot}>
+      <Text>{text}</Text>
+      <Text
+        style={{ color: "#128393" }}
+        onPress={() => navigation.navigate(routeName)}
+      >
+        {routeName === "SignUp" ? " Sign Up" : " Login"}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  haveAccOrNot: {
+    textAlign: "left",
+    marginBottom: 10,
+    fontSize: 16,
+    color: "#7B7B7B",
+    flexDirection: "row",
+  },
+});
+export default HaveAccOrNot;

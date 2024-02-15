@@ -1,6 +1,6 @@
-// InputField.js
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
+
 
 const InputField = ({
   value,
