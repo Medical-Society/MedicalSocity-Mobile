@@ -4,6 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 const MessagesModal = ({ errorMessage, successMessage, clearMessage }) => {
   const message = errorMessage ? errorMessage : successMessage;
+  console.log("Hii");
   return (
     <Modal
       visible={message ? true : false}
