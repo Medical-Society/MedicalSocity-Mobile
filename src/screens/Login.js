@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#128393",
     fontFamily: "Roboto-Medium",
+    marginBottom: 20,
   },
   forgetPassword: {
     textAlign: "left",

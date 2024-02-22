@@ -1,31 +1,27 @@
-import React from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
+import { TextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const InputField = ({
-  value,
-  label,
-  placeholder,
-  onChangeText,
-  secureTextEntry,
-}) => {
-  const [showPassword, setShowPassword] = React.useState(!secureTextEntry);
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+const InputField = React.memo(
+  ({ value, label, onChangeText, secureTextEntry, editable }) => {
+    const [showPassword, setShowPassword] = useState(!secureTextEntry);
 
-  return (
-    <View style={styles.inputContainer}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputField}>
+    const toggleShowPassword = () => {
+      setShowPassword((prev) => !prev);
+    };
+
+    return (
+      <View style={styles.container}>
         <TextInput
-          style={styles.input}
-          placeholder={placeholder}
+          style={styles.inputField}
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={!showPassword}
+          label={label}
+          editable={editable}
         />
-        {secureTextEntry ? (
+        {secureTextEntry && (
           <MaterialCommunityIcons
             name={!showPassword ? "eye-off" : "eye"}
             size={24}
@@ -33,35 +29,36 @@ const InputField = ({
             style={styles.icon}
             onPress={toggleShowPassword}
           />
-        ) : null}
+        )}
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
-  inputField: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: StyleSheet.hairlineWidth,
+  container: {
     borderRadius: 10,
     paddingHorizontal: 10,
-    height: 48,
+    height: 70,
+    justifyContent: "center",
     marginBottom: 15,
+    width: "100%",
   },
-
-  label: {
-    marginBottom: 10,
-    fontSize: 18,
-    color: "#7B7B7B",
-    fontFamily: "Roboto-Medium",
+  inputField: {
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    height: 60,
+    color: "#000",
+    borderColor: "#AEAEAE",
+    borderWidth: StyleSheet.hairlineWidth,
+    marginBottom: 15,
+    backgroundColor: "#ffffff",
   },
   icon: {
     position: "absolute",
-    right: 10,
+    right: 20,
   },
   input: {
-    padding: 10,
     fontSize: 16,
     fontFamily: "Roboto-Regular",
     flex: 1,

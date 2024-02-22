@@ -23,10 +23,9 @@ const authReducer = (state, action) => {
 
 const signup = (dispatch) => {
   return async (patientObject, navigation) => {
-    patientObject.birthdate = "2002-03-01";
-    patientObject.gender = "male";
     patientObject.address = "Ism";
 
+    console.log(patientObject);
     patientObject.email = patientObject.email.toLowerCase();
 
     if (patientObject.password !== patientObject.confirmPassword) {
