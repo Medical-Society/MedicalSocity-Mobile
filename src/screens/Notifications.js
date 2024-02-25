@@ -1,14 +1,14 @@
 import React from "react";
 import { SafeAreaView, Text, StyleSheet } from "react-native";
 
-const Home = () => {
+const Notifications = () => {
   return (
     <SafeAreaView>
-      <Text>Home</Text>
+      <Text>Notifications</Text>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({});
 
-export default Home;
+export default Notifications;

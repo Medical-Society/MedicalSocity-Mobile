@@ -21,6 +21,7 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { state, login, clearMessage } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -32,7 +33,7 @@ const Login = ({ navigation }) => {
   }, [navigation]);
 
   const handleLogin = useCallback(() => {
-    login({ email, password });
+    login({ email, password }, setIsLoading);
   }, [email, password, login]);
 
   return (
@@ -55,7 +56,11 @@ const Login = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
           <Text style={styles.forgetPassword}>Forget your password</Text>
         </TouchableOpacity>
-        <Button onPress={handleLogin} buttonText="Login" />
+        <Button
+          onPress={handleLogin}
+          buttonText="Login"
+          isLoading={isLoading}
+        />
         {state.errorMessage ? (
           <MessagesModal
             type="error"

@@ -20,6 +20,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialSignUpData = {
     patientName: "",
@@ -50,8 +51,8 @@ const SignUp = ({ navigation }) => {
   }, []);
 
   const handleSignUp = useCallback(() => {
-    signup(signUpData, navigation);
-  }, [signup, signUpData]);
+    signup(signUpData, navigation, setIsLoading);
+  }, [signup, signUpData, isLoading]);
 
   const inputsData = [
     {
@@ -132,9 +133,9 @@ const SignUp = ({ navigation }) => {
 
   const onChange = (event, value) => {
     if (event.type === "set") {
-      setIsPickerShow(false);
+      if (Platform.OS === "android") setIsPickerShow(false);
       setSignUpData((prevState) => ({ ...prevState, birthdate: value }));
-    } else {
+    } else if (Platform.OS !== "ios") {
       setIsPickerShow(false);
     }
   };
@@ -175,7 +176,12 @@ const SignUp = ({ navigation }) => {
         {signupInputs}
         <GenderInput />
         <DatePicker />
-        <Button onPress={handleSignUp} buttonText="SignUp" />
+        <Button
+          onPress={handleSignUp}
+          buttonText="SignUp"
+          isLoading={isLoading}
+        />
+
         <HaveAccOrNot
           text="Already have an account?"
           routeName="Login"
@@ -267,7 +273,7 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 18,
     color: "black",
-  }
+  },
 });
 
 export default React.memo(SignUp);
