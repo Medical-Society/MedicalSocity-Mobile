@@ -25,7 +25,7 @@ const signup = (dispatch) => {
   return async (patientObject, navigation, setIsLoading) => {
     patientObject.address = "Ism";
     patientObject.email = patientObject.email.toLowerCase();
-
+    console.log(patientObject);
     if (patientObject.password !== patientObject.confirmPassword) {
       dispatch({
         type: "add_error",
@@ -33,6 +33,8 @@ const signup = (dispatch) => {
       });
       return;
     }
+
+    delete patientObject.confirmPassword;
 
     try {
       setIsLoading(true);
@@ -50,9 +52,10 @@ const signup = (dispatch) => {
         clearTimeout(timeTemp);
       };
     } catch (err) {
+      console.log(err.response.data);
       dispatch({
         type: "add_error",
-        payload: err.response.data.message,
+        payload: err.response.data,
       });
     } finally {
       setIsLoading(false);

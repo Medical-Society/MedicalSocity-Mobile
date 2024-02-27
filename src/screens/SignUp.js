@@ -30,7 +30,7 @@ const SignUp = ({ navigation }) => {
     birthdate: new Date(),
     gender: "",
     address: "",
-    mobile: "",
+    phoneNumber: "",
   };
   const [signUpData, setSignUpData] = useState(initialSignUpData);
 
@@ -84,8 +84,8 @@ const SignUp = ({ navigation }) => {
     {
       label: "Phone Number",
       placeholder: "Enter your phone number",
-      value: signUpData.mobile,
-      onChangeText: (text) => handleInputChange("mobile", text),
+      value: signUpData.phoneNumber,
+      onChangeText: (text) => handleInputChange("phoneNumber", text),
     },
   ];
 
@@ -113,11 +113,11 @@ const SignUp = ({ navigation }) => {
         >
           <View style={styles.genderSelectors}>
             <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="male" color="#6200EE" />
+              <RadioButton.Android value="MALE" color="#6200EE" />
               <Text style={styles.radioButtonText}>Male</Text>
             </View>
             <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="female" color="#6200EE" />
+              <RadioButton.Android value="FEMALE" color="#6200EE" />
               <Text style={styles.radioButtonText}>Female</Text>
             </View>
           </View>
