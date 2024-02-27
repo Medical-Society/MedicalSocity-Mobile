@@ -1,5 +1,6 @@
 import React from "react";
-import { SafeAreaView, Text, StyleSh, StyleSheet } from "react-native";
+import { Text, StyleSh, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Calender = () => {
   return (

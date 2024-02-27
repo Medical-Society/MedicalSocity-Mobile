@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   StatusBar,
   ScrollView,
   Platform,
@@ -17,6 +16,7 @@ import { Context as AuthContext } from "../context/AuthContext";
 import MessagesModal from "../components/auth/MessagesModal";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
     color: "#128393",
-    fontFamily: "Roboto-Medium",
+    fontFamily: "Cairo-Medium",
     marginBottom: 20,
   },
   form: {

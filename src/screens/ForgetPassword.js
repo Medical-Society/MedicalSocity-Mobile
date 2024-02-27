@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
-  SafeAreaView,
   Text,
   StyleSheet,
   View,
@@ -9,6 +8,8 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 
 import { Context as AuthContext } from "../context/AuthContext";
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
     color: "#128393",
-    fontFamily: "Roboto-Medium",
+    fontFamily: "Cairo-Medium",
   },
 });
 

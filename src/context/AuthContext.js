@@ -76,6 +76,7 @@ const login = (dispatch) => {
     try {
       setIsLoading(true);
       const response = await patientApi.post("/login", patientObject);
+      console.log(response.data.data);
       await AsyncStorage.setItem("token", response.data.data.token);
       dispatch({ type: "login", payload: response.data.data.token });
     } catch (err) {
@@ -100,9 +101,13 @@ const forgetPassword = (dispatch) => {
         payload: "A reset password link has been sent to your email.",
       });
 
-      setTimeout(() => {
+      const tempTime = setTimeout(() => {
         navigation.navigate("Login");
       }, 2000);
+
+      return () => {
+        clearTimeout(tempTime);
+      };
     } catch (err) {
       dispatch({
         type: "add_error",

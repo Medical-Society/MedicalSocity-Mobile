@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 16,
-    fontFamily: "Roboto-Regular",
+    fontFamily: "Cairo-Regular",
     flex: 1,
   },
 });

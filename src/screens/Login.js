@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
-  SafeAreaView,
   Text,
   StyleSheet,
   View,
@@ -9,6 +8,7 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../components/auth/SubmitButton";
 import InputField from "../components/auth/InputField";
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
     color: "#128393",
-    fontFamily: "Roboto-Medium",
+    fontFamily: "Cairo-Medium",
     marginBottom: 20,
   },
   forgetPassword: {
