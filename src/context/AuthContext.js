@@ -22,11 +22,8 @@ const authReducer = (state, action) => {
 };
 
 const signup = (dispatch) => {
-  return async (patientObject, navigation) => {
-    patientObject.birthdate = "2002-03-01";
-    patientObject.gender = "male";
+  return async (patientObject, navigation, setIsLoading) => {
     patientObject.address = "Ism";
-
     patientObject.email = patientObject.email.toLowerCase();
 
     if (patientObject.password !== patientObject.confirmPassword) {
@@ -38,20 +35,27 @@ const signup = (dispatch) => {
     }
 
     try {
+      setIsLoading(true);
       const response = await patientApi.post("/signup", patientObject);
       dispatch({
         type: "add_success",
         payload:
           "A verification link has been sent to your email. Please verify your email to login.",
       });
-      setTimeout(() => {
+      const timeTemp = setTimeout(() => {
         navigation.navigate("Login");
       }, 2000);
+
+      return () => {
+        clearTimeout(timeTemp);
+      };
     } catch (err) {
       dispatch({
         type: "add_error",
         payload: err.response.data.message,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 };
@@ -67,10 +71,12 @@ const tryLocalSignin = (dispatch) => {
 };
 
 const login = (dispatch) => {
-  return async (patientObject) => {
+  return async (patientObject, setIsLoading) => {
     patientObject.email = patientObject.email.toLowerCase();
     try {
+      setIsLoading(true);
       const response = await patientApi.post("/login", patientObject);
+      console.log(response.data.data);
       await AsyncStorage.setItem("token", response.data.data.token);
       dispatch({ type: "login", payload: response.data.data.token });
     } catch (err) {
@@ -78,6 +84,8 @@ const login = (dispatch) => {
         type: "add_error",
         payload: err.response.data.message,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 };
@@ -93,9 +101,13 @@ const forgetPassword = (dispatch) => {
         payload: "A reset password link has been sent to your email.",
       });
 
-      setTimeout(() => {
+      const tempTime = setTimeout(() => {
         navigation.navigate("Login");
       }, 2000);
+
+      return () => {
+        clearTimeout(tempTime);
+      };
     } catch (err) {
       dispatch({
         type: "add_error",
@@ -118,6 +130,7 @@ const clearMessage = (dispatch) => () => {
 
 export const { Provider, Context } = createDataContext(
   authReducer,
+  { signup, login, tryLocalSignin, signout, clearMessage, forgetPassword },
   { signup, login, tryLocalSignin, signout, clearMessage, forgetPassword },
   { token: null, errorMessage: "", isLoading: true, successMessage: "" }
 );

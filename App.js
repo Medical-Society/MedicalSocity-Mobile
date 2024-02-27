@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthStack from "./src/components/auth/AuthStack";
-import MainTab from "./src/components/home/MainTab";
+import MainTab from "./src/components/mainTab/MainTab";
 import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import React, { useContext, useMemo } from "react";
 import {

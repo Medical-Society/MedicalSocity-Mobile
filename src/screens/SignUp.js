@@ -3,9 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   StatusBar,
   ScrollView,
+  Platform,
+  TouchableOpacity,
 } from "react-native";
 import Button from "../components/auth/SubmitButton";
 import InputField from "../components/auth/InputField";
@@ -13,16 +14,20 @@ import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import OrLine from "../components/auth/OrLine";
 import { Context as AuthContext } from "../context/AuthContext";
 import MessagesModal from "../components/auth/MessagesModal";
+import { RadioButton } from "react-native-paper";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialSignUpData = {
     patientName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    age: "",
+    birthdate: new Date(),
     gender: "",
     address: "",
     mobile: "",
@@ -37,13 +42,17 @@ const SignUp = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
+  // useEffect(() => {
+  //   console.log(signUpData);
+  // }, [signUpData]);
+
   const handleInputChange = useCallback((fieldName, text) => {
     setSignUpData((prevState) => ({ ...prevState, [fieldName]: text }));
   }, []);
 
   const handleSignUp = useCallback(() => {
-    signup(signUpData, navigation);
-  }, [signup, signUpData]);
+    signup(signUpData, navigation, setIsLoading);
+  }, [signup, signUpData, isLoading]);
 
   const inputsData = [
     {
@@ -93,12 +102,86 @@ const SignUp = ({ navigation }) => {
     );
   });
 
+  const GenderInput = () => {
+    const gender = signUpData.gender;
+    return (
+      <View style={styles.genderContainer}>
+        <Text style={styles.label}>Select Gender:</Text>
+        <RadioButton.Group
+          onValueChange={(newValue) => handleInputChange("gender", newValue)}
+          value={gender}
+        >
+          <View style={styles.genderSelectors}>
+            <View style={styles.radioButtonContainer}>
+              <RadioButton.Android value="male" color="#6200EE" />
+              <Text style={styles.radioButtonText}>Male</Text>
+            </View>
+            <View style={styles.radioButtonContainer}>
+              <RadioButton.Android value="female" color="#6200EE" />
+              <Text style={styles.radioButtonText}>Female</Text>
+            </View>
+          </View>
+        </RadioButton.Group>
+      </View>
+    );
+  };
+
+  const [isPickerShow, setIsPickerShow] = useState(false);
+  const showPicker = () => {
+    setIsPickerShow((prev) => !prev);
+  };
+
+  const onChange = (event, value) => {
+    if (event.type === "set") {
+      if (Platform.OS === "android") setIsPickerShow(false);
+      setSignUpData((prevState) => ({ ...prevState, birthdate: value }));
+    } else if (Platform.OS !== "ios") {
+      setIsPickerShow(false);
+    }
+  };
+
+  const DatePicker = () => {
+    return (
+      <>
+        <View style={styles.pickedDateContainer}>
+          <TouchableOpacity style={styles.pickedDate} onPress={showPicker}>
+            <Text style={styles.dateText}>
+              {signUpData.birthdate
+                .toDateString()
+                .split(" ")
+                .slice(1)
+                .join(" ")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {isPickerShow && (
+          <DateTimePicker
+            value={signUpData.birthdate}
+            mode={"date"}
+            display={Platform.OS === "ios" ? "spinner" : "default"}
+            is24Hour={true}
+            onChange={onChange}
+            style={styles.datePicker}
+          />
+        )}
+      </>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.head}>SignUp</Text>
       <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
         {signupInputs}
-        <Button onPress={handleSignUp} buttonText="SignUp" />
+        <GenderInput />
+        <DatePicker />
+        <Button
+          onPress={handleSignUp}
+          buttonText="SignUp"
+          isLoading={isLoading}
+        />
+
         <HaveAccOrNot
           text="Already have an account?"
           routeName="Login"
@@ -128,7 +211,8 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
     color: "#128393",
-    fontFamily: "Roboto-Medium",
+    fontFamily: "Cairo-Medium",
+    marginBottom: 20,
   },
   form: {
     marginHorizontal: 15,
@@ -142,6 +226,53 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "green",
     textAlign: "center",
+  },
+  genderContainer: {
+    marginBottom: 20,
+    flexDirection: "column",
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: "#6200EE",
+  },
+  radioButtonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  radioButtonText: {
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  genderSelectors: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+
+  pickedDateContainer: {
+    padding: 20,
+    backgroundColor: "#eee",
+    borderRadius: 10,
+  },
+  pickedDate: {
+    fontSize: 18,
+    color: "black",
+  },
+  btnContainer: {
+    padding: 30,
+  },
+  // This only works on iOS
+  datePicker: {
+    width: 320,
+    height: 260,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  dateText: {
+    fontSize: 18,
+    color: "black",
   },
 });
 
