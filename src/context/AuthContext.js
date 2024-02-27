@@ -131,5 +131,6 @@ const clearMessage = (dispatch) => () => {
 export const { Provider, Context } = createDataContext(
   authReducer,
   { signup, login, tryLocalSignin, signout, clearMessage, forgetPassword },
+  { signup, login, tryLocalSignin, signout, clearMessage, forgetPassword },
   { token: null, errorMessage: "", isLoading: true, successMessage: "" }
 );
