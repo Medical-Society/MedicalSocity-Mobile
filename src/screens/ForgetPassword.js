@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
     color: "#128393",
-    fontFamily: "Roboto-Medium",
+    fontFamily: "Cairo-Medium",
   },
 });
 
