@@ -7,6 +7,8 @@ import {
   ScrollView,
   Platform,
   TouchableOpacity,
+  Platform,
+  TouchableOpacity,
 } from "react-native";
 import Button from "../components/auth/SubmitButton";
 import InputField from "../components/auth/InputField";
@@ -17,9 +19,13 @@ import MessagesModal from "../components/auth/MessagesModal";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { RadioButton } from "react-native-paper";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const initialSignUpData = {
@@ -28,9 +34,10 @@ const SignUp = ({ navigation }) => {
     password: "",
     confirmPassword: "",
     birthdate: new Date(),
+    birthdate: new Date(),
     gender: "",
     address: "",
-    mobile: "",
+    phoneNumber: "",
   };
   const [signUpData, setSignUpData] = useState(initialSignUpData);
 
@@ -46,11 +53,17 @@ const SignUp = ({ navigation }) => {
   //   console.log(signUpData);
   // }, [signUpData]);
 
+  // useEffect(() => {
+  //   console.log(signUpData);
+  // }, [signUpData]);
+
   const handleInputChange = useCallback((fieldName, text) => {
     setSignUpData((prevState) => ({ ...prevState, [fieldName]: text }));
   }, []);
 
   const handleSignUp = useCallback(() => {
+    signup(signUpData, navigation, setIsLoading);
+  }, [signup, signUpData, isLoading]);
     signup(signUpData, navigation, setIsLoading);
   }, [signup, signUpData, isLoading]);
 
@@ -84,8 +97,8 @@ const SignUp = ({ navigation }) => {
     {
       label: "Phone Number",
       placeholder: "Enter your phone number",
-      value: signUpData.mobile,
-      onChangeText: (text) => handleInputChange("mobile", text),
+      value: signUpData.phoneNumber,
+      onChangeText: (text) => handleInputChange("phoneNumber", text),
     },
   ];
 
@@ -113,11 +126,11 @@ const SignUp = ({ navigation }) => {
         >
           <View style={styles.genderSelectors}>
             <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="male" color="#6200EE" />
+              <RadioButton.Android value="MALE" color="#6200EE" />
               <Text style={styles.radioButtonText}>Male</Text>
             </View>
             <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="female" color="#6200EE" />
+              <RadioButton.Android value="FEMALE" color="#6200EE" />
               <Text style={styles.radioButtonText}>Female</Text>
             </View>
           </View>
@@ -182,6 +195,14 @@ const SignUp = ({ navigation }) => {
           isLoading={isLoading}
         />
 
+        <GenderInput />
+        <DatePicker />
+        <Button
+          onPress={handleSignUp}
+          buttonText="SignUp"
+          isLoading={isLoading}
+        />
+
         <HaveAccOrNot
           text="Already have an account?"
           routeName="Login"
@@ -213,6 +234,8 @@ const styles = StyleSheet.create({
     color: "#128393",
     fontFamily: "Cairo-Medium",
     marginBottom: 20,
+    fontFamily: "Cairo-Medium",
+    marginBottom: 20,
   },
   form: {
     marginHorizontal: 15,
@@ -226,6 +249,53 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "green",
     textAlign: "center",
+  },
+  genderContainer: {
+    marginBottom: 20,
+    flexDirection: "column",
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: "#6200EE",
+  },
+  radioButtonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  radioButtonText: {
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  genderSelectors: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+
+  pickedDateContainer: {
+    padding: 20,
+    backgroundColor: "#eee",
+    borderRadius: 10,
+  },
+  pickedDate: {
+    fontSize: 18,
+    color: "black",
+  },
+  btnContainer: {
+    padding: 30,
+  },
+  // This only works on iOS
+  datePicker: {
+    width: 320,
+    height: 260,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  dateText: {
+    fontSize: 18,
+    color: "black",
   },
   genderContainer: {
     marginBottom: 20,
