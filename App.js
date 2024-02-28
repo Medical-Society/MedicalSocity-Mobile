@@ -8,7 +8,7 @@ import {
   Context as AuthContext,
   Provider as AuthProvider,
 } from "./src/context/AuthContext";
-
+import Drawer from "./src/components/drawer/Drawer";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -31,8 +31,8 @@ const App = () => {
     if (state.token) {
       return (
         <Stack.Screen
-          name="mainFlow"
-          component={MainTab}
+          name="Drawer"
+          component={Drawer}
           options={{ headerShown: false }}
         />
       );

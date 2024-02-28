@@ -55,7 +55,7 @@ const signup = (dispatch) => {
       console.log(err.response.data);
       dispatch({
         type: "add_error",
-        payload: err.response.data,
+        payload: err.response.data.message,
       });
     } finally {
       setIsLoading(false);

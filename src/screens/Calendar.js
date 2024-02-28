@@ -2,14 +2,14 @@ import React from "react";
 import { Text, StyleSh, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const Calender = () => {
+const Calendar = () => {
   return (
     <SafeAreaView>
-      <Text>Calender</Text>
+      <Text>Calendar</Text>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({});
 
-export default Calender;
+export default Calendar;

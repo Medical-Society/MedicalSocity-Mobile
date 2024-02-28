@@ -71,13 +71,17 @@ const Home = ({ navigation }) => {
     image: require("../../assets/doctor.png"),
   };
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <DoctorCard doctor={doctor} navigation={navigation} />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   card: {
     backgroundColor: "#fff",
     padding: 20,
