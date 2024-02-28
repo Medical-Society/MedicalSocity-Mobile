@@ -44,15 +44,7 @@ const styles = StyleSheet.create({
 const ProfileIcon = React.memo(
   ({ width, height, focused, setSelectTabInChild }) => {
     return (
-      <Svg
-        onPress={() => {
-          setSelectTabInChild("ProfileStack");
-        }}
-        width={width}
-        height={height}
-        viewBox="0 0 32 32"
-        fill="none"
-      >
+      <Svg width={width} height={height} viewBox="0 0 32 32" fill="none">
         <Path
           d="M15.9485 15.5259C14.6693 15.5259 13.6013 15.0974 12.7443 14.2354C11.8873 13.3834 11.4588 12.3139 11.4588 11.0318C11.4588 9.74983 11.8873 8.68174 12.7443 7.82759C13.6013 6.97345 14.6693 6.54639 15.9485 6.54639C17.2277 6.54639 18.2958 6.97345 19.1528 7.82759C20.0098 8.68174 20.4383 9.74983 20.4383 11.0318C20.4383 12.3139 20.0098 13.3834 19.1528 14.2354C18.2958 15.0974 17.2277 15.5259 15.9485 15.5259ZM5.98071 23.9653V22.9941C5.98071 22.3012 6.16573 21.6856 6.53576 21.1475C6.90578 20.6094 7.39097 20.1957 7.99133 19.9067C9.35182 19.2773 10.7026 18.8039 12.0135 18.4864C13.3245 18.1689 14.6351 18.0102 15.9483 18.0102C17.2604 18.0102 18.5698 18.1712 19.8764 18.4933C21.183 18.8153 22.5197 19.2884 23.8866 19.9127C24.5026 20.2013 24.9949 20.6138 25.3535 21.1501C25.7321 21.6865 25.9163 22.3012 25.9163 22.9941V23.9653C25.9163 24.4325 25.7506 24.8318 25.419 25.1633C25.0875 25.4949 24.6881 25.6607 24.221 25.6607H7.67608C7.20894 25.6607 6.80959 25.4949 6.47804 25.1633C6.14649 24.8318 5.98071 24.4325 5.98071 23.9653ZM7.65049 23.9909H24.2466V22.9941C24.2466 22.6737 24.1476 22.3597 23.9496 22.0821C23.7517 21.7944 23.4906 21.5662 23.1662 21.3975C21.9133 20.7858 20.7023 20.3466 19.5333 20.08C18.3542 19.8133 17.1693 19.68 15.9485 19.68C14.7277 19.68 13.5268 19.8133 12.3459 20.08C11.1649 20.3466 9.95534 20.7858 8.71715 21.3975C8.39284 21.5662 8.13399 21.7944 7.93559 22.0821C7.74719 22.3597 7.65049 22.6737 7.65049 22.9941V23.9909ZM15.9485 13.8561C16.7454 13.8561 17.4146 13.5853 17.9561 13.0438C18.4977 12.5022 18.7685 11.833 18.7685 11.0351C18.7685 10.2393 18.4977 9.57004 17.9561 9.02848C17.4146 8.48694 16.7454 8.21617 15.9485 8.21617C15.1517 8.21617 14.4825 8.48694 13.9359 9.02848C13.3993 9.57004 13.1286 10.2393 13.1286 11.0351C13.1286 11.833 13.3993 12.5022 13.9359 13.0438C14.4825 13.5853 15.1517 13.8561 15.9485 13.8561Z"
           fill={focused ? "#fff" : "#C9D7FE"}
@@ -66,15 +58,7 @@ const ProfileIcon = React.memo(
 const NotificationIcon = React.memo(
   ({ width, height, focused, setSelectTabInChild }) => {
     return (
-      <Svg
-        onPress={() => {
-          setSelectTabInChild("Notifications");
-        }}
-        width={width}
-        height={height}
-        viewBox="0 0 32 32"
-        fill="none"
-      >
+      <Svg width={width} height={height} viewBox="0 0 32 32" fill="none">
         <ClipPath id="clip-path">
           <Rect width="31.8971" height="31.8971" fill="#D9D9D9" />
         </ClipPath>
@@ -92,15 +76,7 @@ const NotificationIcon = React.memo(
 const HomeIcon = React.memo(
   ({ width, height, focused, setSelectTabInChild }) => {
     return (
-      <Svg
-        onPress={() => {
-          setSelectTabInChild("HomeStack");
-        }}
-        width={width}
-        height={height}
-        viewBox="0 0 32 32"
-        fill="none"
-      >
+      <Svg width={width} height={height} viewBox="0 0 32 32" fill="none">
         <ClipPath id="clip-path">
           <Rect width="31.8971" height="31.8971" fill="#D9D9D9" />
         </ClipPath>
@@ -118,15 +94,7 @@ const HomeIcon = React.memo(
 const CalendarIcon = React.memo(
   ({ width, height, focused, setSelectTabInChild }) => {
     return (
-      <Svg
-        onPress={() => {
-          setSelectTabInChild("Calendar");
-        }}
-        width={width}
-        height={height}
-        viewBox="0 0 32 32"
-        fill="none"
-      >
+      <Svg width={width} height={height} viewBox="0 0 32 32" fill="none">
         <ClipPath id="clip-path">
           <Rect width="31.8971" height="31.8971" fill="#D9D9D9" />
         </ClipPath>
@@ -159,6 +127,11 @@ const MainTab = ({ setSelectTabInChild }) => {
     >
       <Tab.Screen
         name="ProfileStack"
+        listeners={{
+          tabPress: (e) => {
+            setSelectTabInChild("ProfileStack");
+          },
+        }}
         component={ProfileStack}
         options={{
           headerShown: false,
@@ -167,7 +140,12 @@ const MainTab = ({ setSelectTabInChild }) => {
             backgroundColor: "#041E3F",
           },
           tabBarIcon: ({ focused }) => (
-            <ProfileIcon focused={focused} width={35} height={35} />
+            <ProfileIcon
+              setSelectTabInChild={setSelectTabInChild}
+              focused={focused}
+              width={35}
+              height={35}
+            />
           ),
 
           tabBarIconStyle: {
@@ -182,6 +160,11 @@ const MainTab = ({ setSelectTabInChild }) => {
       />
       <Tab.Screen
         name="Notifications"
+        listeners={{
+          tabPress: (e) => {
+            setSelectTabInChild("Notifications");
+          },
+        }}
         component={Notifications}
         options={{
           headerShown: false,
@@ -251,6 +234,11 @@ const MainTab = ({ setSelectTabInChild }) => {
       <Tab.Screen
         name="Calendar"
         component={Calendar}
+        listeners={{
+          tabPress: (e) => {
+            setSelectTabInChild("Calendar");
+          },
+        }}
         options={{
           headerShown: false,
           tabBarItemStyle: {
@@ -280,6 +268,11 @@ const MainTab = ({ setSelectTabInChild }) => {
       <Tab.Screen
         name="HomeStack"
         component={HomeStack}
+        listeners={{
+          tabPress: (e) => {
+            setSelectTabInChild("HomeStack");
+          },
+        }}
         options={{
           headerShown: false,
           tabBarItemStyle: {
