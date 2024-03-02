@@ -6,11 +6,16 @@ import {
   Image,
   TextInput,
   Dimensions,
+  Modal,
 } from "react-native";
+
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useContext } from "react";
+import { Context as UserContext } from "../../context/UserContext";
+
 const COLORS = {
   primary: "#242760",
   secondary: "#544C4C",
@@ -63,14 +68,14 @@ const FONTS = {
   body4: { fontSize: SIZES.body4, lineHeight: 20 },
 };
 const EditProfile = ({ navigation }) => {
-  const [selectedImage, setSelectedImage] = useState(
-    "https://i.ibb.co/W29btXp/profile.jpg"
-  );
-  const [name, setName] = useState("Melissa Peters");
-  const [email, setEmail] = useState("metperters@gmail.com");
-  const [password, setPassword] = useState("randompassword");
-  const [country, setCountry] = useState("Nigeria");
+  const { state, updateUserDataServer, postImage } = useContext(UserContext);
+  const { userData } = state;
 
+  const [selectedImage, setSelectedImage] = useState(userData?.avatar);
+  const [name, setName] = useState(userData?.patientName);
+  const [address, setAddress] = useState(userData?.address);
+  const [phoneNumber, setPhoneNumber] = useState(userData?.phoneNumber);
+  const [loading, setLoading] = useState(false);
   const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -79,9 +84,8 @@ const EditProfile = ({ navigation }) => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
+      postImage(result.assets[0].uri, setLoading);
       setSelectedImage(result.assets[0].uri);
     }
   };
@@ -117,6 +121,28 @@ const EditProfile = ({ navigation }) => {
 
         <Text style={{ ...FONTS.h3 }}>Edit Profile</Text>
       </View>
+      <Modal animationType="slide" transparent={true} visible={loading}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: COLORS.white,
+              padding: 22,
+              borderRadius: 4,
+              width: "80%",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ ...FONTS.h3 }}>Loading...</Text>
+          </View>
+        </View>
+      </Modal>
 
       <ScrollView>
         <View
@@ -125,32 +151,26 @@ const EditProfile = ({ navigation }) => {
             marginVertical: 22,
           }}
         >
+          <Image
+            source={{ uri: selectedImage }}
+            style={{
+              height: 170,
+              width: 170,
+              borderRadius: 85,
+              borderWidth: 2,
+              borderColor: COLORS.primary,
+            }}
+          />
           <TouchableOpacity onPress={handleImageSelection}>
-            <Image
-              source={{ uri: selectedImage }}
+            <Text
               style={{
-                height: 170,
-                width: 170,
-                borderRadius: 85,
-                borderWidth: 2,
-                borderColor: COLORS.primary,
-              }}
-            />
-
-            <View
-              style={{
-                position: "absolute",
-                bottom: 0,
-                right: 10,
-                zIndex: 9999,
+                ...FONTS.body2,
+                color: COLORS.primary,
+                marginTop: 6,
               }}
             >
-              <MaterialIcons
-                name="photo-camera"
-                size={32}
-                color={COLORS.primary}
-              />
-            </View>
+              Edit Image
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -188,7 +208,7 @@ const EditProfile = ({ navigation }) => {
               marginBottom: 6,
             }}
           >
-            <Text style={{ ...FONTS.h4 }}>Email</Text>
+            <Text style={{ ...FONTS.h4 }}>Address</Text>
             <View
               style={{
                 height: 44,
@@ -202,37 +222,9 @@ const EditProfile = ({ navigation }) => {
               }}
             >
               <TextInput
-                value={email}
-                onChangeText={(value) => setEmail(value)}
+                value={address}
+                onChangeText={(value) => setAddress(value)}
                 editable={true}
-              />
-            </View>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "column",
-              marginBottom: 6,
-            }}
-          >
-            <Text style={{ ...FONTS.h4 }}>Password</Text>
-            <View
-              style={{
-                height: 44,
-                width: "100%",
-                borderColor: COLORS.secondaryGray,
-                borderWidth: 1,
-                borderRadius: 4,
-                marginVertical: 6,
-                justifyContent: "center",
-                paddingLeft: 8,
-              }}
-            >
-              <TextInput
-                value={password}
-                onChangeText={(value) => setPassword(value)}
-                editable={true}
-                secureTextEntry
               />
             </View>
           </View>
@@ -244,7 +236,7 @@ const EditProfile = ({ navigation }) => {
             marginBottom: 6,
           }}
         >
-          <Text style={{ ...FONTS.h4 }}>Country</Text>
+          <Text style={{ ...FONTS.h4 }}>Phone Number</Text>
           <View
             style={{
               height: 44,
@@ -258,8 +250,8 @@ const EditProfile = ({ navigation }) => {
             }}
           >
             <TextInput
-              value={country}
-              onChangeText={(value) => setCountry(value)}
+              value={phoneNumber}
+              onChangeText={(value) => setPhoneNumber(value)}
               editable={true}
             />
           </View>
@@ -273,6 +265,14 @@ const EditProfile = ({ navigation }) => {
             alignItems: "center",
             justifyContent: "center",
           }}
+          onPress={() =>
+            updateUserDataServer({
+              patientName: name,
+              address,
+              phoneNumber,
+              avatar: selectedImage,
+            })
+          }
         >
           <Text
             style={{

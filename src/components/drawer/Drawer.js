@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import { CommonActions, useNavigation } from "@react-navigation/native";
-// import home, calender, notifications, profile from vector-icons
+import { Context as UserContext } from "../../context/UserContext";
+import { Context as AuthContext } from "../../context/AuthContext";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import profile from "../../../assets2/profile.png";
 
@@ -26,6 +27,9 @@ export default function Drawer() {
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
   const [selectTabInChild, setSelectTabInChild] = useState("HomeStack");
+  const { state, updateUserDataServer, postImage } = useContext(UserContext);
+  const { signout } = useContext(AuthContext);
+  const { userData } = state;
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -33,12 +37,15 @@ export default function Drawer() {
       setCurrentTab(selectTabInChild);
     }
   }, [selectTabInChild]);
+
   return (
     <View style={styles.container}>
       <View>
         <View style={{ justifyContent: "flex-start", padding: 15 }}>
           <Image
-            source={profile}
+            source={{
+              uri: userData.avatar,
+            }}
             style={{
               width: 60,
               height: 60,
@@ -56,7 +63,7 @@ export default function Drawer() {
               marginTop: 20,
             }}
           >
-            Jenna Ezarik
+            {userData.patientName}
           </Text>
 
           <TouchableOpacity>
@@ -123,7 +130,8 @@ export default function Drawer() {
               currentTab,
               setCurrentTab,
               "LogOut",
-              <MaterialIcons name="logout" size={30} color="white" />
+              <MaterialIcons name="logout" size={30} color="white" />,
+              signout
             )}
           </View>
         </View>
@@ -187,14 +195,21 @@ export default function Drawer() {
   );
 }
 
-const TabButton = (navigation, currentTab, setCurrentTab, title, icon) => {
+const TabButton = (
+  navigation,
+  currentTab,
+  setCurrentTab,
+  title,
+  icon,
+  signout
+) => {
   //   if navigation channged, the currentTab will be updated
 
   return (
     <TouchableOpacity
       onPress={() => {
         if (title == "LogOut") {
-          // Do your logout action
+          signout();
         } else {
           // navigate to Profile screen
           setCurrentTab(title);

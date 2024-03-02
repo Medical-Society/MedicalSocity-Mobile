@@ -1,11 +1,13 @@
 import createDataContext from "./createDataContext";
 import patientApi from "../api/patient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { useContext } from "react";
+import { Context as userContext } from "./UserContext";
 const authReducer = (state, action) => {
   switch (action.type) {
-    case "login":
+    case "login": {
       return { ...state, token: action.payload, errorMessage: "" };
+    }
     case "signout":
       return { ...state, token: null, errorMessage: "" };
     case "add_error":
@@ -25,7 +27,6 @@ const signup = (dispatch) => {
   return async (patientObject, navigation, setIsLoading) => {
     patientObject.address = "Ism";
     patientObject.email = patientObject.email.toLowerCase();
-    console.log(patientObject);
     if (patientObject.password !== patientObject.confirmPassword) {
       dispatch({
         type: "add_error",
@@ -52,7 +53,6 @@ const signup = (dispatch) => {
         clearTimeout(timeTemp);
       };
     } catch (err) {
-      console.log(err.response.data);
       dispatch({
         type: "add_error",
         payload: err.response.data.message,
@@ -64,23 +64,33 @@ const signup = (dispatch) => {
 };
 
 const tryLocalSignin = (dispatch) => {
+  const { updateUserData } = useContext(userContext);
+
   return async () => {
     const token = await AsyncStorage.getItem("token");
     if (token) {
       dispatch({ type: "login", payload: token });
     }
+    const userData = await AsyncStorage.getItem("userData");
+    updateUserData(JSON.parse(userData));
     dispatch({ type: "clear_loading" });
   };
 };
 
 const login = (dispatch) => {
+  const { updateUserData } = useContext(userContext);
+
   return async (patientObject, setIsLoading) => {
     patientObject.email = patientObject.email.toLowerCase();
     try {
       setIsLoading(true);
       const response = await patientApi.post("/login", patientObject);
-      console.log(response.data.data);
       await AsyncStorage.setItem("token", response.data.data.token);
+      await AsyncStorage.setItem(
+        "userData",
+        JSON.stringify(response.data.data.result)
+      );
+      updateUserData(response.data.data.result);
       dispatch({ type: "login", payload: response.data.data.token });
     } catch (err) {
       dispatch({

@@ -8,6 +8,10 @@ import {
   Context as AuthContext,
   Provider as AuthProvider,
 } from "./src/context/AuthContext";
+import {
+  Context as UserContext,
+  Provider as UserProvider,
+} from "./src/context/UserContext";
 import Drawer from "./src/components/drawer/Drawer";
 const Stack = createNativeStackNavigator();
 
@@ -48,7 +52,14 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
+      <Stack.Navigator
+        screenOptions={{
+          contentStyle: {
+            backgroundColor: "#FFFFFF",
+          },
+        }}
+        initialRouteName="Welcome"
+      >
         {resolvedScreen}
         {authOrMainFlowScreen}
       </Stack.Navigator>
@@ -58,8 +69,10 @@ const App = () => {
 
 export default () => {
   return (
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <UserProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </UserProvider>
   );
 };

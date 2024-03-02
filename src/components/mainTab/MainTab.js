@@ -123,6 +123,9 @@ const MainTab = ({ setSelectTabInChild }) => {
           backgroundColor: Platform.OS !== "ios" ? "transparent" : "#041E3F",
           borderTopWidth: 0,
         },
+        contentStyle: {
+          backgroundColor: "#FFFFFF",
+        },
       }}
     >
       <Tab.Screen

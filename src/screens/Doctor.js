@@ -18,19 +18,16 @@ const Doctor = ({ navigation, route }) => {
   const doctor = route.params.doctor;
   const [selectedDate, setSelectedData] = useState(null);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: doctor.name,
-      headerTitleAlign: "center",
-      //   screen background color white
-    });
-  }, [doctor, navigation]);
-
   return (
     <ScrollView style={styles.container}>
       <View>
-        <View style={styles.left}>
-          <Image source={doctor.image} style={styles.image} />
+        <View style={styles.info}>
+          <Image
+            source={{
+              uri: doctor.avatar,
+            }}
+            style={styles.image}
+          />
           <View style={styles.doctorInfo}>
             <Text style={styles.infoText}>{doctor.name}</Text>
 
@@ -103,7 +100,7 @@ const styles = StyleSheet.create({
     color: "#060B73",
     marginBottom: 10,
   },
-  left: {
+  info: {
     flexDirection: "row",
     marginTop: 20,
   },
