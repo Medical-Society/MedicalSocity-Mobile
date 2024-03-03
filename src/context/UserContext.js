@@ -98,6 +98,7 @@ const updateUserDataServer = (dispatch) => {
 
 const updateUserData = (dispatch) => {
   return async (userData) => {
+    await AsyncStorage.setItem("userData", JSON.stringify(userData)); //if error here
     dispatch({ type: "update_user_data", payload: userData });
   };
 };

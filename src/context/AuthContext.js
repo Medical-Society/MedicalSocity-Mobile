@@ -68,12 +68,26 @@ const tryLocalSignin = (dispatch) => {
 
   return async () => {
     const token = await AsyncStorage.getItem("token");
-    if (token) {
-      dispatch({ type: "login", payload: token });
+    try {
+      if (token) {
+        const response = await patientApi.get("/myinfo", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        updateUserData(response.data.data.patient);
+        dispatch({ type: "login", payload: token });
+      }
+    } catch (err) {
+      if (token) {
+        dispatch({ type: "login", payload: token });
+      }
+      const userData = await AsyncStorage.getItem("userData");
+      updateUserData(JSON.parse(userData));
+      dispatch({ type: "clear_loading" });
+    } finally {
+      dispatch({ type: "clear_loading" });
     }
-    const userData = await AsyncStorage.getItem("userData");
-    updateUserData(JSON.parse(userData));
-    dispatch({ type: "clear_loading" });
   };
 };
 

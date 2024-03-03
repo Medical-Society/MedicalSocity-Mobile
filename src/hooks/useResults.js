@@ -6,22 +6,19 @@ export default () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const searchApi = async (searchTerm) => {
-    if (searchTerm === "") {
-      return;
-    }
+    const toSearchWith = searchTerm === "All" ? "" : searchTerm;
+    console.log("SearchTerm: ", toSearchWith);
     try {
-      const response = await doctorApi.get("/search", {
+      const response = await doctorApi.get("/", {
         params: {
-          specialization: "",
-          englishFullName: searchTerm,
-          clinicAddress: "",
+          searchTerm: toSearchWith,
         },
       });
       setResults(response.data.data.doctors);
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err.response);
     }
   };
 
-  return [searchApi, results, errorMessage];
+  return [searchApi, results, errorMessage, setResults];
 };

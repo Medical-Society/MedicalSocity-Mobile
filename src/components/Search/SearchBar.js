@@ -1,8 +1,8 @@
 import React from "react";
-import { View, TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-const SearchBar = ({ term, onTermChange, onTermSubmit }) => {
+const SearchBar = ({ term, onTermChange, onTermSubmit, setResults }) => {
   return (
     <View style={styles.backgroundStyle}>
       <Feather name="search" style={styles.iconStyle} />
@@ -15,6 +15,15 @@ const SearchBar = ({ term, onTermChange, onTermSubmit }) => {
         onChangeText={onTermChange}
         onEndEditing={onTermSubmit}
       />
+      <TouchableOpacity
+        style={{ alignSelf: "center" }}
+        onPress={() => {
+          onTermChange("");
+          setResults([]);
+        }}
+      >
+        <Feather name="x" style={styles.iconStyle} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -30,10 +39,11 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     flex: 1,
+    fontFamily: "Cairo-Regular",
     fontSize: 18,
   },
   iconStyle: {
-    fontSize: 35,
+    fontSize: 30,
     alignSelf: "center",
     marginHorizontal: 15,
   },

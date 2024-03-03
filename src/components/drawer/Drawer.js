@@ -66,7 +66,13 @@ export default function Drawer() {
             {userData.patientName}
           </Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("ProfileStack", {
+                screen: "EditProfile",
+              });
+            }}
+          >
             <Text
               style={{
                 marginTop: 6,

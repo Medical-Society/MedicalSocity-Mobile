@@ -30,9 +30,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="ResultsShow"
         component={ResultsShowScreen}
-        options={{
-          title: "Results Show",
-        }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

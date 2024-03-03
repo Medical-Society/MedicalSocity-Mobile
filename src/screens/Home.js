@@ -162,7 +162,7 @@ const HomeCard = ({ feature, navigation }) => {
 
 const Home = ({ navigation }) => {
   const [term, setTerm] = useState("");
-  const [searchApi, results, errorMessage] = useResults();
+  const [searchApi, results, errorMessage, setResults] = useResults();
 
   const doctors = [
     {
@@ -488,87 +488,87 @@ const Home = ({ navigation }) => {
       image: require("../../assets/doctor2.png"),
     },
   ];
+
+  // make on the screen focus, setResults to empty array
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setResults([]);
+    });
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <SearchBar
         term={term}
         onTermChange={setTerm}
+        setResults={setResults}
         onTermSubmit={() => searchApi(term)}
       />
-      {results.length === 0 || term === "" ? (
-        <ScrollView
-          style={styles.container}
-          showsVerticalScrollIndicator={false}
-        >
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <View>
           <View>
-            <View>
-              <View style={styles.headBestDoctorsSection}>
-                <Text style={styles.headBestDoctors}>Best Doctors</Text>
-                <Text style={styles.headAllDoctors}>All Doctors</Text>
-              </View>
+            <View style={styles.headBestDoctorsSection}>
+              <Text style={styles.headBestDoctors}>Best Doctors</Text>
+              <Text style={styles.headAllDoctors}>All Doctors</Text>
             </View>
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={doctors}
-              key={Math.random().toString(36).substring(7)}
-              renderItem={({ item }) => {
-                return <DoctorCircle doctor={item} navigation={navigation} />;
-              }}
-            />
-            <HomeCard
-              feature={{
-                title: "You can ask AI chat bot",
-                text: "It would be answered immediately",
-                button: "Try it now",
-                screen: "Search",
-                image: require("../../assets/AiCardImg.png"),
-                bgColor: "#041E3F",
-              }}
-              navigation={navigation}
-            />
-            <HomeCard
-              feature={{
-                title: "Try our bracelet and track your health",
-                text: " Your heart rate and oxygen pulse",
-                button: "Shop now",
-                screen: "Search",
-                image: require("../../assets/brecletCardImg.png"),
-                bgColor: "#440A05",
-              }}
-              navigation={navigation}
-            />
-            <HomeCard
-              feature={{
-                title: "Scan your prescriptions",
-                text: "Convert your hard copy prescriptions to digital form",
-                button: "Try it now",
-                screen: "Search",
-                image: require("../../assets/Ocr.png"),
-                bgColor: "#503453",
-              }}
-              navigation={navigation}
-            />
-            <HomeCard
-              feature={{
-                title: "Ask a specific doctor or our doctors in public",
-                text: "It would be answered in 24 hours",
-                button: "Try it now",
-                screen: "Search",
-                image: require("../../assets/AiCardImg.png"),
-                bgColor: "#3F3114",
-              }}
-              navigation={navigation}
-            />
           </View>
-        </ScrollView>
-      ) : (
-        <ResultsList
-          results={results}
-          title="Search Results"
-          navigation={navigation}
-        />
-      )}
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={doctors}
+            key={Math.random().toString(36).substring(7)}
+            renderItem={({ item }) => {
+              return <DoctorCircle doctor={item} navigation={navigation} />;
+            }}
+          />
+          <HomeCard
+            feature={{
+              title: "You can ask AI chat bot",
+              text: "It would be answered immediately",
+              button: "Try it now",
+              screen: "Search",
+              image: require("../../assets/AiCardImg.png"),
+              bgColor: "#041E3F",
+            }}
+            navigation={navigation}
+          />
+          <HomeCard
+            feature={{
+              title: "Try our bracelet and track your health",
+              text: " Your heart rate and oxygen pulse",
+              button: "Shop now",
+              screen: "Search",
+              image: require("../../assets/brecletCardImg.png"),
+              bgColor: "#440A05",
+            }}
+            navigation={navigation}
+          />
+          <HomeCard
+            feature={{
+              title: "Scan your prescriptions",
+              text: "Convert your hard copy prescriptions to digital form",
+              button: "Try it now",
+              screen: "Search",
+              image: require("../../assets/Ocr.png"),
+              bgColor: "#503453",
+            }}
+            navigation={navigation}
+          />
+          <HomeCard
+            feature={{
+              title: "Ask a specific doctor or our doctors in public",
+              text: "It would be answered in 24 hours",
+              button: "Try it now",
+              screen: "Search",
+              image: require("../../assets/AiCardImg.png"),
+              bgColor: "#3F3114",
+            }}
+            navigation={navigation}
+          />
+        </View>
+      </ScrollView>
+      {results.length !== 0 && navigation.navigate("ResultsShow", { results })}
     </SafeAreaView>
   );
 };
