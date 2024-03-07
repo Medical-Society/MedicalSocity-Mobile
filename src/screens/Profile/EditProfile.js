@@ -1,3 +1,4 @@
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -7,14 +8,14 @@ import {
   TextInput,
   Dimensions,
   Modal,
+  StyleSheet,
+  KeyboardAvoidingView,
 } from "react-native";
-
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState, useEffect } from "react";
-import * as ImagePicker from "expo-image-picker";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useContext } from "react";
+import * as ImagePicker from "expo-image-picker";
 import { Context as UserContext } from "../../context/UserContext";
+import MessagesModal from "../../components/MessagesModal";
 
 const COLORS = {
   primary: "#242760",
@@ -27,15 +28,12 @@ const COLORS = {
 const { height, width } = Dimensions.get("window");
 
 const SIZES = {
-  // global SIZES
   base: 8,
   font: 14,
   radius: 30,
   padding: 10,
   padding2: 12,
   padding3: 16,
-
-  // font sizes
   largeTitle: 50,
   h1: 30,
   h2: 20,
@@ -46,8 +44,6 @@ const SIZES = {
   body3: 18,
   body4: 14,
   body5: 12,
-
-  // app dimensions
   width,
   height,
 };
@@ -67,15 +63,18 @@ const FONTS = {
   body3: { fontSize: SIZES.body3, lineHeight: 22 },
   body4: { fontSize: SIZES.body4, lineHeight: 20 },
 };
+
 const EditProfile = ({ navigation }) => {
-  const { state, updateUserDataServer, postImage } = useContext(UserContext);
-  const { userData } = state;
+  const { state, updateUserDataServer, postImage, clearMessage } =
+    useContext(UserContext);
+  const { userData, errorMessage, successMessage } = state;
 
   const [selectedImage, setSelectedImage] = useState(userData?.avatar);
   const [name, setName] = useState(userData?.patientName);
   const [address, setAddress] = useState(userData?.address);
   const [phoneNumber, setPhoneNumber] = useState(userData?.phoneNumber);
   const [loading, setLoading] = useState(false);
+
   const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -85,32 +84,17 @@ const EditProfile = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      postImage(result.assets[0].uri, setLoading);
+      postImage(result.assets[0].uri, navigation, setLoading);
       setSelectedImage(result.assets[0].uri);
     }
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.white,
-        paddingHorizontal: 22,
-      }}
-    >
-      <View
-        style={{
-          marginHorizontal: 12,
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={{
-            position: "absolute",
-            left: 0,
-          }}
+          style={styles.backButton}
         >
           <MaterialIcons
             name="keyboard-arrow-left"
@@ -118,174 +102,180 @@ const EditProfile = ({ navigation }) => {
             color={COLORS.black}
           />
         </TouchableOpacity>
-
-        <Text style={{ ...FONTS.h3 }}>Edit Profile</Text>
+        <Text style={styles.headerText}>Edit Profile</Text>
       </View>
       <Modal animationType="slide" transparent={true} visible={loading}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0,0,0,0.5)",
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: COLORS.white,
-              padding: 22,
-              borderRadius: 4,
-              width: "80%",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ ...FONTS.h3 }}>Loading...</Text>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Loading...</Text>
           </View>
         </View>
       </Modal>
 
-      <ScrollView>
-        <View
-          style={{
-            alignItems: "center",
-            marginVertical: 22,
-          }}
-        >
-          <Image
-            source={{ uri: selectedImage }}
-            style={{
-              height: 170,
-              width: 170,
-              borderRadius: 85,
-              borderWidth: 2,
-              borderColor: COLORS.primary,
-            }}
-          />
-          <TouchableOpacity onPress={handleImageSelection}>
-            <Text
-              style={{
-                ...FONTS.body2,
-                color: COLORS.primary,
-                marginTop: 6,
-              }}
-            >
-              Edit Image
-            </Text>
-          </TouchableOpacity>
-        </View>
+      {errorMessage || successMessage ? (
+        <MessagesModal
+          errorMessage={errorMessage}
+          successMessage={successMessage}
+          clearMessage={clearMessage}
+        />
+      ) : null}
 
-        <View>
-          <View
-            style={{
-              flexDirection: "column",
-              marginBottom: 6,
-            }}
-          >
-            <Text style={{ ...FONTS.h4 }}>Name</Text>
-            <View
-              style={{
-                height: 44,
-                width: "100%",
-                borderColor: COLORS.secondaryGray,
-                borderWidth: 1,
-                borderRadius: 4,
-                marginVertical: 6,
-                justifyContent: "center",
-                paddingLeft: 8,
-              }}
-            >
-              <TextInput
-                value={name}
-                onChangeText={(value) => setName(value)}
-                editable={true}
-              />
+      <KeyboardAvoidingView
+        style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
+        behavior="padding"
+        enabled
+        keyboardVerticalOffset={100}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: selectedImage }} style={styles.avatar} />
+            <TouchableOpacity onPress={handleImageSelection}>
+              <Text style={styles.editImageText}>Edit Image</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Name</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  value={name}
+                  onChangeText={(value) => setName(value)}
+                  style={styles.textInput}
+                />
+              </View>
             </View>
-          </View>
 
-          <View
-            style={{
-              flexDirection: "column",
-              marginBottom: 6,
-            }}
-          >
-            <Text style={{ ...FONTS.h4 }}>Address</Text>
-            <View
-              style={{
-                height: 44,
-                width: "100%",
-                borderColor: COLORS.secondaryGray,
-                borderWidth: 1,
-                borderRadius: 4,
-                marginVertical: 6,
-                justifyContent: "center",
-                paddingLeft: 8,
-              }}
-            >
-              <TextInput
-                value={address}
-                onChangeText={(value) => setAddress(value)}
-                editable={true}
-              />
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Address</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  value={address}
+                  onChangeText={(value) => setAddress(value)}
+                  style={styles.textInput}
+                />
+              </View>
             </View>
-          </View>
-        </View>
 
-        <View
-          style={{
-            flexDirection: "column",
-            marginBottom: 6,
-          }}
-        >
-          <Text style={{ ...FONTS.h4 }}>Phone Number</Text>
-          <View
-            style={{
-              height: 44,
-              width: "100%",
-              borderColor: COLORS.secondaryGray,
-              borderWidth: 1,
-              borderRadius: 4,
-              marginVertical: 6,
-              justifyContent: "center",
-              paddingLeft: 8,
-            }}
-          >
-            <TextInput
-              value={phoneNumber}
-              onChangeText={(value) => setPhoneNumber(value)}
-              editable={true}
-            />
-          </View>
-        </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Phone Number</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  value={phoneNumber}
+                  onChangeText={(value) => setPhoneNumber(value)}
+                  style={styles.textInput}
+                />
+              </View>
+            </View>
 
-        <TouchableOpacity
-          style={{
-            backgroundColor: COLORS.primary,
-            height: 44,
-            borderRadius: 6,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onPress={() =>
-            updateUserDataServer({
-              patientName: name,
-              address,
-              phoneNumber,
-              avatar: selectedImage,
-            })
-          }
-        >
-          <Text
-            style={{
-              ...FONTS.body3,
-              color: COLORS.white,
-            }}
-          >
-            Save Change
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={() =>
+                updateUserDataServer(
+                  {
+                    patientName: name,
+                    address,
+                    phoneNumber,
+                    avatar: selectedImage,
+                  },
+                  navigation,
+                  setLoading
+                )
+              }
+            >
+              <Text style={styles.saveButtonText}>Save Change</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
 export default EditProfile;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 22,
+  },
+  header: {
+    marginHorizontal: 12,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: 0,
+  },
+  headerText: {
+    ...FONTS.h3,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    backgroundColor: COLORS.white,
+    padding: 22,
+    borderRadius: 4,
+    width: "80%",
+    alignItems: "center",
+  },
+  modalText: {
+    ...FONTS.h3,
+  },
+  imageContainer: {
+    alignItems: "center",
+    marginVertical: 22,
+  },
+  avatar: {
+    height: 170,
+    width: 170,
+    borderRadius: 85,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+  },
+  editImageText: {
+    ...FONTS.body2,
+    color: COLORS.primary,
+    marginTop: 6,
+  },
+  inputContainer: {
+    flexDirection: "column",
+    marginBottom: 6,
+  },
+  label: {
+    ...FONTS.h4,
+  },
+  textInputContainer: {
+    height: 44,
+    width: "100%",
+    borderColor: COLORS.secondaryGray,
+    borderWidth: 1,
+    borderRadius: 4,
+    marginVertical: 6,
+    justifyContent: "center",
+    paddingLeft: 8,
+  },
+  textInput: {
+    flex: 1,
+  },
+  saveButton: {
+    backgroundColor: COLORS.primary,
+    height: 44,
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  saveButtonText: {
+    ...FONTS.body3,
+    color: COLORS.white,
+  },
+});

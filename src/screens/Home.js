@@ -497,6 +497,12 @@ const Home = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+    if (results.length !== 0) {
+      navigation.navigate("ResultsShow", { results });
+    }
+  }, [results, navigation]);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <SearchBar
@@ -510,7 +516,7 @@ const Home = ({ navigation }) => {
           <View>
             <View style={styles.headBestDoctorsSection}>
               <Text style={styles.headBestDoctors}>Best Doctors</Text>
-              <Text style={styles.headAllDoctors}>All Doctors</Text>
+              {/* <Text style={styles.headAllDoctors}>All Doctors</Text> */}
             </View>
           </View>
           <FlatList
@@ -568,7 +574,6 @@ const Home = ({ navigation }) => {
           />
         </View>
       </ScrollView>
-      {results.length !== 0 && navigation.navigate("ResultsShow", { results })}
     </SafeAreaView>
   );
 };

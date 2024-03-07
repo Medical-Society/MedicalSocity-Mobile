@@ -4,15 +4,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const userReducer = (state, action) => {
   switch (action.type) {
-    case "update_user_data":
+    case "UPDATE_USER_DATA":
       return { ...state, userData: action.payload };
-    case "get_user_data":
-      return state.userData;
-    case "post_image":
+    case "POST_IMAGE":
       return {
         ...state,
         userData: { ...state.userData, avatar: action.payload },
       };
+    case "ADD_ERROR_MESSAGE":
+      return { ...state, successMessage: "", errorMessage: action.payload };
+    case "ADD_SUCCESS_MESSAGE":
+      return { ...state, errorMessage: "", successMessage: action.payload };
+    case "CLEAR_MESSAGE":
+      return { ...state, errorMessage: "", successMessage: "" };
+
     default:
       return state;
   }
@@ -31,26 +36,34 @@ const createFormData = (uri) => {
 };
 
 const postImage = (dispatch) => {
-  return async (uri, setLoading) => {
-    console.log("uri: ", uri);
-    const data = createFormData(uri);
+  return async (uri, navigation, setLoading) => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem("token");
+      const data = createFormData(uri);
       const response = await patientApi.post("/avatar", data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-      dispatch({ type: "post_image", payload: response.data.data.avatar });
-      console.log("response: ", response.data);
+      const avatar = response.data.data.avatar;
+      dispatch({ type: "POST_IMAGE", payload: avatar });
       const userData = await AsyncStorage.getItem("userData");
       const parsedUserData = JSON.parse(userData);
-      parsedUserData.avatar = response.data.data.avatar;
+      parsedUserData.avatar = avatar;
       await AsyncStorage.setItem("userData", JSON.stringify(parsedUserData));
-    } catch (err) {
-      console.log(err.response);
+
+      dispatch({
+        type: "ADD_SUCCESS_MESSAGE",
+        payload: "Image uploaded successfully",
+      });
+    } catch (error) {
+      console.log(error.response);
+      dispatch({
+        type: "ADD_ERROR_MESSAGE",
+        payload: error.response.data.message,
+      });
     } finally {
       setLoading(false);
     }
@@ -58,59 +71,60 @@ const postImage = (dispatch) => {
 };
 
 const updateUserDataServer = (dispatch) => {
-  return async (userData, navigation) => {
-    console.log("userData: ", userData);
-    const { patientName, address, phoneNumber, avatar } = userData;
+  return async (userData, navigation, setLoading) => {
+    setLoading(true);
     try {
-      // setIsLoading(true);
+      const { patientName, address, phoneNumber } = userData;
       const token = await AsyncStorage.getItem("token");
       const response = await patientApi.patch(
         "/updateMe",
-        {
-          patientName,
-          address,
-          phoneNumber,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { patientName, address, phoneNumber },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      const userData = await AsyncStorage.getItem("userData");
-      const parsedUserData = JSON.parse(userData);
+      const updatedPatientData = response.data.data.patient;
+      const userDataFromStorage = await AsyncStorage.getItem("userData");
+      const parsedUserData = JSON.parse(userDataFromStorage);
       parsedUserData.patientName = patientName;
       parsedUserData.address = address;
       parsedUserData.phoneNumber = phoneNumber;
       await AsyncStorage.setItem("userData", JSON.stringify(parsedUserData));
+      dispatch({ type: "UPDATE_USER_DATA", payload: updatedPatientData });
 
       dispatch({
-        type: "update_user_data",
-        payload: response.data.data.patient,
+        type: "ADD_SUCCESS_MESSAGE",
+        payload: "Profile updated successfully",
       });
-    } catch (err) {
-      console.log(err.response.data);
+    } catch (error) {
+      console.log(error.response.data);
+      dispatch({
+        type: "ADD_ERROR_MESSAGE",
+        payload: error.response.data.message,
+      });
     } finally {
-      // setIsLoading(false);
+      setLoading(false);
     }
   };
 };
 
 const updateUserData = (dispatch) => {
   return async (userData) => {
-    await AsyncStorage.setItem("userData", JSON.stringify(userData)); //if error here
-    dispatch({ type: "update_user_data", payload: userData });
+    try {
+      await AsyncStorage.setItem("userData", JSON.stringify(userData));
+      dispatch({ type: "UPDATE_USER_DATA", payload: userData });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+const clearMessage = (dispatch) => {
+  return () => {
+    dispatch({ type: "CLEAR_MESSAGE" });
   };
 };
 
 export const { Provider, Context } = createDataContext(
   userReducer,
-  {
-    updateUserDataServer,
-    updateUserData,
-    postImage,
-  },
-  {
-    userData: {},
-  }
+  { updateUserDataServer, updateUserData, postImage, clearMessage },
+  { userData: {}, errorMessage: "", successMessage: "" }
 );

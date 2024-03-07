@@ -16,7 +16,7 @@ import { Context as AuthContext } from "../context/AuthContext";
 import Button from "../components/auth/SubmitButton";
 
 import InputField from "../components/auth/InputField";
-import MessagesModal from "../components/auth/MessagesModal";
+import MessagesModal from "../components/MessagesModal";
 const ForgetPassword = ({ navigation }) => {
   const { state, clearMessage, forgetPassword } = useContext(AuthContext);
 

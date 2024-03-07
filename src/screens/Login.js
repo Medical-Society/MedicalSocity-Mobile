@@ -4,8 +4,6 @@ import {
   StyleSheet,
   View,
   StatusBar,
-  Alert,
-  Modal,
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,9 +11,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/auth/SubmitButton";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
-import OrLine from "../components/auth/OrLine";
 import { Context as AuthContext } from "../context/AuthContext";
-import MessagesModal from "../components/auth/MessagesModal";
+import MessagesModal from "../components/MessagesModal";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
