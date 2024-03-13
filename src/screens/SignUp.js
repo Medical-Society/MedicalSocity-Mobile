@@ -7,13 +7,14 @@ import {
   ScrollView,
   Platform,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import Button from "../components/auth/SubmitButton";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import OrLine from "../components/auth/OrLine";
 import { Context as AuthContext } from "../context/AuthContext";
-import MessagesModal from "../components/auth/MessagesModal";
+import MessagesModal from "../components/MessagesModal";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -30,7 +31,7 @@ const SignUp = ({ navigation }) => {
     birthdate: new Date(),
     gender: "",
     address: "",
-    mobile: "",
+    phoneNumber: "",
   };
   const [signUpData, setSignUpData] = useState(initialSignUpData);
 
@@ -84,8 +85,8 @@ const SignUp = ({ navigation }) => {
     {
       label: "Phone Number",
       placeholder: "Enter your phone number",
-      value: signUpData.mobile,
-      onChangeText: (text) => handleInputChange("mobile", text),
+      value: signUpData.phoneNumber,
+      onChangeText: (text) => handleInputChange("phoneNumber", text),
     },
   ];
 
@@ -113,11 +114,11 @@ const SignUp = ({ navigation }) => {
         >
           <View style={styles.genderSelectors}>
             <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="male" color="#6200EE" />
+              <RadioButton.Android value="MALE" color="#6200EE" />
               <Text style={styles.radioButtonText}>Male</Text>
             </View>
             <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="female" color="#6200EE" />
+              <RadioButton.Android value="FEMALE" color="#6200EE" />
               <Text style={styles.radioButtonText}>Female</Text>
             </View>
           </View>
@@ -172,31 +173,38 @@ const SignUp = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.head}>SignUp</Text>
-      <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
-        {signupInputs}
-        <GenderInput />
-        <DatePicker />
-        <Button
-          onPress={handleSignUp}
-          buttonText="SignUp"
-          isLoading={isLoading}
-        />
-
-        <HaveAccOrNot
-          text="Already have an account?"
-          routeName="Login"
-          navigation={navigation}
-        />
-        {state.errorMessage || state.successMessage ? (
-          <MessagesModal
-            errorMessage={state.errorMessage}
-            successMessage={state.successMessage}
-            clearMessage={clearMessage}
+      <KeyboardAvoidingView
+        style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
+        behavior="padding"
+        enabled
+        keyboardVerticalOffset={20}
+      >
+        <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
+          {signupInputs}
+          <GenderInput />
+          <DatePicker />
+          <Button
+            onPress={handleSignUp}
+            buttonText="SignUp"
+            isLoading={isLoading}
           />
-        ) : null}
 
-        {/* <OrLine /> */}
-      </ScrollView>
+          <HaveAccOrNot
+            text="Already have an account?"
+            routeName="Login"
+            navigation={navigation}
+          />
+          {state.errorMessage || state.successMessage ? (
+            <MessagesModal
+              errorMessage={state.errorMessage}
+              successMessage={state.successMessage}
+              clearMessage={clearMessage}
+            />
+          ) : null}
+
+          {/* <OrLine /> */}
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

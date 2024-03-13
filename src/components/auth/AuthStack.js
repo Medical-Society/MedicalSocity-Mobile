@@ -9,7 +9,14 @@ const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Welcome">
+    <Stack.Navigator
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }}
+      initialRouteName="Welcome"
+    >
       <Stack.Screen
         name="Welcome"
         component={Welcome}

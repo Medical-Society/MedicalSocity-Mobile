@@ -1,10 +1,8 @@
 import React from "react";
 import { View, Text, Modal, StyleSheet, TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-
+import { AntDesign } from "@expo/vector-icons";
 const MessagesModal = ({ errorMessage, successMessage, clearMessage }) => {
   const message = errorMessage ? errorMessage : successMessage;
-  console.log("Hii");
   return (
     <Modal
       visible={message ? true : false}
@@ -13,14 +11,11 @@ const MessagesModal = ({ errorMessage, successMessage, clearMessage }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <View style={{ ...styles.iconsView, padding: errorMessage ? 0 : 5 }}>
-            <MaterialIcons
-              style={{
-                ...styles.icon,
-                backgroundColor: errorMessage ? "white" : "green",
-              }}
-              name={errorMessage ? "error" : "done"}
-              color={errorMessage ? "red" : "white"}
+          <View style={{ ...styles.iconsView, padding: errorMessage ? 5 : 5 }}>
+            <AntDesign
+              name={errorMessage ? "exclamationcircle" : "checkcircle"}
+              size={50}
+              color={errorMessage ? "red" : "green"}
             />
           </View>
 

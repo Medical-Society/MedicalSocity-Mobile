@@ -14,7 +14,14 @@ const Stack = createNativeStackNavigator();
 
 const ProfileStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Profile">
+    <Stack.Navigator
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }}
+      initialRouteName="Profile"
+    >
       <Stack.Screen
         name="Profile"
         component={Profile}

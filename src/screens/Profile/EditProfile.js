@@ -1,3 +1,4 @@
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -6,11 +7,16 @@ import {
   Image,
   TextInput,
   Dimensions,
+  Modal,
+  StyleSheet,
+  KeyboardAvoidingView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState } from "react";
-import * as ImagePicker from "expo-image-picker";
 import { MaterialIcons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { Context as UserContext } from "../../context/UserContext";
+import MessagesModal from "../../components/MessagesModal";
+
 const COLORS = {
   primary: "#242760",
   secondary: "#544C4C",
@@ -22,15 +28,12 @@ const COLORS = {
 const { height, width } = Dimensions.get("window");
 
 const SIZES = {
-  // global SIZES
   base: 8,
   font: 14,
   radius: 30,
   padding: 10,
   padding2: 12,
   padding3: 16,
-
-  // font sizes
   largeTitle: 50,
   h1: 30,
   h2: 20,
@@ -41,8 +44,6 @@ const SIZES = {
   body3: 18,
   body4: 14,
   body5: 12,
-
-  // app dimensions
   width,
   height,
 };
@@ -62,14 +63,17 @@ const FONTS = {
   body3: { fontSize: SIZES.body3, lineHeight: 22 },
   body4: { fontSize: SIZES.body4, lineHeight: 20 },
 };
+
 const EditProfile = ({ navigation }) => {
-  const [selectedImage, setSelectedImage] = useState(
-    "https://i.ibb.co/W29btXp/profile.jpg"
-  );
-  const [name, setName] = useState("Melissa Peters");
-  const [email, setEmail] = useState("metperters@gmail.com");
-  const [password, setPassword] = useState("randompassword");
-  const [country, setCountry] = useState("Nigeria");
+  const { state, updateUserDataServer, postImage, clearMessage } =
+    useContext(UserContext);
+  const { userData, errorMessage, successMessage } = state;
+
+  const [selectedImage, setSelectedImage] = useState(userData?.avatar);
+  const [name, setName] = useState(userData?.patientName);
+  const [address, setAddress] = useState(userData?.address);
+  const [phoneNumber, setPhoneNumber] = useState(userData?.phoneNumber);
+  const [loading, setLoading] = useState(false);
 
   const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -79,34 +83,18 @@ const EditProfile = ({ navigation }) => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
+      postImage(result.assets[0].uri, navigation, setLoading);
       setSelectedImage(result.assets[0].uri);
     }
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.white,
-        paddingHorizontal: 22,
-      }}
-    >
-      <View
-        style={{
-          marginHorizontal: 12,
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={{
-            position: "absolute",
-            left: 0,
-          }}
+          style={styles.backButton}
         >
           <MaterialIcons
             name="keyboard-arrow-left"
@@ -114,178 +102,180 @@ const EditProfile = ({ navigation }) => {
             color={COLORS.black}
           />
         </TouchableOpacity>
-
-        <Text style={{ ...FONTS.h3 }}>Edit Profile</Text>
+        <Text style={styles.headerText}>Edit Profile</Text>
       </View>
-
-      <ScrollView>
-        <View
-          style={{
-            alignItems: "center",
-            marginVertical: 22,
-          }}
-        >
-          <TouchableOpacity onPress={handleImageSelection}>
-            <Image
-              source={{ uri: selectedImage }}
-              style={{
-                height: 170,
-                width: 170,
-                borderRadius: 85,
-                borderWidth: 2,
-                borderColor: COLORS.primary,
-              }}
-            />
-
-            <View
-              style={{
-                position: "absolute",
-                bottom: 0,
-                right: 10,
-                zIndex: 9999,
-              }}
-            >
-              <MaterialIcons
-                name="photo-camera"
-                size={32}
-                color={COLORS.primary}
-              />
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View>
-          <View
-            style={{
-              flexDirection: "column",
-              marginBottom: 6,
-            }}
-          >
-            <Text style={{ ...FONTS.h4 }}>Name</Text>
-            <View
-              style={{
-                height: 44,
-                width: "100%",
-                borderColor: COLORS.secondaryGray,
-                borderWidth: 1,
-                borderRadius: 4,
-                marginVertical: 6,
-                justifyContent: "center",
-                paddingLeft: 8,
-              }}
-            >
-              <TextInput
-                value={name}
-                onChangeText={(value) => setName(value)}
-                editable={true}
-              />
-            </View>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "column",
-              marginBottom: 6,
-            }}
-          >
-            <Text style={{ ...FONTS.h4 }}>Email</Text>
-            <View
-              style={{
-                height: 44,
-                width: "100%",
-                borderColor: COLORS.secondaryGray,
-                borderWidth: 1,
-                borderRadius: 4,
-                marginVertical: 6,
-                justifyContent: "center",
-                paddingLeft: 8,
-              }}
-            >
-              <TextInput
-                value={email}
-                onChangeText={(value) => setEmail(value)}
-                editable={true}
-              />
-            </View>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "column",
-              marginBottom: 6,
-            }}
-          >
-            <Text style={{ ...FONTS.h4 }}>Password</Text>
-            <View
-              style={{
-                height: 44,
-                width: "100%",
-                borderColor: COLORS.secondaryGray,
-                borderWidth: 1,
-                borderRadius: 4,
-                marginVertical: 6,
-                justifyContent: "center",
-                paddingLeft: 8,
-              }}
-            >
-              <TextInput
-                value={password}
-                onChangeText={(value) => setPassword(value)}
-                editable={true}
-                secureTextEntry
-              />
-            </View>
+      <Modal animationType="slide" transparent={true} visible={loading}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Loading...</Text>
           </View>
         </View>
+      </Modal>
 
-        <View
-          style={{
-            flexDirection: "column",
-            marginBottom: 6,
-          }}
+      {errorMessage || successMessage ? (
+        <MessagesModal
+          errorMessage={errorMessage}
+          successMessage={successMessage}
+          clearMessage={clearMessage}
+        />
+      ) : null}
+
+      <KeyboardAvoidingView
+        style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
+        behavior="padding"
+        enabled
+        keyboardVerticalOffset={100}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
         >
-          <Text style={{ ...FONTS.h4 }}>Country</Text>
-          <View
-            style={{
-              height: 44,
-              width: "100%",
-              borderColor: COLORS.secondaryGray,
-              borderWidth: 1,
-              borderRadius: 4,
-              marginVertical: 6,
-              justifyContent: "center",
-              paddingLeft: 8,
-            }}
-          >
-            <TextInput
-              value={country}
-              onChangeText={(value) => setCountry(value)}
-              editable={true}
-            />
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: selectedImage }} style={styles.avatar} />
+            <TouchableOpacity onPress={handleImageSelection}>
+              <Text style={styles.editImageText}>Edit Image</Text>
+            </TouchableOpacity>
           </View>
-        </View>
 
-        <TouchableOpacity
-          style={{
-            backgroundColor: COLORS.primary,
-            height: 44,
-            borderRadius: 6,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              ...FONTS.body3,
-              color: COLORS.white,
-            }}
-          >
-            Save Change
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
+          <View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Name</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  value={name}
+                  onChangeText={(value) => setName(value)}
+                  style={styles.textInput}
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Address</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  value={address}
+                  onChangeText={(value) => setAddress(value)}
+                  style={styles.textInput}
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Phone Number</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  value={phoneNumber}
+                  onChangeText={(value) => setPhoneNumber(value)}
+                  style={styles.textInput}
+                />
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={() =>
+                updateUserDataServer(
+                  {
+                    patientName: name,
+                    address,
+                    phoneNumber,
+                    avatar: selectedImage,
+                  },
+                  navigation,
+                  setLoading
+                )
+              }
+            >
+              <Text style={styles.saveButtonText}>Save Change</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
 export default EditProfile;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 22,
+  },
+  header: {
+    marginHorizontal: 12,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: 0,
+  },
+  headerText: {
+    ...FONTS.h3,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    backgroundColor: COLORS.white,
+    padding: 22,
+    borderRadius: 4,
+    width: "80%",
+    alignItems: "center",
+  },
+  modalText: {
+    ...FONTS.h3,
+  },
+  imageContainer: {
+    alignItems: "center",
+    marginVertical: 22,
+  },
+  avatar: {
+    height: 170,
+    width: 170,
+    borderRadius: 85,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+  },
+  editImageText: {
+    ...FONTS.body2,
+    color: COLORS.primary,
+    marginTop: 6,
+  },
+  inputContainer: {
+    flexDirection: "column",
+    marginBottom: 6,
+  },
+  label: {
+    ...FONTS.h4,
+  },
+  textInputContainer: {
+    height: 44,
+    width: "100%",
+    borderColor: COLORS.secondaryGray,
+    borderWidth: 1,
+    borderRadius: 4,
+    marginVertical: 6,
+    justifyContent: "center",
+    paddingLeft: 8,
+  },
+  textInput: {
+    flex: 1,
+  },
+  saveButton: {
+    backgroundColor: COLORS.primary,
+    height: 44,
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  saveButtonText: {
+    ...FONTS.body3,
+    color: COLORS.white,
+  },
+});

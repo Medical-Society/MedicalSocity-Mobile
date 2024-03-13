@@ -1,20 +1,22 @@
 import createDataContext from "./createDataContext";
 import patientApi from "../api/patient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useContext } from "react";
+import { Context as userContext } from "./UserContext";
 
 const authReducer = (state, action) => {
   switch (action.type) {
-    case "login":
+    case "LOGIN":
       return { ...state, token: action.payload, errorMessage: "" };
-    case "signout":
+    case "SIGNOUT":
       return { ...state, token: null, errorMessage: "" };
-    case "add_error":
+    case "ADD_ERROR":
       return { ...state, errorMessage: action.payload };
-    case "clear_message":
+    case "ADD_SUCCESS":
+      return { ...state, errorMessage: "", successMessage: action.payload };
+    case "CLEAR_MESSAGE":
       return { ...state, errorMessage: "", successMessage: "" };
-    case "add_success":
-      return { ...state, successMessage: action.payload };
-    case "clear_loading":
+    case "CLEAR_LOADING":
       return { ...state, isLoading: false };
     default:
       return state;
@@ -25,14 +27,15 @@ const signup = (dispatch) => {
   return async (patientObject, navigation, setIsLoading) => {
     patientObject.address = "Ism";
     patientObject.email = patientObject.email.toLowerCase();
-    console.log(patientObject);
     if (patientObject.password !== patientObject.confirmPassword) {
       dispatch({
-        type: "add_error",
-        payload: "Password and confirm password must be same.",
+        type: "ADD_ERROR",
+        payload: "Password and confirm password must be the same.",
       });
       return;
     }
+
+    console.log(patientObject);
 
     delete patientObject.confirmPassword;
 
@@ -40,10 +43,11 @@ const signup = (dispatch) => {
       setIsLoading(true);
       const response = await patientApi.post("/signup", patientObject);
       dispatch({
-        type: "add_success",
+        type: "ADD_SUCCESS",
         payload:
           "A verification link has been sent to your email. Please verify your email to login.",
       });
+
       const timeTemp = setTimeout(() => {
         navigation.navigate("Login");
       }, 2000);
@@ -54,7 +58,7 @@ const signup = (dispatch) => {
     } catch (err) {
       console.log(err.response.data);
       dispatch({
-        type: "add_error",
+        type: "ADD_ERROR",
         payload: err.response.data.message,
       });
     } finally {
@@ -64,16 +68,36 @@ const signup = (dispatch) => {
 };
 
 const tryLocalSignin = (dispatch) => {
+  const { updateUserData } = useContext(userContext);
+
   return async () => {
     const token = await AsyncStorage.getItem("token");
-    if (token) {
-      dispatch({ type: "login", payload: token });
+    try {
+      if (token) {
+        const response = await patientApi.get("/myinfo", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        updateUserData(response.data.data.patient);
+        dispatch({ type: "LOGIN", payload: token });
+      }
+    } catch (err) {
+      if (token) {
+        dispatch({ type: "LOGIN", payload: token });
+      }
+      const userData = await AsyncStorage.getItem("userData");
+      updateUserData(JSON.parse(userData));
+      dispatch({ type: "CLEAR_LOADING" });
+    } finally {
+      dispatch({ type: "CLEAR_LOADING" });
     }
-    dispatch({ type: "clear_loading" });
   };
 };
 
 const login = (dispatch) => {
+  const { updateUserData } = useContext(userContext);
+
   return async (patientObject, setIsLoading) => {
     patientObject.email = patientObject.email.toLowerCase();
     try {
@@ -81,10 +105,15 @@ const login = (dispatch) => {
       const response = await patientApi.post("/login", patientObject);
       console.log(response.data.data);
       await AsyncStorage.setItem("token", response.data.data.token);
-      dispatch({ type: "login", payload: response.data.data.token });
+      await AsyncStorage.setItem(
+        "userData",
+        JSON.stringify(response.data.data.result)
+      );
+      updateUserData(response.data.data.result);
+      dispatch({ type: "LOGIN", payload: response.data.data.token });
     } catch (err) {
       dispatch({
-        type: "add_error",
+        type: "ADD_ERROR",
         payload: err.response.data.message,
       });
     } finally {
@@ -96,11 +125,10 @@ const login = (dispatch) => {
 const forgetPassword = (dispatch) => {
   return async (personEmail, navigation) => {
     personEmail.email = personEmail.email.toLowerCase();
-
     try {
       const response = await patientApi.post("/forgot-password", personEmail);
       dispatch({
-        type: "add_success",
+        type: "ADD_SUCCESS",
         payload: "A reset password link has been sent to your email.",
       });
 
@@ -113,7 +141,7 @@ const forgetPassword = (dispatch) => {
       };
     } catch (err) {
       dispatch({
-        type: "add_error",
+        type: "ADD_ERROR",
         payload: err.response.data.message,
       });
     }
@@ -123,17 +151,26 @@ const forgetPassword = (dispatch) => {
 const signout = (dispatch) => {
   return async () => {
     await AsyncStorage.removeItem("token");
-    dispatch({ type: "signout" });
+    dispatch({ type: "SIGNOUT" });
   };
 };
 
-const clearMessage = (dispatch) => () => {
-  dispatch({ type: "clear_message" });
+const clearMessage = (dispatch) => {
+  return () => {
+    console.log("clearing message");
+    dispatch({ type: "CLEAR_MESSAGE" });
+  };
 };
 
 export const { Provider, Context } = createDataContext(
   authReducer,
-  { signup, login, tryLocalSignin, signout, clearMessage, forgetPassword },
-  { signup, login, tryLocalSignin, signout, clearMessage, forgetPassword },
+  {
+    signup,
+    login,
+    tryLocalSignin,
+    signout,
+    clearMessage,
+    forgetPassword,
+  },
   { token: null, errorMessage: "", isLoading: true, successMessage: "" }
 );

@@ -160,7 +160,6 @@ const Profile = () => {
       </View>
 
       <ScrollView style={{ marginHorizontal: 12 }}>
-        {/* Account Settings */}
         <View style={{ marginBottom: 12 }}>
           <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Account</Text>
           <View
