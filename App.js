@@ -1,7 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthStack from "./src/components/auth/AuthStack";
-import MainTab from "./src/components/mainTab/MainTab";
 import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import React, { useContext, useMemo } from "react";
 import {
@@ -13,6 +12,7 @@ import {
   Provider as UserProvider,
 } from "./src/context/UserContext";
 import Drawer from "./src/components/drawer/Drawer";
+import MainStack from "./src/components/mainStack/MainStack";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -35,8 +35,8 @@ const App = () => {
     if (state.token) {
       return (
         <Stack.Screen
-          name="Drawer"
-          component={Drawer}
+          name="mainStack"
+          component={MainStack}
           options={{ headerShown: false }}
         />
       );

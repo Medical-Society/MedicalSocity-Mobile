@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://medicalsociety.azurewebsites.net/api/v1/patients",
+  baseURL: "https://medical-society-official.onrender.com/api/v1/patients",
 });

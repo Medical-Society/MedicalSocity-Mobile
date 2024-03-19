@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Modal,
   Image,
   FlatList,
   PixelRatio,
@@ -17,6 +18,7 @@ import SearchBar from "../components/Search/SearchBar";
 import useResults from "../hooks/useResults";
 import ResultsList from "../components/Search/ResultsList";
 import { SafeAreaView } from "react-native-safe-area-context";
+import OcrModal from "../components/Ocr/OcrModal";
 const DoctorCard = ({ doctor, navigation }) => {
   return (
     <TouchableOpacity
@@ -88,7 +90,7 @@ const normalize = (size) => {
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
 };
-const HomeCard = ({ feature, navigation }) => {
+const HomeCard = ({ feature, onPress }) => {
   const styles = StyleSheet.create({
     homeCard: {
       flexDirection: "row",
@@ -140,6 +142,12 @@ const HomeCard = ({ feature, navigation }) => {
     },
   });
 
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    }
+  };
+
   return (
     <View style={[styles.homeCard, { backgroundColor: feature.bgColor }]}>
       <View style={styles.cardCol}>
@@ -148,7 +156,7 @@ const HomeCard = ({ feature, navigation }) => {
         <TouchableOpacity
           style={styles.cardButton}
           title={feature.button}
-          onPress={() => navigation.navigate(feature.screen)}
+          onPress={handlePress}
         >
           <Text style={{ color: "white" }}>{feature.button}</Text>
         </TouchableOpacity>
@@ -162,6 +170,7 @@ const HomeCard = ({ feature, navigation }) => {
 
 const Home = ({ navigation }) => {
   const [term, setTerm] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
   const [searchApi, results, errorMessage, setResults] = useResults();
 
   const doctors = [
@@ -511,6 +520,11 @@ const Home = ({ navigation }) => {
         setResults={setResults}
         onTermSubmit={() => searchApi(term)}
       />
+      <OcrModal
+        navigation={navigation}
+        isVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View>
           <View>
@@ -533,22 +547,11 @@ const Home = ({ navigation }) => {
               title: "You can ask AI chat bot",
               text: "It would be answered immediately",
               button: "Try it now",
-              screen: "Search",
+              screen: "AiChatbot",
               image: require("../../assets/AiCardImg.png"),
               bgColor: "#041E3F",
             }}
-            navigation={navigation}
-          />
-          <HomeCard
-            feature={{
-              title: "Try our bracelet and track your health",
-              text: " Your heart rate and oxygen pulse",
-              button: "Shop now",
-              screen: "Search",
-              image: require("../../assets/brecletCardImg.png"),
-              bgColor: "#440A05",
-            }}
-            navigation={navigation}
+            onPress={() => navigation.navigate("AiChatbot")}
           />
           <HomeCard
             feature={{
@@ -559,8 +562,20 @@ const Home = ({ navigation }) => {
               image: require("../../assets/Ocr.png"),
               bgColor: "#503453",
             }}
-            navigation={navigation}
+            // onPress={() => setModalVisible(true)}
+            onPress={() => navigation.navigate("OcrResultScreen")}
           />
+          <HomeCard
+            feature={{
+              title: "Try our bracelet and track your health",
+              text: " Your heart rate and oxygen pulse",
+              button: "Shop now",
+              screen: "Search",
+              image: require("../../assets/brecletCardImg.png"),
+              bgColor: "#440A05",
+            }}
+          />
+
           <HomeCard
             feature={{
               title: "Ask a specific doctor or our doctors in public",
@@ -570,7 +585,6 @@ const Home = ({ navigation }) => {
               image: require("../../assets/AiCardImg.png"),
               bgColor: "#3F3114",
             }}
-            navigation={navigation}
           />
         </View>
       </ScrollView>

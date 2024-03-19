@@ -80,6 +80,7 @@ const tryLocalSignin = (dispatch) => {
           },
         });
         updateUserData(response.data.data.patient);
+        console.log(response.data.data.patient);
         dispatch({ type: "LOGIN", payload: token });
       }
     } catch (err) {
@@ -87,6 +88,7 @@ const tryLocalSignin = (dispatch) => {
         dispatch({ type: "LOGIN", payload: token });
       }
       const userData = await AsyncStorage.getItem("userData");
+      console.log("userData: ", userData);
       updateUserData(JSON.parse(userData));
       dispatch({ type: "CLEAR_LOADING" });
     } finally {

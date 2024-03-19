@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../../screens/Home";
 import Doctor from "../../screens/Doctor";
 import ResultsShowScreen from "../../screens/Search/ResultsShowScreen";
+import AiChatbot from "../../screens/Chat/AiChatbot";
 const Stack = createNativeStackNavigator();
 const HomeStack = () => {
   return (
@@ -27,6 +28,7 @@ const HomeStack = () => {
           headerShown: false,
         }}
       />
+
       <Stack.Screen
         name="ResultsShow"
         component={ResultsShowScreen}

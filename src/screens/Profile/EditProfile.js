@@ -16,6 +16,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Context as UserContext } from "../../context/UserContext";
 import MessagesModal from "../../components/MessagesModal";
+import LoadingModal from "../../components/LoadingModal";
 
 const COLORS = {
   primary: "#242760",
@@ -104,13 +105,8 @@ const EditProfile = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.headerText}>Edit Profile</Text>
       </View>
-      <Modal animationType="slide" transparent={true} visible={loading}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Loading...</Text>
-          </View>
-        </View>
-      </Modal>
+
+      <LoadingModal loading={loading} />
 
       {errorMessage || successMessage ? (
         <MessagesModal
