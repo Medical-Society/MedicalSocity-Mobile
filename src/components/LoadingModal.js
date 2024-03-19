@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Modal, StyleSheet, Dimensions } from "react-native";
 
 const LoadingModal = ({ loading }) => {
+  console.log("loading", loading);
   return (
     <Modal animationType="slide" transparent={true} visible={loading}>
       <View style={styles.modalContainer}>

@@ -163,6 +163,12 @@ const clearMessage = (dispatch) => {
   };
 };
 
+const addError = (dispatch) => {
+  return (message) => {
+    dispatch({ type: "ADD_ERROR", payload: message });
+  };
+};
+
 export const { Provider, Context } = createDataContext(
   authReducer,
   {
@@ -172,6 +178,7 @@ export const { Provider, Context } = createDataContext(
     signout,
     clearMessage,
     forgetPassword,
+    addError,
   },
   { token: null, errorMessage: "", isLoading: true, successMessage: "" }
 );

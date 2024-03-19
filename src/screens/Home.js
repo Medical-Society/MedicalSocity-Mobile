@@ -562,8 +562,7 @@ const Home = ({ navigation }) => {
               image: require("../../assets/Ocr.png"),
               bgColor: "#503453",
             }}
-            // onPress={() => setModalVisible(true)}
-            onPress={() => navigation.navigate("OcrResultScreen")}
+            onPress={() => setModalVisible(true)}
           />
           <HomeCard
             feature={{

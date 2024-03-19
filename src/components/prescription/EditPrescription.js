@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -8,10 +8,13 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  TextInput,
+  Platform,
+  VirtualizedList,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput } from "react-native-paper";
+
 import SubmitButton from "../auth/SubmitButton";
 
 const COLORS = {
@@ -62,48 +65,57 @@ const FONTS = {
   body4: { fontSize: SIZES.body4, lineHeight: 20, fontFamily: "Cairo-Regular" },
 };
 
-const MedicineFields = React.memo(
-  ({ id, name, nOfTimes, note, handleChange, handleDelete }) => {
-    return (
-      <View style={styles.medicineField}>
-        <Text style={styles.headerText}>Medicine {id}</Text>
-        <TextInput
-          style={styles.input}
-          label="Medicine Name"
-          value={name}
-          onChangeText={(text) => handleChange(id, "name", text)}
-        />
-        <TextInput
-          style={styles.input}
-          label="Number of Times"
-          value={nOfTimes}
-          onChangeText={(text) => handleChange(id, "nOfTimes", text)}
-        />
-        <TextInput
-          style={styles.input}
-          label="Note"
-          value={note}
-          onChangeText={(text) => handleChange(id, "note", text)}
-        />
-        <TouchableOpacity
-          onPress={() => handleDelete(id)}
-          style={{ position: "absolute", right: 0, top: 0 }}
-        >
-          <MaterialIcons name="delete" size={24} color={COLORS.primary} />
-        </TouchableOpacity>
-      </View>
-    );
-  }
-);
+const MedicineFields = ({
+  id,
+  name,
+  nOfTimes,
+  note,
+  handleChange,
+  handleDelete,
+}) => {
+  return (
+    <View style={styles.medicineField}>
+      <Text style={styles.headerText}>Medicine {id}</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Medicine Name"
+        value={name}
+        onChangeText={(text) => handleChange(id, "name", text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Number of Times"
+        value={nOfTimes}
+        onChangeText={(text) => handleChange(id, "nOfTimes", text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Note"
+        value={note}
+        onChangeText={(text) => handleChange(id, "note", text)}
+      />
+      <TouchableOpacity
+        onPress={() => handleDelete(id)}
+        style={{ position: "absolute", right: 0, top: 0 }}
+      >
+        <MaterialIcons name="delete" size={24} color={COLORS.primary} />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const EditPrescription = ({
   prescriptionData,
   setMode,
   setPrescriptionData,
 }) => {
-  const [localData, setLocalData] = useState(prescriptionData);
+  //   copy prescriptionData to a new variable by value
+  const newPrescriptionData = JSON.parse(JSON.stringify(prescriptionData));
+
+  const [localData, setLocalData] = useState(newPrescriptionData);
 
   const handleDelete = (id) => {
+    console.log("id", id);
     const newMedicines = localData.medicines.filter(
       (medicine) => medicine.id !== id
     );
@@ -111,6 +123,7 @@ const EditPrescription = ({
   };
 
   const handleChange = (id, field, value) => {
+    console.log("id", id, "field", field, "value", value);
     const newMedicines = localData.medicines.map((medicine) => {
       if (medicine.id === id) {
         return { ...medicine, [field]: value };
@@ -121,9 +134,24 @@ const EditPrescription = ({
   };
 
   const handleSubmit = () => {
+    console.log("localData", localData);
     setPrescriptionData(localData);
     setMode("View");
   };
+
+  const renderItem = useCallback(
+    ({ item }) => (
+      <MedicineFields
+        id={item.id}
+        name={item.name}
+        nOfTimes={item.nOfTimes}
+        note={item.note}
+        handleChange={handleChange}
+        handleDelete={handleDelete}
+      />
+    ),
+    [localData]
+  );
 
   return (
     <View style={styles.container}>
@@ -131,7 +159,7 @@ const EditPrescription = ({
 
       <TextInput
         style={styles.input}
-        label="Name of Doctor"
+        placeholder="Name of Doctor"
         value={localData.doctorName}
         onChangeText={(text) =>
           setLocalData({ ...localData, doctorName: text })
@@ -139,7 +167,7 @@ const EditPrescription = ({
       />
       <TextInput
         style={styles.input}
-        label="Name of Patient"
+        placeholder="Name of Patient"
         value={localData.patientName}
         onChangeText={(text) =>
           setLocalData({ ...localData, patientName: text })
@@ -147,32 +175,35 @@ const EditPrescription = ({
       />
       <TextInput
         style={styles.input}
-        label="Age"
+        placeholder="Age"
         value={localData.age}
         onChangeText={(text) => setLocalData({ ...localData, age: text })}
       />
-
-      <FlatList
-        data={localData.medicines}
-		
-        renderItem={({ item }) => (
-          <MedicineFields
-            id={item.id}
-            name={item.name}
-            nOfTimes={item.nOfTimes}
-            note={item.note}
-            handleChange={handleChange}
-            handleDelete={handleDelete}
-          />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-      />
-      <SubmitButton buttonText="Save" onPress={handleSubmit} color="default" />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <VirtualizedList
+          data={localData.medicines}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          getItemCount={(data) => data.length}
+          getItem={(data, index) => data[index]}
+          showsVerticalScrollIndicator={false}
+          initialNumToRender={5}
+          maxToRenderPerBatch={5}
+          windowSize={5}
+          updateCellsBatchingPeriod={100}
+        />
+        <SubmitButton
+          buttonText="Save"
+          onPress={handleSubmit}
+          color="default"
+        />
+      </KeyboardAvoidingView>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -200,6 +231,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderWidth: 0.2,
     borderColor: COLORS.primary,
+    padding: SIZES.padding,
+    borderRadius: SIZES.radius,
+    fontFamily: "Cairo-Regular",
+    fontSize: SIZES.body3,
   },
 });
 

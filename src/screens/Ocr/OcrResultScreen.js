@@ -133,13 +133,24 @@ const medicineData = [
     note: "After meal",
   },
 ];
-const OcrResultScreen = ({ navigation }) => {
-  const [mode, setMode] = useState("View");
+const OcrResultScreen = ({ navigation, route }) => {
+  const { drugs } = route.params;
+
+  const drugsData = drugs.map((drug, index) => {
+    return {
+      id: index + 1,
+      name: drug,
+      nOfTimes: "",
+      note: "",
+    };
+  });
+
+  const [mode, setMode] = useState("Edit");
   const [prescriptionData, setPrescriptionData] = useState({
-    doctorName: "John Doe",
-    patientName: "Peter Joseph",
-    age: "21",
-    medicines: medicineData,
+    doctorName: "",
+    patientName: "",
+    age: "",
+    medicines: drugsData,
   });
   return (
     <SafeAreaView style={styles.container}>

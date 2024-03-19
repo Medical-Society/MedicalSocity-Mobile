@@ -19,7 +19,7 @@ const MainStack = () => {
     >
       <Stack.Screen component={Drawer} name="Drawer" />
       <Stack.Screen component={AiChatbot} name="AiChatbot" />
-      <Stack.Screen component={OcrResultScreen} name="OcrResultScreen" />
+      <Stack.Screen component={OcrResultScreen} name="OcrResult" />
     </Stack.Navigator>
   );
 };

@@ -123,8 +123,14 @@ const clearMessage = (dispatch) => {
   };
 };
 
+const addError = (dispatch) => {
+  return (errorMessage) => {
+    dispatch({ type: "ADD_ERROR_MESSAGE", payload: errorMessage });
+  };
+};
+
 export const { Provider, Context } = createDataContext(
   userReducer,
-  { updateUserDataServer, updateUserData, postImage, clearMessage },
+  { updateUserDataServer, updateUserData, postImage, clearMessage, addError },
   { userData: {}, errorMessage: "", successMessage: "" }
 );
