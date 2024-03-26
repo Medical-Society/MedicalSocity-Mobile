@@ -133,9 +133,26 @@ const EditPrescription = ({
     setLocalData({ ...localData, medicines: newMedicines });
   };
 
+  const addDrug = () => {
+    const newMedicines = [
+      ...localData.medicines,
+      {
+        id: localData.medicines.length + 1,
+        name: "",
+        nOfTimes: "",
+        note: "",
+      },
+    ];
+    setLocalData({ ...localData, medicines: newMedicines });
+  };
+
+
   const handleSubmit = () => {
-    console.log("localData", localData);
-    setPrescriptionData(localData);
+    // filter out empty medicines
+    const newMedicines = localData.medicines.filter(
+      (medicine) => medicine.name !== ""
+    );
+    setPrescriptionData({ ...localData, medicines: newMedicines });
     setMode("View");
   };
 
@@ -194,6 +211,11 @@ const EditPrescription = ({
           maxToRenderPerBatch={5}
           windowSize={5}
           updateCellsBatchingPeriod={100}
+        />
+        <SubmitButton
+          buttonText="Add Drug"
+          onPress={addDrug}
+          color="default"
         />
         <SubmitButton
           buttonText="Save"

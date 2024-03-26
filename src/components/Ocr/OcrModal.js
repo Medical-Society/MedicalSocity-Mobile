@@ -11,7 +11,7 @@ import MessagesModal from "../MessagesModal";
 import LoadingModal from "../LoadingModal";
 
 import * as ImagePicker from "expo-image-picker";
-import { Context as UserContext } from "../../context/UserContext";
+import { Context as AuthContext } from "../../context/AuthContext";
 import CameraIcon from "../../../assets/camera.png";
 import GalleryIcon from "../../../assets/gallery.png";
 import axios from "axios";
@@ -28,14 +28,14 @@ const createFormData = (uri) => {
   return formData;
 };
 
-const postImage = async (uri, navigation, setLoading) => {
+const postImage = async (uri, navigation, setLoading, addError) => {
   console.log("uri", uri);
   console.log("createFormData", createFormData(uri));
   setLoading(true);
   try {
     const data = createFormData(uri);
     const response = await axios.post(
-      "https://prescriptions-ocr.azurewebsites.net/OCR",
+      "https://ocr-3nz8.onrender.com/OCR",
       data,
       {
         headers: {
@@ -43,10 +43,13 @@ const postImage = async (uri, navigation, setLoading) => {
         },
       }
     );
-    console.log("response", response.data);
-    navigation.navigate("OcrResult", { drugs: response.data.response });
+    console.log(response.data.response);
+    if (response.data.drugs_extracted)
+      navigation.navigate("OcrResult", { drugs: response.data.response });
+    else addError("Failed to extract drugs from image, please try again.");
   } catch (error) {
     console.log(error.response);
+    addError("Image upload failed");
     setLoading(false);
   } finally {
     setLoading(false);
@@ -56,7 +59,7 @@ const postImage = async (uri, navigation, setLoading) => {
 const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { state, addError, clearMessage } = useContext(UserContext);
+  const { clearMessage, state, addError } = useContext(AuthContext);
   const { errorMessage, successMessage } = state;
 
   const handleGalleryUpload = async () => {
@@ -66,7 +69,7 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
     });
     if (!result.canceled) {
       setModalVisible(false);
-      postImage(result.assets[0].uri, navigation, setLoading);
+      postImage(result.assets[0].uri, navigation, setLoading, addError);
       setSelectedImage(result.assets[0].uri);
     }
   };
@@ -83,12 +86,11 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
     let result = await ImagePicker.launchCameraAsync({
       quality: 1,
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      
     });
 
     if (!result.canceled) {
       setModalVisible(false);
-      postImage(result.assets[0].uri, navigation, setLoading);
+      postImage(result.assets[0].uri, navigation, setLoading, addError);
       setSelectedImage(result.assets[0].uri);
     }
   };
