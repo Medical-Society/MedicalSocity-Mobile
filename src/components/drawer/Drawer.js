@@ -13,9 +13,9 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Context as UserContext } from "../../context/UserContext";
 import { Context as AuthContext } from "../../context/AuthContext";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import profile from "../../../assets2/profile.png";
-import menu from "../../../assets2/menu.png";
-import close from "../../../assets2/close.png";
+import profile from "../../../assets/profile.png";
+import menu from "../../../assets/menu.png";
+import close from "../../../assets/close.png";
 import MainTab from "../mainTab/MainTab";
 import TabButton from "./TabButton";
 
@@ -69,8 +69,7 @@ export default function Drawer() {
             onPress={() => {
               hideMenu();
               navigation.navigate("ProfileStack");
-            }}
-          >
+            }}>
             <Text style={styles.settingsText}>Settings</Text>
           </TouchableOpacity>
           <View style={styles.tabButtonsContainer}>
@@ -159,8 +158,7 @@ export default function Drawer() {
               borderRadius: showMenu ? 15 : 0,
               transform: [{ scale: scaleValue }, { translateX: offsetValue }],
             },
-          ]}
-        >
+          ]}>
           <TouchableOpacity onPress={hideMenu}>
             <Image source={showMenu ? close : menu} style={styles.menuIcon} />
           </TouchableOpacity>

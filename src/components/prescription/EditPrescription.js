@@ -15,7 +15,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import SubmitButton from "../auth/SubmitButton";
+import SubmitButton from "../SubmitButton";
 
 const COLORS = {
   primary: "#242760",

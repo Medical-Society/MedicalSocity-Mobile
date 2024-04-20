@@ -1,3 +1,6 @@
+import "react-native-reanimated";
+import "react-native-gesture-handler";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthStack from "./src/components/auth/AuthStack";
@@ -58,8 +61,7 @@ const App = () => {
             backgroundColor: "#FFFFFF",
           },
         }}
-        initialRouteName="Welcome"
-      >
+        initialRouteName="Welcome">
         {resolvedScreen}
         {authOrMainFlowScreen}
       </Stack.Navigator>

@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
-import Button from "../components/auth/SubmitButton";
+import Button from "../components/SubmitButton";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import OrLine from "../components/auth/OrLine";
@@ -18,6 +18,13 @@ import MessagesModal from "../components/MessagesModal";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  colors,
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from "../../AppStyles";
+import GenderInput from "../components/GenderInput";
 
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
@@ -103,30 +110,6 @@ const SignUp = ({ navigation }) => {
     );
   });
 
-  const GenderInput = () => {
-    const gender = signUpData.gender;
-    return (
-      <View style={styles.genderContainer}>
-        <Text style={styles.label}>Select Gender:</Text>
-        <RadioButton.Group
-          onValueChange={(newValue) => handleInputChange("gender", newValue)}
-          value={gender}
-        >
-          <View style={styles.genderSelectors}>
-            <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="MALE" color="#6200EE" />
-              <Text style={styles.radioButtonText}>Male</Text>
-            </View>
-            <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="FEMALE" color="#6200EE" />
-              <Text style={styles.radioButtonText}>Female</Text>
-            </View>
-          </View>
-        </RadioButton.Group>
-      </View>
-    );
-  };
-
   const [isPickerShow, setIsPickerShow] = useState(false);
   const showPicker = () => {
     setIsPickerShow((prev) => !prev);
@@ -177,11 +160,13 @@ const SignUp = ({ navigation }) => {
         style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
         behavior="padding"
         enabled
-        keyboardVerticalOffset={20}
-      >
+        keyboardVerticalOffset={20}>
         <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
           {signupInputs}
-          <GenderInput />
+          <GenderInput
+            gender={signUpData.gender}
+            handleInputChange={handleInputChange}
+          />
           <DatePicker />
           <Button
             onPress={handleSignUp}

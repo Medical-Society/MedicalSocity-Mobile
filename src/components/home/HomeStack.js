@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../../screens/Home";
-import Doctor from "../../screens/Doctor";
 import ResultsShowScreen from "../../screens/Search/ResultsShowScreen";
 import AiChatbot from "../../screens/Chat/AiChatbot";
 const Stack = createNativeStackNavigator();
@@ -14,19 +13,11 @@ const HomeStack = () => {
           backgroundColor: "#FFFFFF",
         },
       }}
-      initialRouteName="Home"
-    >
+      initialRouteName="Home">
       <Stack.Screen
         name="Home"
         component={Home}
         options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Doctor"
-        component={Doctor}
-        options={{
-          headerShown: false,
-        }}
       />
 
       <Stack.Screen

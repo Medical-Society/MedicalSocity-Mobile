@@ -12,6 +12,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ViewPrescription from "../../components/prescription/ViewPrescription";
 import EditPrescription from "../../components/prescription/EditPrescription";
+import Header from "../../components/Header";
 const COLORS = {
   primary: "#242760",
   secondary: "#544C4C",
@@ -154,19 +155,7 @@ const OcrResultScreen = ({ navigation, route }) => {
   });
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <MaterialIcons
-            name="keyboard-arrow-left"
-            size={24}
-            color={COLORS.black}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Your Prescription</Text>
-      </View>
+      <Header title="OCR" navigation={navigation} />
       {mode === "Edit" ? (
         <EditPrescription
           prescriptionData={prescriptionData}

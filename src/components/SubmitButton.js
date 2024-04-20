@@ -2,32 +2,35 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-
+import { responsiveFontSize, responsiveHeight, colors } from "../../AppStyles";
 const Button = ({
   onPress,
   buttonText,
   isLoading = false,
   color = "default",
+  disabled = false,
 }) => (
-  <TouchableOpacity onPress={onPress}>
+  <TouchableOpacity onPress={onPress} disabled={disabled || isLoading}>
     <LinearGradient
-      colors={color === "default" ? ["#060B73", "#040740"] : ["#fff", "#fff"]}
+      colors={
+        color === "default"
+          ? [colors.BlueI, colors.BlueII]
+          : [colors.White, colors.White]
+      }
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={[
         styles.gradientButton,
         {
-          borderColor: color === "default" ? null : "#060B73",
+          borderColor: color === "default" ? null : colors.BlueI,
           borderWidth: color === "default" ? null : 1,
         },
-      ]}
-    >
+      ]}>
       <Text
         style={[
           styles.buttonText,
-          { color: color === "default" ? "#fff" : "#060B73" },
-        ]}
-      >
+          { color: color === "default" ? colors.White : colors.BlueI },
+        ]}>
         {buttonText}
       </Text>
       {isLoading && <ActivityIndicator animating={isLoading} />}
@@ -37,9 +40,10 @@ const Button = ({
 
 const styles = StyleSheet.create({
   gradientButton: {
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 10,
+    paddingVertical: responsiveHeight(14),
     borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
@@ -54,8 +58,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     textAlign: "center",
+    fontFamily: "Cairo-SemiBold",
   },
 });
 

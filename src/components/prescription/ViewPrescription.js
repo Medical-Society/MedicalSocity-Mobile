@@ -9,7 +9,7 @@ import {
   Dimensions,
   FlatList,
 } from "react-native";
-import SubmitButton from "../auth/SubmitButton";
+import SubmitButton from "../SubmitButton";
 
 const COLORS = {
   primary: "#242760",

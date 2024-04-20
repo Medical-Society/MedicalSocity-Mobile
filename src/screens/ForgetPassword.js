@@ -13,7 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 
 import { Context as AuthContext } from "../context/AuthContext";
-import Button from "../components/auth/SubmitButton";
+import Button from "../components/SubmitButton";
 
 import InputField from "../components/auth/InputField";
 import MessagesModal from "../components/MessagesModal";

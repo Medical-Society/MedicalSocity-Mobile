@@ -17,6 +17,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Context as UserContext } from "../../context/UserContext";
 import MessagesModal from "../../components/MessagesModal";
 import LoadingModal from "../../components/LoadingModal";
+import Header from "../../components/Header";
 
 const COLORS = {
   primary: "#242760",
@@ -92,19 +93,7 @@ const EditProfile = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <MaterialIcons
-            name="keyboard-arrow-left"
-            size={24}
-            color={COLORS.black}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Edit Profile</Text>
-      </View>
+      <Header title="Edit Profile" navigation={navigation} />
 
       <LoadingModal loading={loading} />
 
@@ -120,12 +109,10 @@ const EditProfile = ({ navigation }) => {
         style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
         behavior="padding"
         enabled
-        keyboardVerticalOffset={100}
-      >
+        keyboardVerticalOffset={100}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+          contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.imageContainer}>
             <Image source={{ uri: selectedImage }} style={styles.avatar} />
             <TouchableOpacity onPress={handleImageSelection}>
@@ -180,8 +167,7 @@ const EditProfile = ({ navigation }) => {
                   navigation,
                   setLoading
                 )
-              }
-            >
+              }>
               <Text style={styles.saveButtonText}>Save Change</Text>
             </TouchableOpacity>
           </View>

@@ -16,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import aiChatbot from "../../api/Ai";
 import axios from "axios";
+import Header from "../../components/Header";
 
 const COLORS = {
   primary: "#242760",
@@ -121,19 +122,7 @@ const AiChatbot = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <MaterialIcons
-            name="keyboard-arrow-left"
-            size={24}
-            color={COLORS.black}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Ai Chatbot</Text>
-      </View>
+      <Header title="Chatbot" navigation={navigation} />
       <GiftedChat
         messages={messages}
         onSend={(messages) => onSend(messages)}

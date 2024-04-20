@@ -4,6 +4,7 @@ import Drawer from "../drawer/Drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AiChatbot from "../../screens/Chat/AiChatbot";
 import OcrResultScreen from "../../screens/Ocr/OcrResultScreen";
+import DoctorStack from "../DoctorStack/DoctorStack";
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
@@ -15,11 +16,11 @@ const MainStack = () => {
         contentStyle: {
           backgroundColor: "#FFFFFF",
         },
-      }}
-    >
+      }}>
       <Stack.Screen component={Drawer} name="Drawer" />
       <Stack.Screen component={AiChatbot} name="AiChatbot" />
       <Stack.Screen component={OcrResultScreen} name="OcrResult" />
+      <Stack.Screen component={DoctorStack} name="DoctorStack" />
     </Stack.Navigator>
   );
 };
