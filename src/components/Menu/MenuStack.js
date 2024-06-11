@@ -12,7 +12,7 @@ const ReportProblem = lazy(() => import("../../screens/Profile/ReportProblem"));
 
 const Stack = createNativeStackNavigator();
 
-const ProfileStack = () => {
+const MenuStack = ({navigation}) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -20,8 +20,7 @@ const ProfileStack = () => {
           backgroundColor: "#FFFFFF",
         },
       }}
-      initialRouteName="Profile"
-    >
+      initialRouteName="Profile">
       <Stack.Screen
         name="Profile"
         component={Profile}
@@ -40,9 +39,13 @@ const ProfileStack = () => {
       />
       <Stack.Screen name="Help&Support" component={HelpSupport} />
       <Stack.Screen name="TermsAndPolicies" component={TermsPolicies} />
-      <Stack.Screen name="ReportProblem" component={ReportProblem} />
+      <Stack.Screen
+        name="ReportProblem"
+        component={ReportProblem}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
 
-export default ProfileStack;
+export default MenuStack;

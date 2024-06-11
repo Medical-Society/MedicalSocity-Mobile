@@ -14,7 +14,7 @@ import {
   Context as UserContext,
   Provider as UserProvider,
 } from "./src/context/UserContext";
-import Drawer from "./src/components/drawer/Drawer";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainStack from "./src/components/mainStack/MainStack";
 const Stack = createNativeStackNavigator();
 
@@ -54,18 +54,20 @@ const App = () => {
   }, [state.token]);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          contentStyle: {
-            backgroundColor: "#FFFFFF",
-          },
-        }}
-        initialRouteName="Welcome">
-        {resolvedScreen}
-        {authOrMainFlowScreen}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            contentStyle: {
+              backgroundColor: "#FFFFFF",
+            },
+          }}
+          initialRouteName="Welcome">
+          {resolvedScreen}
+          {authOrMainFlowScreen}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
 

@@ -31,6 +31,7 @@ const Login = ({ navigation }) => {
       clearMessage();
       setEmail("");
       setPassword("");
+      setIsLoading(false);
     });
     return unsubscribe;
   }, [navigation]);

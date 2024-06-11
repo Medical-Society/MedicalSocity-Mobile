@@ -1,7 +1,7 @@
-//import liraries
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+// Header.js
 
+import React, { memo } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   responsiveFontSize,
@@ -10,18 +10,18 @@ import {
   responsiveWidth,
 } from "../../AppStyles";
 
-const Header = ({ title, navigation }) => {
+const Header = ({ title, backButtonHandler }) => {
   return (
     <View style={styles.header}>
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.iconButton}>
-        <MaterialIcons
-          name="keyboard-arrow-left"
-          size={responsiveFontSize(30)}
-          color={colors.Black}
-        />
-      </TouchableOpacity>
+      {backButtonHandler && (
+        <TouchableOpacity onPress={backButtonHandler} style={styles.iconButton}>
+          <MaterialIcons
+            name="keyboard-arrow-left"
+            size={responsiveFontSize(30)}
+            color={colors.Black}
+          />
+        </TouchableOpacity>
+      )}
       <Text style={styles.headerTitle}>{title}</Text>
     </View>
   );
@@ -46,5 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-//make this component available to the app
-export default Header;
+export default memo(Header);

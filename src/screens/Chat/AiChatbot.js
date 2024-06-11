@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import aiChatbot from "../../api/Ai";
 import axios from "axios";
 import Header from "../../components/Header";
+import { Context as AuthContext } from "../../context/AuthContext";
 
 const COLORS = {
   primary: "#242760",
@@ -64,8 +65,11 @@ const FONTS = {
   body3: { fontSize: SIZES.body3, lineHeight: 22 },
   body4: { fontSize: SIZES.body4, lineHeight: 20 },
 };
-const AiChatbot = ({ navigation }) => {
+const AiChatbot = ({ navigation, route }) => {
+  const { isFromStack } = route.params || false;
   const [messages, setMessages] = useState([]);
+  const { state } = useContext(AuthContext);
+  const token = state.token;
 
   const callChatbot = async ({ text: message }) => {
     try {
@@ -73,13 +77,14 @@ const AiChatbot = ({ navigation }) => {
         "https://chatbot-mgle.onrender.com/message",
         {
           message: message,
+          user_id: token,
         }
       );
       const newMessage = {
         _id:
           Math.floor(Math.random() * Math.floor(Math.random() * 1000000)) +
           Math.floor(Math.random() * 10000000),
-        text: response.data.message,
+        text: response.data.response,
         createdAt: new Date(),
         user: {
           _id: 2,
@@ -120,9 +125,12 @@ const AiChatbot = ({ navigation }) => {
     );
   }, []);
 
+  const handleButton = () =>
+    navigation.navigate("HomeStack", { screen: "Home" });
+
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Chatbot" navigation={navigation} />
+      <Header title="Chatbot" backButtonHandler={handleButton} />
       <GiftedChat
         messages={messages}
         onSend={(messages) => onSend(messages)}

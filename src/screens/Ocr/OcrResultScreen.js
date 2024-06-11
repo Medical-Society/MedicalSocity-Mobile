@@ -146,7 +146,7 @@ const OcrResultScreen = ({ navigation, route }) => {
     };
   });
 
-  const [mode, setMode] = useState("Edit");
+  const [mode, setMode] = useState("View");
   const [prescriptionData, setPrescriptionData] = useState({
     doctorName: "",
     patientName: "",
@@ -155,7 +155,7 @@ const OcrResultScreen = ({ navigation, route }) => {
   });
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="OCR" navigation={navigation} />
+      <Header title="OCR" backButtonHandler={() => navigation.goBack()} />
       {mode === "Edit" ? (
         <EditPrescription
           prescriptionData={prescriptionData}
@@ -175,7 +175,6 @@ const OcrResultScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 12,
     marginBottom: 20,
     backgroundColor: COLORS.white,
   },

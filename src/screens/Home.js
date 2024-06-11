@@ -13,7 +13,7 @@ import {
   Platform,
 } from "react-native";
 import { useContext } from "react";
-import { Context as UserContext } from "../context/UserContext";
+import { Context as AuthContext } from "../context/AuthContext";
 import SearchBar from "../components/Search/SearchBar";
 import useResults from "../hooks/useResults";
 import ResultsList from "../components/Search/ResultsList";
@@ -23,8 +23,7 @@ const DoctorCard = ({ doctor, navigation }) => {
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate("Doctor", { doctor })}
-    >
+      onPress={() => navigation.navigate("Doctor", { doctor })}>
       <Text style={styles.name}>{doctor.name}</Text>
       <Text style={styles.specialty}>{doctor.specialty}</Text>
       <Text style={styles.address}>{doctor.address}</Text>
@@ -70,8 +69,7 @@ const DoctorCircle = ({ doctor, navigation }) => {
     <View>
       <TouchableOpacity
         style={styles.doctorCircle}
-        onPress={() => navigation.navigate("Doctor", { doctor })}
-      >
+        onPress={() => navigation.navigate("Doctor", { doctor })}>
         <Image source={doctor.image} style={styles.image} />
         <Text style={styles.name}>{doctor.name}</Text>
         <Text style={styles.specialty}>{doctor.specialty}</Text>
@@ -156,8 +154,7 @@ const HomeCard = ({ feature, onPress }) => {
         <TouchableOpacity
           style={styles.cardButton}
           title={feature.button}
-          onPress={handlePress}
-        >
+          onPress={handlePress}>
           <Text style={{ color: "white" }}>{feature.button}</Text>
         </TouchableOpacity>
       </View>
@@ -172,6 +169,7 @@ const Home = ({ navigation }) => {
   const [term, setTerm] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [searchApi, results, errorMessage, setResults] = useResults();
+  const token = useContext(AuthContext).state.token;
 
   const doctors = [
     {
@@ -518,7 +516,7 @@ const Home = ({ navigation }) => {
         term={term}
         onTermChange={setTerm}
         setResults={setResults}
-        onTermSubmit={() => searchApi(term)}
+        onTermSubmit={() => searchApi(term, token)}
       />
       <OcrModal
         navigation={navigation}
@@ -551,7 +549,9 @@ const Home = ({ navigation }) => {
               image: require("../../assets/AiCardImg.png"),
               bgColor: "#041E3F",
             }}
-            onPress={() => navigation.navigate("AiChatbot")}
+            onPress={() =>
+              navigation.navigate("AiChatbot", { isFromStack: true })
+            }
           />
           <HomeCard
             feature={{

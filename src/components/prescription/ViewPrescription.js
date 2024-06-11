@@ -10,6 +10,8 @@ import {
   FlatList,
 } from "react-native";
 import SubmitButton from "../SubmitButton";
+import { colors } from "../../../AppStyles";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const COLORS = {
   primary: "#242760",
@@ -29,7 +31,7 @@ const SIZES = {
   padding: 10,
   padding2: 12,
   padding3: 16,
-  largeTitle: 50,  
+  largeTitle: 50,
   h1: 30,
   h2: 20,
   h3: 18,
@@ -60,17 +62,9 @@ const FONTS = {
 };
 const InfoField = ({ title, value }) => {
   return (
-    <View style={{ flexDirection: "row", marginVertical: SIZES.base }}>
-      <Text style={{ ...FONTS.h3, color: COLORS.primary }}>{title}</Text>
-      <Text
-        style={{
-          ...FONTS.h3,
-          color: COLORS.secondary,
-          marginLeft: SIZES.padding,
-        }}
-      >
-        {value}
-      </Text>
+    <View style={styles.infoFiled}>
+      <Text style={styles.mainText}>{title}</Text>
+      <Text style={styles.valueText}>{value}</Text>
     </View>
   );
 };
@@ -78,9 +72,11 @@ const InfoField = ({ title, value }) => {
 const MedicineField = ({ name, nOfTimes, note }) => {
   return (
     <View style={{ flexDirection: "column", marginVertical: SIZES.base }}>
-      <Text style={{ ...FONTS.h2, color: COLORS.primary }}>{name}</Text>
-      <Text style={styles.secondaryText}>- {nOfTimes} a day</Text>
-      <Text style={styles.secondaryText}>- {note}</Text>
+      <Text style={styles.mainText}>{name}</Text>
+      <Text style={styles.valueText}>
+        {nOfTimes ? nOfTimes : "X times"} a day
+      </Text>
+      <Text style={styles.valueText}>{note ? note : "no notes founded"}</Text>
     </View>
   );
 };
@@ -98,7 +94,11 @@ const ViewPrescription = ({ prescriptionData, setMode }) => {
         value={patientName ? patientName : "No name"}
       />
       <InfoField title="Age:" value={age ? age : "No age"} />
-      {/* create a divider with colors primary */}
+      <View
+        style={{
+          height: 20,
+        }}
+      />
       <View
         style={{
           borderBottomWidth: 1,
@@ -107,7 +107,7 @@ const ViewPrescription = ({ prescriptionData, setMode }) => {
         }}
       />
       <FlatList
-        data={prescriptionData.medicines}
+        data={medicines}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -118,11 +118,16 @@ const ViewPrescription = ({ prescriptionData, setMode }) => {
           />
         )}
       />
-      <SubmitButton
+      <TouchableOpacity
+        style={styles.editButton}
+        onPress={() => setMode("Edit")}>
+        <MaterialIcons name="edit" size={35} color={colors.White} />
+      </TouchableOpacity>
+      {/* <SubmitButton
         buttonText="Edit Prescription"
         onPress={() => setMode("Edit")}
         color="default"
-      />
+      /> */}
     </View>
   );
 };
@@ -136,6 +141,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
   },
+  infoFiled: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 5,
+  },
   headerText: {
     ...FONTS.h3,
     color: COLORS.primary,
@@ -144,6 +154,24 @@ const styles = StyleSheet.create({
     ...FONTS.h3,
     color: COLORS.secondary,
     marginVertical: SIZES.small,
+  },
+  mainText: {
+    fontSize: 20,
+    color: colors.BlueI,
+    fontFamily: "Cairo-Medium",
+  },
+  valueText: {
+    fontSize: 18,
+    color: colors.GreyI,
+    fontFamily: "Cairo-Medium",
+  },
+  editButton: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    backgroundColor: colors.BlueII,
+    padding: 10,
+    borderRadius: 50,
   },
 });
 

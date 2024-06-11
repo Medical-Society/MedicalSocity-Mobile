@@ -13,6 +13,7 @@ import doctorApi from "../../api/doctor";
 import ResultsList from "../../components/Search/ResultsList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
+import { responsiveHeight } from "../../../AppStyles";
 
 const COLORS = {
   primary: "#242760",
@@ -75,8 +76,7 @@ const ResultsShowScreen = ({ navigation, route }) => {
           marginHorizontal: 12,
           flexDirection: "row",
           justifyContent: "center",
-        }}
-      >
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();
@@ -84,8 +84,7 @@ const ResultsShowScreen = ({ navigation, route }) => {
           style={{
             position: "absolute",
             left: 0,
-          }}
-        >
+          }}>
           <MaterialIcons
             name="keyboard-arrow-left"
             size={24}
@@ -107,7 +106,7 @@ const ResultsShowScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 60,
+    marginBottom: responsiveHeight(80),
   },
   image: {
     height: 200,

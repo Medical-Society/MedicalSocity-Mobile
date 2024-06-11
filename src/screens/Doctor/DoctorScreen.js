@@ -29,7 +29,6 @@ const Spacer = () => {
 
 const DoctorScreen = ({ navigation, route }) => {
   const doctorId = route.params.doctorId;
-
   const [loading, setLoading] = useState(true);
   const [doctor, setDoctor] = useState({
     _id: "",
@@ -114,7 +113,7 @@ const DoctorScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Doctor" navigation={navigation} />
+      <Header title="Doctor" backButtonHandler={() => navigation.goBack()} />
       {loading ? (
         <Skeleton />
       ) : (
@@ -138,7 +137,7 @@ const DoctorScreen = ({ navigation, route }) => {
             <Text style={styles.about}>{doctor.about}</Text>
             <Button
               buttonText="Reviews"
-              onPress={() => navigation.navigate("Reviews", { doctor })}
+              onPress={() => navigation.navigate("Reviews", { doctorId })}
               color="white"
             />
             <Button

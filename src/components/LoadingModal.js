@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, Modal, StyleSheet, Dimensions } from "react-native";
+import { colors } from "../../AppStyles";
 
 const LoadingModal = ({ loading }) => {
-  console.log("loading", loading);
   return (
     <Modal animationType="slide" transparent={true} visible={loading}>
       <View style={styles.modalContainer}>
@@ -13,14 +13,7 @@ const LoadingModal = ({ loading }) => {
     </Modal>
   );
 };
-const COLORS = {
-  primary: "#242760",
-  secondary: "#544C4C",
-  white: "#FFFFFF",
-  black: "#000000",
-  gray: "rgba(36, 39, 96, 0.05)",
-  secondaryGray: "rgba(84, 76, 76, 0.14)",
-};
+
 const { height, width } = Dimensions.get("window");
 
 const SIZES = {
@@ -67,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
-    backgroundColor: COLORS.white,
+    backgroundColor: colors.White,
     padding: 22,
     borderRadius: 4,
     width: "80%",

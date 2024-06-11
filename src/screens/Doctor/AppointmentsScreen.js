@@ -17,13 +17,15 @@ import {
   convertTo12HourFormat,
 } from "../../../AppStyles";
 import doctorApi from "../../api/doctor";
+import patientApi from "../../api/patient";
 import {
   Context as AuthContext,
   Provider as AuthProvider,
 } from "../../context/AuthContext";
 import Header from "../../components/Header";
 import Button from "../../components/SubmitButton";
-
+import MessagesModal from "../../components/MessagesModal";
+import LoadingModal from "../../components/LoadingModal";
 const AppointmentsScreen = ({
   navigation,
   route: {
@@ -35,8 +37,10 @@ const AppointmentsScreen = ({
   const [weekDays, setWeekDays] = useState({});
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const getDoctorAvailableTime = async () => {
       try {
@@ -45,8 +49,6 @@ const AppointmentsScreen = ({
             Authorization: `Bearer ${token}`,
           },
         });
-
-        console.log("response", response.data.data);
         setWeekDays(response.data.data);
       } catch (error) {
         console.log("error", error);
@@ -56,11 +58,36 @@ const AppointmentsScreen = ({
   }, []);
 
   const keys = useMemo(() => Object.keys(weekDays), [weekDays]);
-  console.log("keys", keys);
+
+  const bookAppointment = async (date) => {
+    setLoading(true);
+    try {
+      await patientApi.post(
+        "/appointments",
+        {
+          doctorId,
+          date,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setSuccessMessage("Appointment booked successfully!");
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Appointments" navigation={navigation} />
+      <Header
+        title="Appointments"
+        backButtonHandler={() => navigation.goBack()}
+      />
       <View
         style={{
           marginHorizontal: responsiveWidth(20),
@@ -91,70 +118,37 @@ const AppointmentsScreen = ({
           />
         </View>
 
-        {/*success one <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.modalContainer}>
-            <View
-              style={{
-                backgroundColor: "white",
-                width: responsiveWidth(300),
-                height: responsiveHeight(200),
-                borderRadius: 20,
-                padding: 20,
-                justifyContent: "center",
-                alignItems: "center",
-              }}>
-              <MaterialIcons
-                name="check-circle"
-                size={responsiveFontSize(50)}
-                color={colors.Green}
-              />
-              <Text
-                style={{
-                  fontFamily: "Cairo-SemiBold",
-                  fontSize: responsiveFontSize(20),
-                  color: colors.Green,
-                  textAlign: "center",
-                }}>
-                Your appointment has been booked successfully
-              </Text>
-            </View>
-          </View>
-        </Modal> */}
+        <MessagesModal
+          errorMessage={errorMessage}
+          successMessage={successMessage}
+          clearMessage={() => {
+            setErrorMessage("");
+            setSuccessMessage("");
+          }}
+        />
 
+        <LoadingModal loading={loading} />
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
             setModalVisible(!modalVisible);
           }}>
           <View style={styles.modalContainer}>
-            <View
-              style={{
-                backgroundColor: "white",
-                borderRadius: 20,
-                padding: 20,
-                justifyContent: "center",
-                alignItems: "center",
-                marginHorizontal: responsiveWidth(20),
-              }}>
-              <MaterialIcons
-                // name: question mark
-                name="date-range"
-                size={responsiveFontSize(50)}
-                color={colors.Black}
-              />
+            <View style={styles.modalContent}>
+              <View style={styles.iconsView}>
+                <MaterialIcons
+                  name="date-range"
+                  size={responsiveFontSize(50)}
+                  color={colors.Black}
+                />
+              </View>
               <Text
                 style={{
                   fontFamily: "Cairo-SemiBold",
                   fontSize: responsiveFontSize(20),
-                  color: colors.Green,
+                  color: colors.DarkCyan,
                   textAlign: "center",
                 }}>
                 The appointment you want to book {"\n"} is on{" "}
@@ -162,6 +156,27 @@ const AppointmentsScreen = ({
                 {convertTo12HourFormat(selectedTime)[2]} {"\n"} at{" "}
                 {convertTo12HourFormat(selectedTime)[1]}
               </Text>
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                  style={{ ...styles.modalButton, backgroundColor: colors.Red }}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <Text style={styles.modalButtonText}>Close</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    ...styles.modalButton,
+                    backgroundColor: colors.Green,
+                  }}
+                  onPress={() => {
+                    bookAppointment(selectedTime);
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <Text style={styles.modalButtonText}>Confirm</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>
@@ -278,6 +293,41 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  iconsView: {
+    position: "absolute",
+    top: responsiveHeight(-30),
+    backgroundColor: "white",
+    borderRadius: 50,
+  },
+  icon: {
+    fontSize: responsiveFontSize(60),
+    marginBottom: responsiveHeight(20),
+    borderRadius: 50,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: responsiveWidth(20),
+    borderRadius: 10,
+    alignItems: "center",
+    paddingVertical: responsiveHeight(40),
+    marginHorizontal: responsiveWidth(20),
+  },
+  modalButton: {
+    paddingVertical: responsiveHeight(10),
+    paddingHorizontal: responsiveWidth(20),
+    borderRadius: 5,
+    marginTop: responsiveHeight(20),
+  },
+  modalButtonText: {
+    color: "white",
+    fontSize: responsiveFontSize(16),
+    textAlign: "center",
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
 });
 

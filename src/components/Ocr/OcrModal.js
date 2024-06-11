@@ -28,7 +28,7 @@ const createFormData = (uri) => {
   return formData;
 };
 
-const postImage = async (uri, navigation, setLoading, addError) => {
+const postImage = async (uri, navigation, setLoading, addError, token) => {
   console.log("uri", uri);
   console.log("createFormData", createFormData(uri));
   setLoading(true);
@@ -48,7 +48,7 @@ const postImage = async (uri, navigation, setLoading, addError) => {
       navigation.navigate("OcrResult", { drugs: response.data.response });
     else addError("Failed to extract drugs from image, please try again.");
   } catch (error) {
-    console.log(error.response);
+    console.log(error.response.data);
     addError("Image upload failed");
     setLoading(false);
   } finally {
@@ -58,6 +58,7 @@ const postImage = async (uri, navigation, setLoading, addError) => {
 
 const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
   const [selectedImage, setSelectedImage] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const { clearMessage, state, addError } = useContext(AuthContext);
   const { errorMessage, successMessage } = state;
@@ -69,7 +70,13 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
     });
     if (!result.canceled) {
       setModalVisible(false);
-      postImage(result.assets[0].uri, navigation, setLoading, addError);
+      postImage(
+        result.assets[0].uri,
+        navigation,
+        setLoading,
+        addError,
+        state.token
+      );
       setSelectedImage(result.assets[0].uri);
     }
   };
@@ -110,22 +117,19 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
         visible={isVisible}
         onRequestClose={() => {
           Alert.alert("Modal has been closed.");
-        }}
-      >
+        }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View
               style={{
                 flexDirection: "row",
-              }}
-            >
+              }}>
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
                   handlePermission();
                   // setModalVisible(false);
-                }}
-              >
+                }}>
                 <Image source={CameraIcon} style={styles.icon} />
               </TouchableOpacity>
 
@@ -134,8 +138,7 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
                 onPress={() => {
                   setModalVisible(false);
                   handleGalleryUpload();
-                }}
-              >
+                }}>
                 <Image source={GalleryIcon} style={styles.icon} />
               </TouchableOpacity>
             </View>
@@ -143,8 +146,7 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
               style={styles.button}
               onPress={() => {
                 setModalVisible(false);
-              }}
-            >
+              }}>
               <Text style={styles.textStyle}>Cancel</Text>
             </TouchableOpacity>
           </View>

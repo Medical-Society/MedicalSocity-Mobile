@@ -80,7 +80,7 @@ export const hasNotch = (version) => {
 
 // colors used in the app
 export const colors = {
-  Gold: "#BF8148",
+  Gold: "#EFCE4A",
   White: "#FFFFFF",
   Moka: "#EBE8E8",
   Black: "#000000",
@@ -88,6 +88,7 @@ export const colors = {
   Cyan: "#55C4E0",
   LightSeaGreen: "#1B7B94",
   Grey: "#ABAAAA",
+  GreyI: "#7B7B7B",
   SolidGrey: "#D9D9D9",
   LightGrey: "#B5B5B5",
   DarkGrey: "#606060",
@@ -243,7 +244,6 @@ export const convertTo12HourFormat = (dateTimeString) => {
     date.getMonth() + 1
   }-${date.getDate()}`;
 
-  console.log("formattedYMD", formattedYMD);
   return [day, formattedTime, formattedYMD];
 };
 

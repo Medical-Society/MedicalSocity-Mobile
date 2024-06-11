@@ -93,7 +93,10 @@ const EditProfile = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Edit Profile" navigation={navigation} />
+      <Header
+        title="Edit Profile"
+        backButtonHandler={() => navigation.goBack()}
+      />
 
       <LoadingModal loading={loading} />
 
