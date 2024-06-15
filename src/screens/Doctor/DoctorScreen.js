@@ -52,7 +52,10 @@ const DoctorScreen = ({ navigation, route }) => {
       try {
         const response = await doctorApi.get(`/${doctorId}`);
         setDoctor(response.data.data.doctor);
-
+        console.log(
+          "Doctor is:",
+          JSON.stringify(response.data.data.doctor, null, 2)
+        );
         setLoading(false);
       } catch (err) {
         console.log(err.response);
@@ -142,7 +145,7 @@ const DoctorScreen = ({ navigation, route }) => {
             />
             <Button
               buttonText="Latest Work"
-              onPress={() => navigation.navigate("LatestWork", { doctor })}
+              onPress={() => navigation.navigate("LatestWork", { doctorId })}
             />
           </View>
           <Spacer />

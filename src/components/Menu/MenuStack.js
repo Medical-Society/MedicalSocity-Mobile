@@ -9,10 +9,13 @@ const NotificationsSettings = lazy(() =>
 const HelpSupport = lazy(() => import("../../screens/Profile/HelpSupport"));
 const TermsPolicies = lazy(() => import("../../screens/Profile/TermsPolicies"));
 const ReportProblem = lazy(() => import("../../screens/Profile/ReportProblem"));
+const ViewPrescription = lazy(() =>
+  import("../../screens/Prescription/ViewPrescriptionScreen")
+);
 
 const Stack = createNativeStackNavigator();
 
-const MenuStack = ({navigation}) => {
+const MenuStack = ({ navigation }) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -44,6 +47,7 @@ const MenuStack = ({navigation}) => {
         component={ReportProblem}
         options={{ headerShown: false }}
       />
+      
     </Stack.Navigator>
   );
 };

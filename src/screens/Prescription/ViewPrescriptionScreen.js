@@ -9,9 +9,11 @@ import {
   Dimensions,
   FlatList,
 } from "react-native";
-import SubmitButton from "../SubmitButton";
+import SubmitButton from "../../components/SubmitButton";
 import { colors } from "../../../AppStyles";
 import { MaterialIcons } from "@expo/vector-icons";
+import Header from "../../components/Header";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const COLORS = {
   primary: "#242760",
@@ -63,7 +65,7 @@ const FONTS = {
 const InfoField = ({ title, value }) => {
   return (
     <View style={styles.infoFiled}>
-      <Text style={styles.mainText}>{title}</Text>
+      <Text style={styles.mainText}>{title}: </Text>
       <Text style={styles.valueText}>{value}</Text>
     </View>
   );
@@ -76,64 +78,64 @@ const MedicineField = ({ name, nOfTimes, note }) => {
       <Text style={styles.valueText}>
         {nOfTimes ? nOfTimes : "X times"} a day
       </Text>
-      <Text style={styles.valueText}>{note ? note : "no notes founded"}</Text>
     </View>
   );
 };
 
-const ViewPrescription = ({ prescriptionData, setMode }) => {
-  const { patientName, doctorName, age, medicines } = prescriptionData;
+const ViewPrescriptionScreen = ({ navigation, route, setMode }) => {
+  const { doctorName, medicines, diagnose, diseases } =
+    route.params.prescription;
+
   return (
-    <View style={styles.container}>
-      <InfoField
-        title="Doctor Name:"
-        value={doctorName ? doctorName : "No name"}
+    <SafeAreaView style={styles.container}>
+      <Header
+        title="Prescription"
+        backButtonHandler={() => navigation.goBack()}
       />
-      <InfoField
-        title="Patient Name:"
-        value={patientName ? patientName : "No name"}
-      />
-      <InfoField title="Age:" value={age ? age : "No age"} />
-      <View
-        style={{
-          height: 20,
-        }}
-      />
-      <View
-        style={{
-          borderBottomWidth: 1,
-          borderBottomColor: COLORS.primary,
-          marginVertical: SIZES.base,
-        }}
-      />
-      <FlatList
-        data={medicines}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <MedicineField
-            name={item.name}
-            nOfTimes={item.nOfTimes}
-            note={item.note}
-          />
+      <View style={styles.innerContainer}>
+        <InfoField
+          title="Doctor Name:"
+          value={doctorName ? doctorName : "No name"}
+        />
+        <InfoField title="Diseases" value={diseases} />
+        <InfoField title="Diagnose" value={diagnose} />
+        <View
+          style={{
+            height: 20,
+          }}
+        />
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: COLORS.primary,
+            marginVertical: SIZES.base,
+          }}
+        />
+        <FlatList
+          data={medicines}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.name}
+          renderItem={({ item }) => (
+            <MedicineField name={item.name} nOfTimes={item.time} />
+          )}
+        />
+        {setMode && (
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => setMode("Edit")}>
+            <MaterialIcons name="edit" size={35} color={colors.White} />
+          </TouchableOpacity>
         )}
-      />
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => setMode("Edit")}>
-        <MaterialIcons name="edit" size={35} color={colors.White} />
-      </TouchableOpacity>
-      {/* <SubmitButton
-        buttonText="Edit Prescription"
-        onPress={() => setMode("Edit")}
-        color="default"
-      /> */}
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  innerContainer: {
     flex: 1,
     marginHorizontal: 12,
   },
@@ -175,4 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewPrescription;
+export default ViewPrescriptionScreen;

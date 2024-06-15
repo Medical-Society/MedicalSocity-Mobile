@@ -120,10 +120,6 @@ const ReviewsScreen = ({ navigation, route }) => {
     navigation.goBack();
   }, [navigation]);
 
-  useEffect(() => {
-    console.log("defaultRating", defaultRating);
-  }, [defaultRating]);
-
   const CustomRatingBar = () => {
     return (
       <View style={styles.customRatingBarStyle}>

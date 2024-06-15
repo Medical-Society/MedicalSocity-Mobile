@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../../screens/Home";
 import Profile from "../../screens/Profile/Profile";
 import { getPathDown } from "./curve";
 import { Svg, Path, Rect, G, ClipPath } from "react-native-svg";
-
+import { Context as UserContext } from "../../context/UserContext";
 import { scale } from "react-native-size-scaling";
 import {
   View,
@@ -50,11 +50,17 @@ const Icon = React.memo(({ name, focused }) => {
   );
 });
 
-const MenuIcon = React.memo(({ width, height, focused }) => {
+const MenuIcon = React.memo(({ focused, patientName }) => {
+  const firstTwoLetters = patientName
+    ?.split(" ")
+    ?.map((name) => name.charAt(0))
+    ?.join("")
+    ?.toUpperCase();
+
   return (
     <View style={styles.menuIcon}>
       <View style={styles.menuNameCircle}>
-        <Text style={styles.menuName}>PJ</Text>
+        <Text style={styles.menuName}>{firstTwoLetters}</Text>
       </View>
       <View style={styles.menuImageCircle}>
         <Image
@@ -69,6 +75,9 @@ const MenuIcon = React.memo(({ width, height, focused }) => {
 const MainTab = () => {
   const [maxWidth, setMaxWidth] = useState(Dimensions.get("window").width + 1);
   const returnPathDown = getPathDown(maxWidth, 60, 50);
+  const { state } = useContext(UserContext);
+  const patientName = state.userData.patientName;
+  console.log("state", state.userData.patientName);
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
@@ -93,7 +102,12 @@ const MainTab = () => {
             backgroundColor: "#041E3F",
           },
           tabBarIcon: ({ focused }) => (
-            <MenuIcon focused={focused} width={35} height={35} />
+            <MenuIcon
+              focused={focused}
+              width={35}
+              height={35}
+              patientName={patientName}
+            />
           ),
 
           tabBarIconStyle: {
@@ -259,11 +273,11 @@ const styles = StyleSheet.create({
   },
   menuImageCircle: {
     position: "absolute",
-    left: 25,
-    top: 20,
-    width: 20,
-    height: 20,
-    borderRadius: 35,
+    left: responsiveWidth(25),
+    top: Platform.OS === "ios" ? responsiveHeight(10) : responsiveHeight(30),
+    width: responsiveWidth(20),
+    height: responsiveWidth(20),
+    borderRadius: responsiveWidth(25) / 2,
     backgroundColor: "#060B73",
     display: "flex",
     justifyContent: "center",

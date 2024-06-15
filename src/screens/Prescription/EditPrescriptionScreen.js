@@ -15,7 +15,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import SubmitButton from "../SubmitButton";
+import SubmitButton from "../../components/SubmitButton";
 
 const COLORS = {
   primary: "#242760",
@@ -96,15 +96,14 @@ const MedicineFields = ({
       />
       <TouchableOpacity
         onPress={() => handleDelete(id)}
-        style={{ position: "absolute", right: 0, top: 0 }}
-      >
+        style={{ position: "absolute", right: 0, top: 0 }}>
         <MaterialIcons name="delete" size={24} color={COLORS.primary} />
       </TouchableOpacity>
     </View>
   );
 };
 
-const EditPrescription = ({
+const EditPrescriptionScreen = ({
   prescriptionData,
   setMode,
   setPrescriptionData,
@@ -145,7 +144,6 @@ const EditPrescription = ({
     ];
     setLocalData({ ...localData, medicines: newMedicines });
   };
-
 
   const handleSubmit = () => {
     // filter out empty medicines
@@ -198,8 +196,7 @@ const EditPrescription = ({
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-      >
+        style={{ flex: 1 }}>
         <VirtualizedList
           data={localData.medicines}
           renderItem={renderItem}
@@ -212,11 +209,7 @@ const EditPrescription = ({
           windowSize={5}
           updateCellsBatchingPeriod={100}
         />
-        <SubmitButton
-          buttonText="Add Drug"
-          onPress={addDrug}
-          color="default"
-        />
+        <SubmitButton buttonText="Add Drug" onPress={addDrug} color="default" />
         <SubmitButton
           buttonText="Save"
           onPress={handleSubmit}
@@ -260,4 +253,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditPrescription;
+export default EditPrescriptionScreen;
