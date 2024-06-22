@@ -19,6 +19,7 @@ import useResults from "../hooks/useResults";
 import ResultsList from "../components/Search/ResultsList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OcrModal from "../components/Ocr/OcrModal";
+import { colors } from "../../AppStyles";
 const DoctorCard = ({ doctor, navigation }) => {
   return (
     <TouchableOpacity
@@ -54,14 +55,14 @@ const DoctorCircle = ({ doctor, navigation }) => {
     },
     name: {
       fontSize: normalize(16),
-      color: "#041E3F",
+      color: colors.BlueII,
       fontFamily: "Cairo-Regular",
     },
     specialty: {
       fontSize: normalize(14),
       marginBottom: 10,
       fontFamily: "Cairo-Regular",
-      color: "#7B7B7B",
+      color: colors.GreyI,
     },
   });
 
@@ -511,7 +512,7 @@ const Home = ({ navigation }) => {
   }, [results, navigation]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView style={styles.container}>
       <SearchBar
         term={term}
         onTermChange={setTerm}
@@ -523,7 +524,9 @@ const Home = ({ navigation }) => {
         isVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}>
         <View>
           <View>
             <View style={styles.headBestDoctorsSection}>
@@ -547,7 +550,7 @@ const Home = ({ navigation }) => {
               button: "Try it now",
               screen: "AiChatbot",
               image: require("../../assets/AiCardImg.png"),
-              bgColor: "#041E3F",
+              bgColor: colors.BlueII,
             }}
             onPress={() =>
               navigation.navigate("AiChatbot", { isFromStack: true })
@@ -594,8 +597,12 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.White,
+  },
+  scrollContainer: {
+    flex: 1,
     marginHorizontal: 10,
-    backgroundColor: "#fff",
+    backgroundColor: colors.White,
     marginBottom: 60,
   },
   headBestDoctorsSection: {
@@ -607,7 +614,7 @@ const styles = StyleSheet.create({
   headBestDoctors: {
     fontSize: normalize(16),
     fontFamily: "Cairo-Bold",
-    color: "#041E3F",
+    color: colors.BlueII,
   },
   headAllDoctors: {
     fontSize: normalize(15),

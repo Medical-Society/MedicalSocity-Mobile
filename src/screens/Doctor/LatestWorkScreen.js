@@ -6,6 +6,8 @@ import Work from "../../components/doctor/Work";
 import axios from "axios";
 import { ActivityIndicator } from "react-native-paper";
 import { Context as AuthContext } from "../../context/AuthContext";
+import { colors } from "../../../AppStyles";
+import usePaginatedFetch from "../../hooks/usePaginatedFetch";
 
 const LatestWorkScreen = ({ navigation, route }) => {
   const backButtonHandler = () => {
@@ -13,58 +15,66 @@ const LatestWorkScreen = ({ navigation, route }) => {
   };
 
   const doctorId = route.params.doctorId;
-  const [posts, setPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
   const { state } = useContext(AuthContext);
+  // const [posts, setPosts] = useState([]);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(1);
+  // const [isLoading, setIsLoading] = useState(false);
 
-  console.log("Token: ", state.token);
-  const limit = 10;
+  // console.log("Token: ", state.token);
+  // const limit = 10;
 
-  useEffect(() => {
-    fetchPosts();
-  }, [currentPage]);
+  // useEffect(() => {
+  //   fetchPosts();
+  // }, [currentPage]);
 
-  const fetchPosts = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(
-        `https://medical-society-official.onrender.com/api/v1/doctors/${doctorId}/posts`,
-        {
-          params: {
-            page: currentPage,
-            limit: limit,
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${state.token}`,
-          },
-        }
-      );
-      setPosts((posts) => [
-        ...posts,
-        ...response.data.data.posts.filter(
-          (post) => !posts.find((prevPost) => prevPost._id === post._id)
-        ),
-      ]);
-      setTotalPages(response.data.data.totalPages);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(
-        "Error fetching posts:",
-        err.response ? err.response.data.message : err.message
-      );
-      setIsLoading(false);
-    }
-  };
+  // const fetchPosts = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await axios.get(
+  //       `https://api-mcy9.onrender.com/api/v1/doctors/${doctorId}/posts`,
+  //       {
+  //         params: {
+  //           page: currentPage,
+  //           limit: limit,
+  //         },
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${state.token}`,
+  //         },
+  //       }
+  //     );
+  //     setPosts((posts) => [
+  //       ...posts,
+  //       ...response.data.data.posts.filter(
+  //         (post) => !posts.find((prevPost) => prevPost._id === post._id)
+  //       ),
+  //     ]);
+  //     setTotalPages(response.data.data.totalPages);
+  //   } catch (err) {
+  //     console.error(
+  //       "Error fetching posts:",
+  //       err.response ? err.response.data.message : err.message
+  //     );
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const handleLoadMore = useCallback(() => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  }, [currentPage, totalPages]);
+  // const handleLoadMore = useCallback(() => {
+  //   if (currentPage < totalPages) {
+  //     setCurrentPage(currentPage + 1);
+  //   }
+  // }, [currentPage, totalPages]);
+  const {
+    data: posts,
+    isLoading,
+    handleLoadMore,
+  } = usePaginatedFetch(
+    `https://api-mcy9.onrender.com/api/v1/doctors/${doctorId}/posts`,
+    "posts"
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,7 +96,7 @@ const LatestWorkScreen = ({ navigation, route }) => {
           onEndReachedThreshold={0.1}
           ListFooterComponent={
             isLoading ? (
-              <ActivityIndicator size="large" color="#0000ff" />
+              <ActivityIndicator size="large" color={colors.BlueI} />
             ) : null
           }
           showsVerticalScrollIndicator={false}
@@ -99,7 +109,7 @@ const LatestWorkScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.White,
   },
   works: {
     flex: 1,

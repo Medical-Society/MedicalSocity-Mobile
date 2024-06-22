@@ -15,6 +15,7 @@ import Header from "../../components/Header";
 import { colors } from "../../../AppStyles";
 import { Path } from "react-native-svg";
 import SvgIconBuilder from "../../components/SvgIconBuilder";
+import SafeScrollView from "../../components/SafeScrollView";
 
 const Profile = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
@@ -27,8 +28,11 @@ const Profile = ({ navigation }) => {
   const navigateToNotifications = () => navigateTo("NotificationsSettings");
   const navigateToSupport = () => navigateTo("Help&Support");
   const navigateToTermsAndPolicies = () => navigateTo("TermsAndPolicies");
-  const navigateToReportProblem = () => navigateTo("ReportProblem");
+  const navigateToPrescriptionsScreen = () => navigateTo("Prescriptions");
+  const navigateToScannedPrescriptionsScreen = () =>
+    navigateTo("ScannedPrescriptions");
 
+  const navigateToAppointmentsScreen = () => navigateTo("Appointments");
   const PrescriptionIcon = (props) => (
     <SvgIconBuilder {...props}>
       <Path
@@ -98,11 +102,11 @@ const Profile = ({ navigation }) => {
         />
       ),
       text: "Prescriptions",
-      action: navigateToReportProblem,
+      action: navigateToPrescriptionsScreen,
     },
     {
       component: (width, height, color, style) => (
-        <RecentlyDoctorIcon
+        <PrescriptionIcon
           width={width}
           height={height}
           fill={color}
@@ -110,7 +114,7 @@ const Profile = ({ navigation }) => {
         />
       ),
       text: "Scanned prescriptions",
-      action: navigateToReportProblem,
+      action: navigateToScannedPrescriptionsScreen,
     },
     {
       component: (width, height, color, style) => (
@@ -122,7 +126,7 @@ const Profile = ({ navigation }) => {
         />
       ),
       text: "Appointments",
-      action: navigateToReportProblem,
+      action: navigateToAppointmentsScreen,
     },
     {
       component: (width, height, color, style) => (
@@ -134,7 +138,7 @@ const Profile = ({ navigation }) => {
         />
       ),
       text: "Settings",
-      action: navigateToReportProblem,
+      action: navigateToPrescriptionsScreen,
     },
     {
       component: (width, height, color, style) => (
@@ -159,8 +163,8 @@ const Profile = ({ navigation }) => {
 
   const actionsItems = [
     {
-      text: "Report a problem",
-      action: navigateToReportProblem,
+      text: "Report a Problem",
+      action: navigateToPrescriptionsScreen,
     },
   ];
 
@@ -174,57 +178,49 @@ const Profile = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header title="Menu" />
-
-      <ScrollView style={{ marginHorizontal: 12 }}>
-        <View style={{ marginBottom: 12 }}>
-          <Text style={styles.itemTitle}>Account</Text>
-          <View
-            style={{
-              borderRadius: 12,
-            }}>
-            {accountItems.map((item, index) => (
-              <React.Fragment key={index}>
-                {renderSettingsItem(item)}
-              </React.Fragment>
-            ))}
-          </View>
+    <SafeScrollView header={<Header title="Menu" />}>
+      <View style={{ marginBottom: 12 }}>
+        <Text style={styles.itemTitle}>Account</Text>
+        <View
+          style={{
+            borderRadius: 12,
+          }}>
+          {accountItems.map((item, index) => (
+            <React.Fragment key={index}>
+              {renderSettingsItem(item)}
+            </React.Fragment>
+          ))}
         </View>
-
-        {/* Support and About settings */}
-
-        <View style={{ marginBottom: 12 }}>
-          <Text style={styles.itemTitle}>Support & About </Text>
-          <View
-            style={{
-              borderRadius: 12,
-            }}>
-            {supportItems.map((item, index) => (
-              <React.Fragment key={index}>
-                {renderSettingsItem(item)}
-              </React.Fragment>
-            ))}
-          </View>
+      </View>
+      {/* Support and About settings */}
+      <View style={{ marginBottom: 12 }}>
+        <Text style={styles.itemTitle}>Support & About </Text>
+        <View
+          style={{
+            borderRadius: 12,
+          }}>
+          {supportItems.map((item, index) => (
+            <React.Fragment key={index}>
+              {renderSettingsItem(item)}
+            </React.Fragment>
+          ))}
         </View>
-
-        {/* Actions Settings */}
-
-        <View style={{ marginBottom: 12 }}>
-          <Text style={styles.itemTitle}>Actions</Text>
-          <View
-            style={{
-              borderRadius: 12,
-            }}>
-            {actionsItems.map((item, index) => (
-              <React.Fragment key={index}>
-                {renderSettingsItem(item)}
-              </React.Fragment>
-            ))}
-          </View>
+      </View>
+      {/* Actions Settings */}
+      <View style={{ marginBottom: 12 }}>
+        <Text style={styles.itemTitle}>Actions</Text>
+        <View
+          style={{
+            borderRadius: 12,
+          }}>
+          {actionsItems.map((item, index) => (
+            <React.Fragment key={index}>
+              {renderSettingsItem(item)}
+            </React.Fragment>
+          ))}
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </SafeScrollView>
   );
 };
 

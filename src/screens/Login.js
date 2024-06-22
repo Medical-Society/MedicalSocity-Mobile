@@ -40,6 +40,7 @@ const Login = ({ navigation }) => {
     login({ email, password }, setIsLoading);
   }, [email, password, login]);
 
+  // some code is login Screen view
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.head}>Login</Text>
@@ -77,7 +78,6 @@ const Login = ({ navigation }) => {
           routeName="SignUp"
           navigation={navigation}
         />
-        {/* <OrLine /> */}
       </View>
     </SafeAreaView>
   );

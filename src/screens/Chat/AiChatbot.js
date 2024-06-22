@@ -14,11 +14,11 @@ import {
 import { GiftedChat } from "react-native-gifted-chat";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
-import aiChatbot from "../../api/Ai";
+import aiChatbot from "../../services/Ai";
 import axios from "axios";
 import Header from "../../components/Header";
 import { Context as AuthContext } from "../../context/AuthContext";
-
+import aiApi from "../../services/Ai";
 const COLORS = {
   primary: "#242760",
   secondary: "#544C4C",
@@ -65,6 +65,7 @@ const FONTS = {
   body3: { fontSize: SIZES.body3, lineHeight: 22 },
   body4: { fontSize: SIZES.body4, lineHeight: 20 },
 };
+
 const AiChatbot = ({ navigation, route }) => {
   const { isFromStack } = route.params || false;
   const [messages, setMessages] = useState([]);
@@ -73,13 +74,11 @@ const AiChatbot = ({ navigation, route }) => {
 
   const callChatbot = async ({ text: message }) => {
     try {
-      const response = await axios.post(
-        "https://chatbot-mgle.onrender.com/message",
-        {
-          message: message,
-          user_id: token,
-        }
-      );
+      const response = await aiApi.post("/message", {
+        message: message,
+        user_id: token,
+      });
+
       const newMessage = {
         _id:
           Math.floor(Math.random() * Math.floor(Math.random() * 1000000)) +

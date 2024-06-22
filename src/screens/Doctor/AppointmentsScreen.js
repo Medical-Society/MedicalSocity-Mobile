@@ -16,8 +16,8 @@ import {
   responsiveWidth,
   convertTo12HourFormat,
 } from "../../../AppStyles";
-import doctorApi from "../../api/doctor";
-import patientApi from "../../api/patient";
+import doctorApi from "../../services/doctor";
+import patientApi from "../../services/patient";
 import {
   Context as AuthContext,
   Provider as AuthProvider,
@@ -26,6 +26,7 @@ import Header from "../../components/Header";
 import Button from "../../components/SubmitButton";
 import MessagesModal from "../../components/MessagesModal";
 import LoadingModal from "../../components/LoadingModal";
+import SafeScrollView from "../../components/SafeScrollView";
 const AppointmentsScreen = ({
   navigation,
   route: {
@@ -41,6 +42,7 @@ const AppointmentsScreen = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const getDoctorAvailableTime = async () => {
       try {
@@ -83,11 +85,13 @@ const AppointmentsScreen = ({
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
-        title="Appointments"
-        backButtonHandler={() => navigation.goBack()}
-      />
+    <SafeScrollView
+      header={
+        <Header
+          title="Appointments"
+          backButtonHandler={() => navigation.goBack()}
+        />
+      }>
       <View
         style={{
           marginHorizontal: responsiveWidth(20),
@@ -225,14 +229,14 @@ const AppointmentsScreen = ({
           onPress={() => setModalVisible(true)}
         />
       </View>
-    </SafeAreaView>
+    </SafeScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.White,
   },
 
   flatList: {
@@ -248,11 +252,11 @@ const styles = StyleSheet.create({
     paddingVertical: responsiveHeight(20),
     borderRadius: 30,
     marginRight: responsiveWidth(10),
-    borderColor: "#7B7B7B",
+    borderColor: colors.GreyI,
     borderWidth: 1,
   },
   selectedDate: {
-    borderColor: "#060B73",
+    borderColor: colors.BlueI,
     borderWidth: 1.3,
   },
   textDate: {
@@ -268,7 +272,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "Cairo-SemiBold",
     fontSize: responsiveFontSize(20),
-    color: "#060B73",
+    color: colors.BlueI,
     marginBottom: responsiveHeight(10),
   },
   dateTime: {

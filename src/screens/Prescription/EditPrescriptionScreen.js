@@ -108,7 +108,6 @@ const EditPrescriptionScreen = ({
   setMode,
   setPrescriptionData,
 }) => {
-  //   copy prescriptionData to a new variable by value
   const newPrescriptionData = JSON.parse(JSON.stringify(prescriptionData));
 
   const [localData, setLocalData] = useState(newPrescriptionData);

@@ -9,7 +9,7 @@ import {
   Dimensions,
   Platform,
 } from "react-native";
-import doctorApi from "../../api/doctor";
+import doctorApi from "../../services/doctor";
 import ResultsList from "../../components/Search/ResultsList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";

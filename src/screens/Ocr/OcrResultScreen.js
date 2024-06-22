@@ -61,82 +61,8 @@ const FONTS = {
   body4: { fontSize: SIZES.body4, lineHeight: 20 },
 };
 
-const medicineData = [
-  {
-    id: 1,
-    name: "Paracetamol",
-    nOfTimes: "2 times",
-    note: "After meal and before sleep, this medicine is for fever and headache only",
-  },
-  {
-    id: 2,
-    name: "Ibuprofen",
-    nOfTimes: "3 times",
-    note: "Before meal",
-  },
-  {
-    id: 3,
-    name: "Cetirizine",
-    nOfTimes: "1 times",
-    note: "After meal, this medicine if when you have allergy",
-  },
-  {
-    id: 4,
-    name: "Paracetamol",
-    nOfTimes: "2 times",
-    note: "After meal, this medicine is for cough and cold only",
-  },
-  {
-    id: 5,
-    name: "Ibuprofen",
-    nOfTimes: "3 times",
-    note: "Before meal",
-  },
-  {
-    id: 6,
-    name: "Cetirizine",
-    nOfTimes: "1 times",
-    note: "After meal",
-  },
-  {
-    id: 7,
-    name: "Paracetamol",
-    nOfTimes: "2 times",
-    note: "After meal",
-  },
-  {
-    id: 8,
-    name: "Ibuprofen",
-    nOfTimes: "3 times",
-    note: "Before meal",
-  },
-  {
-    id: 9,
-    name: "Cetirizine",
-    nOfTimes: "1 times",
-    note: "After meal",
-  },
-  {
-    id: 10,
-    name: "Paracetamol",
-    nOfTimes: "2 times",
-    note: "This Medicine is for fever and headache only",
-  },
-  {
-    id: 11,
-    name: "Ibuprofen",
-    nOfTimes: "3 times",
-    note: "Before meal",
-  },
-  {
-    id: 12,
-    name: "Cetirizine",
-    nOfTimes: "1 times",
-    note: "After meal",
-  },
-];
 const OcrResultScreen = ({ navigation, route }) => {
-  const { drugs } = route.params;
+  const { prescription } = route.params;
 
   const drugsData = drugs.map((drug, index) => {
     return {

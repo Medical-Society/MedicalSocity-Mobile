@@ -63,7 +63,7 @@ const ReviewsScreen = ({ navigation, route }) => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `https://medical-society-official.onrender.com/api/v1/doctors/${doctorId}/reviews?page=${currentPage}&limit=${limit}`
+        `https://api-mcy9.onrender.com/api/v1/doctors/${doctorId}/reviews?page=${currentPage}&limit=${limit}`
       );
 
       const { data } = response.data;
@@ -86,7 +86,7 @@ const ReviewsScreen = ({ navigation, route }) => {
   const addReview = async (rating) => {
     try {
       const response = await axios.post(
-        `https://medical-society-official.onrender.com/api/v1/doctors/${doctorId}/reviews`,
+        `https://api-mcy9.onrender.com/api/v1/doctors/${doctorId}/reviews`,
         {
           rating,
           comment: reviewContent,

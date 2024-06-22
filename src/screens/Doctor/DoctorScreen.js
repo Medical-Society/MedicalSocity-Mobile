@@ -21,7 +21,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from "../../../AppStyles";
-import doctorApi from "../../api/doctor";
+import doctorApi from "../../services/doctor";
 import Header from "../../components/Header";
 const Spacer = () => {
   return <View style={{ margin: 10 }} />;
@@ -173,7 +173,7 @@ const DoctorScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.White,
   },
   scrollViewContainer: {
     flex: 1,
@@ -216,23 +216,23 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderRadius: 30,
     marginRight: 10,
-    borderColor: "#7B7B7B",
+    borderColor: colors.GreyI,
     borderWidth: 1,
   },
   selectedDate: {
-    borderColor: "#060B73",
+    borderColor: colors.BlueI,
     borderWidth: 2,
   },
   title: {
     fontFamily: "Cairo-SemiBold",
     fontSize: 24,
-    color: "#060B73",
+    color: colors.BlueI,
     marginBottom: 5,
   },
   about: {
     fontFamily: "Cairo-Regular",
     fontSize: 18,
-    color: "#7B7B7B",
+    color: colors.GreyI,
     lineHeight: 20,
   },
   address: {

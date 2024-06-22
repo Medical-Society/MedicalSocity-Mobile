@@ -17,6 +17,7 @@ import Button from "../components/SubmitButton";
 
 import InputField from "../components/auth/InputField";
 import MessagesModal from "../components/MessagesModal";
+import { colors, responsiveFontSize, responsiveHeight } from "../../AppStyles";
 const ForgetPassword = ({ navigation }) => {
   const { state, clearMessage, forgetPassword } = useContext(AuthContext);
 
@@ -59,7 +60,7 @@ const ForgetPassword = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.White,
     paddingTop: StatusBar.currentHeight,
     justifyContent: "center",
   },
@@ -67,10 +68,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   head: {
-    fontSize: 25,
+    fontSize: responsiveFontSize(30),
     textAlign: "center",
-    color: "#128393",
-    fontFamily: "Roboto-Medium",
+    color: colors.BlueI,
+    fontFamily: "Cairo-Medium",
+    marginBottom: responsiveHeight(20),
   },
 });
 

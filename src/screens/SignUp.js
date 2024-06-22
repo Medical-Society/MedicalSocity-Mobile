@@ -197,27 +197,27 @@ const SignUp = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.White,
     paddingTop: StatusBar.currentHeight,
   },
   head: {
-    fontSize: 25,
+    fontSize: responsiveFontSize(30),
     textAlign: "center",
-    color: "#128393",
+    color: colors.BlueI,
     fontFamily: "Cairo-Medium",
-    marginBottom: 20,
+    marginBottom: responsiveHeight(20),
   },
   form: {
     marginHorizontal: 15,
   },
   errorMessage: {
     fontSize: 16,
-    color: "red",
+    color: colors.Red,
     textAlign: "center",
   },
   successMessage: {
     fontSize: 16,
-    color: "green",
+    color: colors.Green,
     textAlign: "center",
   },
   genderContainer: {
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 8,
-    color: "#6200EE",
+    color: colors.Violet,
   },
   radioButtonContainer: {
     flexDirection: "row",
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
 
   pickedDateContainer: {
     padding: 20,
-    backgroundColor: "#eee",
+    backgroundColor: colors.OffWhite,
     borderRadius: 10,
   },
   pickedDate: {

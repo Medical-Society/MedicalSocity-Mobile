@@ -86,12 +86,7 @@ const MedicineField = ({ name, nOfTimes, note }) => {
   );
 };
 
-const ViewPrescriptionScreen = ({ navigation, route }) => {
-  // const { doctorName, medicines, diagnose, diseases } =
-  //   route.params.prescription;
-
-  // const [doctorName, setDoctorName] = useState("");
-
+const ViewScannedPrescriptionScreen = ({ navigation, route, setMode }) => {
   const [prescription, setPrescription] = useState({
     doctorName: "",
     medicines: [],
@@ -102,21 +97,23 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { doctorName, medicines, diagnose, diseases } = prescription;
 
-  const { state: userState } = useContext(UserContext);
   const { state: authState } = useContext(AuthContext);
-
+  const { state: userState } = useContext(UserContext);
   const patientId = userState.userData._id;
+  console.log("patientId", patientId);
+
   const token = authState.token;
 
   useEffect(() => {
-    getPrescriptionById(route.params.prescriptionId);
+    getScannedPrescriptionById(route.params.prescriptionId);
   }, []);
 
-  const getPrescriptionById = async (prescriptionId) => {
+  const getScannedPrescriptionById = async (prescriptionId) => {
+    console.log("prescriptionId", prescriptionId);
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `https://api-mcy9.onrender.com/api/v1/patients/${patientId}/prescriptions/${prescriptionId}`,
+        `https://api-mcy9.onrender.com/api/v1/patients/${patientId}/scanned-prescriptions/${prescriptionId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -125,11 +122,17 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
       );
       console.log(response.data);
       setPrescription({
-        doctorName: response.data.data.doctor.englishFullName,
+        doctorName: response.data.data.doctorName,
+        // medicines: response.data.data.medicines,
+        // diagnose: response.data.data.diagnose,
+        // diseases: response.data.data.diseases,
         ...response.data.data,
       });
     } catch (error) {
-      console.log(error);
+      console.log(
+        "Error fetching scanned prescription:",
+        error.response.data.message
+      );
     } finally {
       setIsLoading(false);
     }
@@ -142,7 +145,7 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title="Prescription"
+        title="Scanned Prescription"
         backButtonHandler={() => navigation.goBack()}
       />
       {isLoading ? (
@@ -172,6 +175,13 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
               <MedicineField name={item.name} nOfTimes={item.time} />
             )}
           />
+          {setMode && (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => setMode("Edit")}>
+              <MaterialIcons name="edit" size={35} color={colors.White} />
+            </TouchableOpacity>
+          )}
         </View>
       )}
     </SafeAreaView>
@@ -224,4 +234,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewPrescriptionScreen;
+export default ViewScannedPrescriptionScreen;
