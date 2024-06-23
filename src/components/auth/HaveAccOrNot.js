@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
   text: {
     color: colors.BlueI,
     fontSize: responsiveFontSize(16),
-    fontWeight: "bold",
+    fontFamily: "Cairo-Regular",
+    lineHeight: 30,
   },
 });
 export default HaveAccOrNot;

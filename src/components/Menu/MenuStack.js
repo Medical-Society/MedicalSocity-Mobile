@@ -1,26 +1,35 @@
 import React, { lazy } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { colors } from "../../../AppStyles";
 
-const Profile = lazy(() => import("../../screens/Profile/Profile"));
-const EditProfile = lazy(() => import("../../screens/Profile/EditProfile"));
+const Profile = lazy(() => import("../../screens/Menu/MenuScreen"));
+const EditProfile = lazy(() => import("../../screens/Menu/YouAccountScreen"));
 const NotificationsSettings = lazy(() =>
-  import("../../screens/Profile/NotificationsSettings")
+  import("../../screens/Menu/NotificationsSettings")
 );
-const HelpSupport = lazy(() => import("../../screens/Profile/HelpSupport"));
-const TermsPolicies = lazy(() => import("../../screens/Profile/TermsPolicies"));
-const ReportProblem = lazy(() => import("../../screens/Profile/ReportProblem"));
-const ViewPrescription = lazy(() =>
-  import("../../screens/Prescription/ViewPrescriptionScreen")
+const HelpSupport = lazy(() => import("../../screens/Menu/HelpSupportScreen"));
+const TermsPolicies = lazy(() =>
+  import("../../screens/Menu/TermsPoliciesScreen")
+);
+const PrescriptionsScreen = lazy(() =>
+  import("../../screens/Menu/PrescriptionsScreen")
+);
+const ScannedPrescriptionsScreen = lazy(() =>
+  import("../../screens/Menu/ScannedPrescriptionsScreen")
+);
+const AppointmentsScreen = lazy(() =>
+  import("../../screens/Menu/AppointmentsScreen")
 );
 
 const Stack = createNativeStackNavigator();
 
-const MenuStack = ({ navigation }) => {
+const MenuStack = ({}) => {
   return (
     <Stack.Navigator
       screenOptions={{
         contentStyle: {
-          backgroundColor: "#FFFFFF",
+          backgroundColor: colors.White,
+          paddingBottom: 70,
         },
       }}
       initialRouteName="Profile">
@@ -43,11 +52,20 @@ const MenuStack = ({ navigation }) => {
       <Stack.Screen name="Help&Support" component={HelpSupport} />
       <Stack.Screen name="TermsAndPolicies" component={TermsPolicies} />
       <Stack.Screen
-        name="ReportProblem"
-        component={ReportProblem}
+        name="Prescriptions"
+        component={PrescriptionsScreen}
         options={{ headerShown: false }}
       />
-      
+      <Stack.Screen
+        name="ScannedPrescriptions"
+        component={ScannedPrescriptionsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Appointments"
+        component={AppointmentsScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

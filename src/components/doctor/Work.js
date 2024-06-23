@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
+import { colors } from "../../../AppStyles";
 
 const Album = ({ beforeImage, afterImage }) => {
   return (
@@ -44,13 +45,13 @@ const styles = StyleSheet.create({
   description: {
     marginTop: 6,
     fontSize: 16,
-    color: "#041E3F",
+    color: colors.BlueII,
     fontFamily: "Cairo-Regular",
     lineHeight: 24,
   },
   title: {
     fontSize: 18,
-    color: "#041E3F",
+    color: colors.BlueI,
     fontFamily: "Cairo-Bold",
     textAlign: "center",
     marginBottom: 10,

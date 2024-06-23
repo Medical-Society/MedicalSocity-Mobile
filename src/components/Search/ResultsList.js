@@ -42,7 +42,7 @@ const ResultsList = ({ results, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    paddingBottom: 50,
   },
 });
 

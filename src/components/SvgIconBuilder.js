@@ -1,5 +1,6 @@
 import React from "react";
 import { Svg, Mask, Path, G } from "react-native-svg";
+import { colors } from "../../AppStyles";
 
 const SvgIconBuilder = ({ children, ...props }) => (
   <Svg
@@ -17,7 +18,7 @@ const SvgIconBuilder = ({ children, ...props }) => (
       y={0}
       width={24}
       height={24}>
-      <Path fill="#D9D9D9" d="M0 0H24V24H0z" />
+      <Path fill={colors.SolidGrey} d="M0 0H24V24H0z" />
     </Mask>
     <G mask="url(#a)">{children}</G>
   </Svg>

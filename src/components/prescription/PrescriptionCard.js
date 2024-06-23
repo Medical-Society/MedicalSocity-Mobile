@@ -1,39 +1,19 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { colors, formatDateForPrescription } from "../../../AppStyles";
 
-const formatDate = (date) => {
-  const newDate = new Date(date);
-  return `${newDate.getDate()}/${
-    newDate.getMonth() + 1
-  }/${newDate.getFullYear()}`;
-};
-
-const PrescriptionCard = ({ prescription, navigation }) => {
-  const date = formatDate(prescription.createdAt);
-  const doctorName = prescription.doctor.englishFullName;
-  const specialization = prescription.doctor.specialization;
-  const address = prescription.doctor.clinicAddress;
-  const price = prescription?.price || 150;
-  const medicines = prescription.medicines;
-  const diseases = prescription.diseases;
-  const diagnose = prescription.diagnose;
-  const ToViewPrescription = {
-    medicines,
-    diseases,
-    diagnose,
-    doctorName,
-  };
+const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
+  const date = formatDateForPrescription(prescription?.createdAt);
+  const doctorName = prescription?.doctor?.englishFullName || "Dr. Unknown";
+  const specialization = prescription?.doctor?.specialization || "Unknown";
+  const address = prescription?.doctor?.clinicAddress || "Unknown";
 
   return (
     <TouchableOpacity
       style={styles.cardContainer}
       activeOpacity={0.7}
-      onPress={() =>
-        navigation.navigate("ViewPrescription", {
-          prescription: ToViewPrescription,
-        })
-      }>
+      onPress={handlePressedPrescription}>
       <View style={styles.card}>
         <Text style={styles.date}>{date}</Text>
         <View style={styles.rowOne}>
@@ -42,9 +22,8 @@ const PrescriptionCard = ({ prescription, navigation }) => {
         </View>
         <View style={styles.rowOne}>
           <Text style={styles.address}>
-            {address.length > 30 ? `${address.substring(0, 30)}...` : address}
+            {address?.length > 30 ? `${address?.substring(0, 30)}...` : address}
           </Text>
-          <Text style={styles.address}>{`${price} EGP`}</Text>
         </View>
       </View>
       <View style={styles.goToButton}>
@@ -71,10 +50,10 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
     padding: 16,
-    backgroundColor: "#fff",
-    borderColor: "#060B73",
+    backgroundColor: colors.White,
+    borderColor: colors.BlueI,
     borderWidth: 0.5,
-    shadowColor: "#000",
+    shadowColor: colors.Black,
     elevation: 3,
   },
   rowOne: {
@@ -85,31 +64,31 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     marginBottom: 6,
-    color: "#060B73",
+    color: colors.BlueI,
     fontFamily: "Cairo-Medium",
   },
   date: {
     fontSize: 16,
     marginBottom: 6,
     alignSelf: "flex-end",
-    color: "#AEAEAE",
+    color: colors.GreyII,
     fontFamily: "Cairo-Regular",
   },
   address: {
     fontSize: 16,
     marginBottom: 6,
-    color: "#7B7B7B",
+    color: colors.GreyI,
     fontFamily: "Cairo-Regular",
   },
   specialization: {
     fontSize: 16,
-    color: "#060B73",
+    color: colors.BlueI,
     fontFamily: "Cairo-Medium",
   },
   goToButton: {
     width: "100%",
     height: 40,
-    backgroundColor: "#060B73",
+    backgroundColor: colors.BlueI,
     borderBottomRightRadius: 8,
     borderBottomLeftRadius: 8,
     flexDirection: "row",
@@ -121,7 +100,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   goToText: {
-    color: "#fff",
+    color: colors.White,
     textAlign: "center",
     fontSize: 18,
     alignSelf: "center",

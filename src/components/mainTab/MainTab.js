@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../../screens/Home";
-import Profile from "../../screens/Profile/Profile";
 import { getPathDown } from "./curve";
 import { Svg, Path, Rect, G, ClipPath } from "react-native-svg";
 import { Context as UserContext } from "../../context/UserContext";
@@ -21,7 +20,7 @@ import MenuStack from "../Menu/MenuStack";
 import HomeStack from "../home/HomeStack";
 import AiChatbot from "../../screens/Chat/AiChatbot";
 import { useNavigation } from "@react-navigation/native";
-import { responsiveHeight, responsiveWidth } from "../../../AppStyles";
+import { colors, responsiveHeight, responsiveWidth } from "../../../AppStyles";
 
 const Tab = createBottomTabNavigator();
 
@@ -43,7 +42,7 @@ const Icon = React.memo(({ name, focused }) => {
       style={{
         width: 30,
         height: 30,
-        tintColor: focused ? "#fff" : "#C9D7FE",
+        tintColor: focused ? colors.White : colors.LightBlue,
       }}
       source={getImageNameBased(name)}
     />
@@ -83,13 +82,14 @@ const MainTab = () => {
       initialRouteName="HomeStack"
       screenOptions={{
         tabBarStyle: {
-          height: 50,
+          height: responsiveHeight(50),
           position: "absolute",
-          backgroundColor: Platform.OS !== "ios" ? "transparent" : "#041E3F",
+          backgroundColor:
+            Platform.OS !== "ios" ? "transparent" : colors.BlueII,
           borderTopWidth: 0,
         },
         contentStyle: {
-          backgroundColor: "#FFFFFF",
+          backgroundColor: colors.White,
         },
       }}>
       <Tab.Screen
@@ -99,7 +99,7 @@ const MainTab = () => {
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: "#041E3F",
+            backgroundColor: colors.BlueII,
           },
           tabBarIcon: ({ focused }) => (
             <MenuIcon
@@ -126,7 +126,7 @@ const MainTab = () => {
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: "#041E3F",
+            backgroundColor: colors.BlueII,
           },
           tabBarIcon: ({ focused }) => (
             <Icon name="notifications" focused={focused} />
@@ -165,7 +165,7 @@ const MainTab = () => {
           tabBarLabel: () => (
             <View>
               <Svg width={maxWidth} height={scale(60)}>
-                <Path fill={"#041E3F"} {...{ d: returnPathDown }} />
+                <Path fill={colors.BlueII} {...{ d: returnPathDown }} />
               </Svg>
             </View>
           ),
@@ -181,7 +181,7 @@ const MainTab = () => {
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: "#041E3F",
+            backgroundColor: colors.BlueII,
           },
           tabBarIcon: ({ focused }) => (
             <Icon name="calendar" focused={focused} />
@@ -207,7 +207,7 @@ const MainTab = () => {
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: "#041E3F",
+            backgroundColor: colors.BlueII,
           },
           tabBarIcon: ({ focused }) => <Icon name="home" focused={focused} />,
 
@@ -232,12 +232,12 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
   },
   activeText: {
-    color: "#fff",
+    color: colors.White,
     fontWeight: "bold",
     marginBottom: 5,
   },
   inactiveText: {
-    color: "#fff",
+    color: colors.White,
     fontWeight: "normal",
     marginBottom: 5,
   },
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 56,
     width: 56,
-    backgroundColor: "#040740",
+    backgroundColor: colors.BlueII,
     borderRadius: 35,
   },
   menuIcon: {
@@ -260,13 +260,13 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 35,
-    backgroundColor: "#C9D7FE",
+    backgroundColor: colors.LightBlue,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
   menuName: {
-    color: "#060B73",
+    color: colors.BlueI,
     fontSize: 16,
     fontWeight: "bold",
     fontFamily: "Cairo-Regular",
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(20),
     height: responsiveWidth(20),
     borderRadius: responsiveWidth(25) / 2,
-    backgroundColor: "#060B73",
+    backgroundColor: colors.BlueI,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

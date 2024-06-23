@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import doctorApi from "../api/doctor";
+import doctorApi from "../services/doctor";
 
 export default () => {
   const [results, setResults] = useState([]);

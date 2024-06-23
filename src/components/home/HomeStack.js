@@ -4,13 +4,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../../screens/Home";
 import ResultsShowScreen from "../../screens/Search/ResultsShowScreen";
 import AiChatbot from "../../screens/Chat/AiChatbot";
+import { colors } from "../../../AppStyles";
 const Stack = createNativeStackNavigator();
 const HomeStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
         contentStyle: {
-          backgroundColor: "#FFFFFF",
+          backgroundColor: colors.White,
         },
       }}
       initialRouteName="Home">

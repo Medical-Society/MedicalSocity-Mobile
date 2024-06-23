@@ -82,30 +82,34 @@ export const hasNotch = (version) => {
 export const colors = {
   Gold: "#EFCE4A",
   White: "#FFFFFF",
-  Moka: "#EBE8E8",
+  OffWhite: "#F0EEEE",
   Black: "#000000",
+  DarkBlack: "#1E1E1Es",
   DarkCyan: "#003441",
   Cyan: "#55C4E0",
   LightSeaGreen: "#1B7B94",
   Grey: "#ABAAAA",
   GreyI: "#7B7B7B",
+  GreyII: "#AEAEAE",
   SolidGrey: "#D9D9D9",
-  LightGrey: "#B5B5B5",
+  LightGrey: "#aaa",
   DarkGrey: "#606060",
   Red: "#e24c4b",
-  DarkRed: "#A41350",
+  DarkRed: "#910F06",
   Green: "#0aa06e",
+  LightBlue: "#C9D7FE",
   BlueI: "#060B73",
+  BlueII: "#040740",
   Yellow: "#fe9800",
   Orange: "#ff6a00",
   Purple: "#800080",
   Pink: "#FFC0CB",
   Brown: "#A52A2A",
-  BlueII: "#040740",
   DarkGreen: "#006400",
   NavyRed: "#410000",
   NavyYellow: "#412300",
   NavyGreen: "#014000",
+  Violet: "#6200EE",
 };
 
 // padding used in the app
@@ -289,4 +293,11 @@ export const mergeSameDays = (schedule) => {
   }
 
   return mergedSchedule;
+};
+
+export const formatDateForPrescription = (date) => {
+  const newDate = new Date(date);
+  return `${newDate.getDate()}/${
+    newDate.getMonth() + 1
+  }/${newDate.getFullYear()}`;
 };

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: responsiveHeight(14),
     borderRadius: 30,
-    shadowColor: "#000",
+    shadowColor: colors.Black,
     shadowOffset: {
       width: 0,
       height: 0,
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonText: {
-    color: "#fff",
-    fontSize: responsiveFontSize(18),
+    color: colors.White,
+    fontSize: responsiveFontSize(16),
     textAlign: "center",
     fontFamily: "Cairo-SemiBold",
   },

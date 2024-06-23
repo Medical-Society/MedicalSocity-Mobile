@@ -18,6 +18,7 @@ import menu from "../../../assets/menu.png";
 import close from "../../../assets/close.png";
 import MainTab from "../mainTab/MainTab";
 import TabButton from "./TabButton";
+import { colors } from "../../../AppStyles";
 
 export default function Drawer() {
   const [currentTab, setCurrentTab] = useState("HomeStack");
@@ -62,12 +63,7 @@ export default function Drawer() {
   return (
     <View style={styles.container}>
       <View>
-        
-        <Animated.View
-          style={[
-            styles.animatedView,
-           
-          ]}>
+        <Animated.View style={[styles.animatedView]}>
           <TouchableOpacity onPress={hideMenu}>
             <Image source={showMenu ? close : menu} style={styles.menuIcon} />
           </TouchableOpacity>
@@ -81,7 +77,7 @@ export default function Drawer() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#060B73",
+    backgroundColor: colors.BlueI,
     height: "100%",
   },
   userInfoContainer: {
@@ -108,7 +104,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginVertical: 50,
   },
-  
+
   menuIcon: {
     width: 20,
     height: 20,

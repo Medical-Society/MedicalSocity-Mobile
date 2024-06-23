@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
-import { responsiveHeight, responsiveWidth } from "../../../AppStyles";
+import { colors, responsiveHeight, responsiveWidth } from "../../../AppStyles";
 const ResultsDetail = ({ doctor }) => {
   return (
     <View style={styles.info}>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
 
     borderRadius: 10,
-    backgroundColor: "#FFF",
+    backgroundColor: colors.White,
     margin: 10,
     padding: 10,
     marginBottom: responsiveHeight(10),
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 16,
     fontFamily: "Cairo-Regular",
-    color: "#060B73",
+    color: colors.BlueI,
   },
   image: {
     height: 96,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   address: {
     fontSize: 14,
     fontFamily: "Cairo-Regular",
-    color: "#060B73",
+    color: colors.BlueI,
   },
 });
 

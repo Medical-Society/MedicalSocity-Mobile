@@ -16,6 +16,9 @@ import {
 } from "./src/context/UserContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainStack from "./src/components/mainStack/MainStack";
+import { StatusBar } from "expo-status-bar";
+import { colors } from "./AppStyles";
+import HomeIotScreen from "./src/screens/IOT/HomeIotScreen";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -35,7 +38,7 @@ const App = () => {
   }, [state.isLoading]);
 
   const authOrMainFlowScreen = useMemo(() => {
-    if (state.token) {
+    if (!state.token) {
       return (
         <Stack.Screen
           name="mainStack"
@@ -56,15 +59,22 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
+        <StatusBar translucent backgroundColor="transparent" />
+
         <Stack.Navigator
           screenOptions={{
             contentStyle: {
-              backgroundColor: "#FFFFFF",
+              backgroundColor: colors.White,
             },
           }}
           initialRouteName="Welcome">
-          {resolvedScreen}
-          {authOrMainFlowScreen}
+          {/* {resolvedScreen}
+          {authOrMainFlowScreen} */}
+          <Stack.Screen
+            name="IOT"
+            component={HomeIotScreen}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

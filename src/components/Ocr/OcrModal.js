@@ -9,48 +9,67 @@ import {
 } from "react-native";
 import MessagesModal from "../MessagesModal";
 import LoadingModal from "../LoadingModal";
-
+import patientApi from "../../services/patient";
 import * as ImagePicker from "expo-image-picker";
 import { Context as AuthContext } from "../../context/AuthContext";
 import CameraIcon from "../../../assets/camera.png";
 import GalleryIcon from "../../../assets/gallery.png";
+import { colors } from "../../../AppStyles";
+import { Context as UserContext } from "../../context/UserContext";
+import * as FileSystem from "expo-file-system";
 import axios from "axios";
+const createFormData = async (uri) => {
+  try {
+    const fileName = uri.split("/").pop(); // Get the file name from the URI
+    const fileType = fileName.split(".").pop(); // Get the file extension
 
-const createFormData = (uri) => {
-  const fileName = uri?.split("/")?.pop();
-  const fileType = fileName?.split(".")?.pop();
-  const formData = new FormData();
-  formData.append("image", {
-    name: fileName,
-    uri,
-    type: `image/${fileType}`,
-  });
-  return formData;
+    const formData = new FormData();
+
+    // Fetch the image data from URI using Expo's FileSystem module
+    const fileUri = FileSystem.cacheDirectory + fileName;
+    await FileSystem.downloadAsync(uri, fileUri);
+
+    const file = {
+      uri: fileUri,
+      name: fileName,
+      type: `image/${fileType}`,
+    };
+
+    formData.append("image", file);
+
+    return formData;
+  } catch (error) {
+    console.error("Error creating FormData:", error);
+    throw error; // Rethrow the error to be caught by the calling function
+  }
 };
 
-const postImage = async (uri, navigation, setLoading, addError, token) => {
-  console.log("uri", uri);
-  console.log("createFormData", createFormData(uri));
-  setLoading(true);
+const postImage = async (
+  uri,
+  navigation,
+  setLoading,
+  addError,
+  token,
+  patientId
+) => {
   try {
-    const data = createFormData(uri);
+    setLoading(true);
+    const formData = await createFormData(uri);
+
     const response = await axios.post(
-      "https://ocr-3nz8.onrender.com/OCR",
-      data,
+      `https://api-mcy9.onrender.com/api/v1/patients/${patientId}/scanned-prescriptions/`,
+      formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       }
     );
-    console.log(response.data.response);
-    if (response.data.drugs_extracted)
-      navigation.navigate("OcrResult", { drugs: response.data.response });
-    else addError("Failed to extract drugs from image, please try again.");
+    console.log("Prescription submitted successfully:", response.data);
   } catch (error) {
-    console.log(error.response.data);
-    addError("Image upload failed");
-    setLoading(false);
+    console.error("Error submitting prescription:", error.response.data);
+    // Handle error here
   } finally {
     setLoading(false);
   }
@@ -60,8 +79,11 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  const { clearMessage, state, addError } = useContext(AuthContext);
-  const { errorMessage, successMessage } = state;
+  const { clearMessage, state: authState, addError } = useContext(AuthContext);
+  const { errorMessage, successMessage } = authState;
+  const { state: userState } = useContext(UserContext);
+  const token = authState.token;
+  const patientId = userState.userData._id;
 
   const handleGalleryUpload = async () => {
     setModalVisible(false);
@@ -75,7 +97,8 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
         navigation,
         setLoading,
         addError,
-        state.token
+        token,
+        patientId
       );
       setSelectedImage(result.assets[0].uri);
     }
@@ -170,7 +193,7 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingVertical: 30,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: colors.Black,
     shadowOffset: {
       width: 0,
       height: 2,

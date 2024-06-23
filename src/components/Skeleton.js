@@ -2,7 +2,12 @@ import React, { useReducer } from "react";
 import { StyleSheet, View } from "react-native";
 import { MotiView } from "moti";
 import { Skeleton } from "moti/skeleton";
-import { margin, responsiveHeight, responsiveWidth } from "../../AppStyles";
+import {
+  colors,
+  margin,
+  responsiveHeight,
+  responsiveWidth,
+} from "../../AppStyles";
 
 const Spacer = ({ height = 16 }) => <MotiView style={{ height }} />;
 
@@ -15,7 +20,7 @@ export default function HelloWorld() {
         type: "timing",
       }}
       style={[styles.container, styles.padded]}
-      animate={{ backgroundColor: "#ffffff" }}>
+      animate={{ backgroundColor: colors.White }}>
       <Spacer />
       <View style={styles.main}>
         <Skeleton

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { RadioButton } from "react-native-paper";
+import { colors } from "../../AppStyles";
 
 const GenderInput = ({ gender, handleInputChange }) => {
   return (
@@ -12,7 +13,7 @@ const GenderInput = ({ gender, handleInputChange }) => {
           <View style={styles.radioButtonContainer}>
             <RadioButton.Android
               value="Male"
-              color="#6200EE"
+              color={colors.Violet}
               // add text to the radio button
               label="Male"
             />
@@ -23,7 +24,7 @@ const GenderInput = ({ gender, handleInputChange }) => {
             </Text>
           </View>
           <View style={styles.radioButtonContainer}>
-            <RadioButton.Android value="Female" color="#6200EE" />
+            <RadioButton.Android value="Female" color={colors.Violet} />
             <Text
               style={styles.radioButtonText}
               onPress={() => handleInputChange("gender", "Female")}>

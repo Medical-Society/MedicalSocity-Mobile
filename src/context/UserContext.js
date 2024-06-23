@@ -1,5 +1,5 @@
 import createDataContext from "./createDataContext";
-import patientApi from "../api/patient";
+import patientApi from "../services/patient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const userReducer = (state, action) => {
