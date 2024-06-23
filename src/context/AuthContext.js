@@ -105,6 +105,7 @@ const login = (dispatch) => {
     try {
       setIsLoading(true);
       const response = await patientApi.post("/login", patientObject);
+      console.log(response.data.data);
       await AsyncStorage.setItem("token", response.data.data.token);
       await AsyncStorage.setItem(
         "userData",
