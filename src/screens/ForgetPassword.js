@@ -18,6 +18,8 @@ import Button from "../components/SubmitButton";
 import InputField from "../components/auth/InputField";
 import MessagesModal from "../components/MessagesModal";
 import { colors, responsiveFontSize, responsiveHeight } from "../../AppStyles";
+import SafeScrollView from "../components/SafeScrollView";
+import Header from "../components/Header";
 const ForgetPassword = ({ navigation }) => {
   const { state, clearMessage, forgetPassword } = useContext(AuthContext);
 
@@ -28,9 +30,8 @@ const ForgetPassword = ({ navigation }) => {
   }, [email, forgetPassword]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.head}>Forget Password</Text>
-      <View style={styles.form}>
+    <SafeScrollView header={<Header title="Forget Password" />}>
+      <View style={styles.container}>
         <InputField
           label="Email"
           placeholder="Enter your email"
@@ -52,20 +53,14 @@ const ForgetPassword = ({ navigation }) => {
           navigation={navigation}
         />
       </View>
-    </SafeAreaView>
+    </SafeScrollView>
   );
 };
 
 // define your styles
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: colors.White,
-    paddingTop: StatusBar.currentHeight,
     justifyContent: "center",
-  },
-  form: {
-    marginHorizontal: 15,
   },
   head: {
     fontSize: responsiveFontSize(30),

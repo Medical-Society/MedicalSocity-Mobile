@@ -26,7 +26,6 @@ import Header from "../../components/Header";
 import Button from "../../components/SubmitButton";
 import MessagesModal from "../../components/MessagesModal";
 import LoadingModal from "../../components/LoadingModal";
-import SafeScrollView from "../../components/SafeScrollView";
 const AppointmentsScreen = ({
   navigation,
   route: {
@@ -85,13 +84,11 @@ const AppointmentsScreen = ({
   };
 
   return (
-    <SafeScrollView
-      header={
-        <Header
-          title="Appointments"
-          backButtonHandler={() => navigation.goBack()}
-        />
-      }>
+    <SafeAreaView style={styles.container}>
+      <Header
+        title="Appointments"
+        backButtonHandler={() => navigation.goBack()}
+      />
       <View
         style={{
           marginHorizontal: responsiveWidth(20),
@@ -229,7 +226,7 @@ const AppointmentsScreen = ({
           onPress={() => setModalVisible(true)}
         />
       </View>
-    </SafeScrollView>
+    </SafeAreaView>
   );
 };
 

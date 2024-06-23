@@ -19,6 +19,8 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from "../../AppStyles";
+import SafeScrollView from "../components/SafeScrollView";
+import Header from "../components/Header";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -42,9 +44,11 @@ const Login = ({ navigation }) => {
 
   // some code is login Screen view
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.head}>Login</Text>
-      <View style={styles.form}>
+    <SafeScrollView
+      header={
+        <Header title="Login" backButtonHandler={() => navigation.goBack()} />
+      }>
+      <View style={styles.container}>
         <InputField
           label="Email"
           placeholder="Enter your email"
@@ -79,7 +83,7 @@ const Login = ({ navigation }) => {
           navigation={navigation}
         />
       </View>
-    </SafeAreaView>
+    </SafeScrollView>
   );
 };
 
@@ -88,9 +92,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.White,
     paddingTop: StatusBar.currentHeight,
-  },
-  form: {
-    marginHorizontal: responsiveWidth(20),
   },
   head: {
     fontSize: responsiveFontSize(30),

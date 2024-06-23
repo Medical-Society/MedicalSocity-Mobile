@@ -25,6 +25,8 @@ import {
   responsiveWidth,
 } from "../../AppStyles";
 import GenderInput from "../components/GenderInput";
+import SafeScrollView from "../components/SafeScrollView";
+import Header from "../components/Header";
 
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
@@ -95,6 +97,18 @@ const SignUp = ({ navigation }) => {
       value: signUpData.phoneNumber,
       onChangeText: (text) => handleInputChange("phoneNumber", text),
     },
+    {
+      label: "Phone Number",
+      placeholder: "Enter your phone number",
+      value: signUpData.phoneNumber,
+      onChangeText: (text) => handleInputChange("phoneNumber", text),
+    },
+    {
+      label: "Phone Number",
+      placeholder: "Enter your phone number",
+      value: signUpData.phoneNumber,
+      onChangeText: (text) => handleInputChange("phoneNumber", text),
+    },
   ];
 
   const signupInputs = inputsData.map((input, index) => {
@@ -154,43 +168,41 @@ const SignUp = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.head}>SignUp</Text>
+    <SafeScrollView
+      header={
+        <Header title="SignUp" backButtonHandler={() => navigation.goBack()} />
+      }>
       <KeyboardAvoidingView
         style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
         behavior="padding"
         enabled
         keyboardVerticalOffset={20}>
-        <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
-          {signupInputs}
-          <GenderInput
-            gender={signUpData.gender}
-            handleInputChange={handleInputChange}
-          />
-          <DatePicker />
-          <Button
-            onPress={handleSignUp}
-            buttonText="SignUp"
-            isLoading={isLoading}
-          />
+        {signupInputs}
+        <GenderInput
+          gender={signUpData.gender}
+          handleInputChange={handleInputChange}
+        />
+        <DatePicker />
+        <Button
+          onPress={handleSignUp}
+          buttonText="SignUp"
+          isLoading={isLoading}
+        />
 
-          <HaveAccOrNot
-            text="Already have an account?"
-            routeName="Login"
-            navigation={navigation}
+        <HaveAccOrNot
+          text="Already have an account?"
+          routeName="Login"
+          navigation={navigation}
+        />
+        {state.errorMessage || state.successMessage ? (
+          <MessagesModal
+            errorMessage={state.errorMessage}
+            successMessage={state.successMessage}
+            clearMessage={clearMessage}
           />
-          {state.errorMessage || state.successMessage ? (
-            <MessagesModal
-              errorMessage={state.errorMessage}
-              successMessage={state.successMessage}
-              clearMessage={clearMessage}
-            />
-          ) : null}
-
-          {/* <OrLine /> */}
-        </ScrollView>
+        ) : null}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </SafeScrollView>
   );
 };
 
@@ -206,9 +218,6 @@ const styles = StyleSheet.create({
     color: colors.BlueI,
     fontFamily: "Cairo-Medium",
     marginBottom: responsiveHeight(20),
-  },
-  form: {
-    marginHorizontal: 15,
   },
   errorMessage: {
     fontSize: 16,
