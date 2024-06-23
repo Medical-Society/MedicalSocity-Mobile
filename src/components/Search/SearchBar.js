@@ -1,6 +1,7 @@
 import React from "react";
 import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { colors } from "../../../AppStyles";
 
 const SearchBar = ({ term, onTermChange, onTermSubmit, setResults }) => {
   return (
@@ -20,8 +21,7 @@ const SearchBar = ({ term, onTermChange, onTermSubmit, setResults }) => {
         onPress={() => {
           onTermChange("");
           setResults([]);
-        }}
-      >
+        }}>
         <Feather name="x" style={styles.iconStyle} />
       </TouchableOpacity>
     </View>
@@ -30,7 +30,7 @@ const SearchBar = ({ term, onTermChange, onTermSubmit, setResults }) => {
 
 const styles = StyleSheet.create({
   backgroundStyle: {
-    backgroundColor: "#F0EEEE",
+    backgroundColor: colors.OffWhite,
     height: 50,
     borderRadius: 5,
     marginHorizontal: 15,

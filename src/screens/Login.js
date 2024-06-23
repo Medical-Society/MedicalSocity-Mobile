@@ -8,11 +8,19 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import Button from "../components/auth/SubmitButton";
+import Button from "../components/SubmitButton";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import { Context as AuthContext } from "../context/AuthContext";
 import MessagesModal from "../components/MessagesModal";
+import {
+  colors,
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from "../../AppStyles";
+import SafeScrollView from "../components/SafeScrollView";
+import Header from "../components/Header";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -25,6 +33,7 @@ const Login = ({ navigation }) => {
       clearMessage();
       setEmail("");
       setPassword("");
+      setIsLoading(false);
     });
     return unsubscribe;
   }, [navigation]);
@@ -33,10 +42,13 @@ const Login = ({ navigation }) => {
     login({ email, password }, setIsLoading);
   }, [email, password, login]);
 
+  // some code is login Screen view
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.head}>Login</Text>
-      <View style={styles.form}>
+    <SafeScrollView
+      header={
+        <Header title="Login" backButtonHandler={() => navigation.goBack()} />
+      }>
+      <View style={styles.container}>
         <InputField
           label="Email"
           placeholder="Enter your email"
@@ -70,38 +82,29 @@ const Login = ({ navigation }) => {
           routeName="SignUp"
           navigation={navigation}
         />
-        {/* <OrLine /> */}
       </View>
-    </SafeAreaView>
+    </SafeScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.White,
     paddingTop: StatusBar.currentHeight,
   },
-  form: {
-    marginHorizontal: 15,
-  },
   head: {
-    fontSize: 25,
+    fontSize: responsiveFontSize(30),
     textAlign: "center",
-    color: "#128393",
+    color: colors.BlueI,
     fontFamily: "Cairo-Medium",
-    marginBottom: 20,
+    marginBottom: responsiveHeight(20),
   },
   forgetPassword: {
     textAlign: "left",
-    marginBottom: 10,
-    fontSize: 16,
-    color: "#7B7B7B",
-  },
-  errorMessage: {
-    fontSize: 16,
-    color: "red",
-    textAlign: "center",
+    marginBottom: responsiveHeight(10),
+    fontSize: responsiveFontSize(16),
+    color: colors.DarkGrey,
   },
 });
 

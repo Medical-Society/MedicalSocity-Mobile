@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { colors, responsiveFontSize, responsiveHeight } from "../../AppStyles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProgressPoints = ({ step }) => {
   return (
@@ -16,8 +18,7 @@ const ProgressPoints = ({ step }) => {
         flexDirection: "row",
         width: 100,
         marginTop: 20,
-      }}
-    >
+      }}>
       {[1, 2, 3].map((index) => (
         <View
           key={index}
@@ -25,8 +26,10 @@ const ProgressPoints = ({ step }) => {
             height: 10,
             width: 10 + 7 * (step === index),
             borderRadius: 5,
+            borderColor: step === index ? "black" : "black",
+            borderWidth: 1,
             marginHorizontal: 5,
-            backgroundColor: step === index ? "#006472" : "gray",
+            backgroundColor: step === index ? "black" : "white",
           }}
         />
       ))}
@@ -51,7 +54,7 @@ const Welcome = ({ navigation }) => {
   };
 
   const steps = [
-    "All your medical experience in one place, book your appointments, tests and order from pharmacies",
+    "Track your health with our special bracelet with sensor that tracks your heart rate and oxygen pulse",
     "Enjoy converting your prescriptions to digital format.",
     "Search about doctor, lab or product easily using voice or scanning.",
   ];
@@ -59,9 +62,9 @@ const Welcome = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
-        source={require("../../assets/welcomeBg.png")}
+        source={require("../../assets/welcomeBG.png")}
         style={styles.imageBg}
-      >
+        resizeMode="cover">
         <Text style={styles.skip} onPress={handleSkip}>
           Skip
         </Text>
@@ -83,15 +86,16 @@ const styles = StyleSheet.create({
   imageBg: {
     flex: 1,
     height: Dimensions.get("window").height,
+    width: "100%",
     justifyContent: "flex-end",
   },
   skip: {
     position: "absolute",
-    top: 40,
+    top: responsiveHeight(50),
     right: 20,
     fontSize: 20,
     fontWeight: "bold",
-    color: "#AEAEAE",
+    color: colors.GreyII,
   },
   contentBox: {
     alignItems: "center",
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   nextIcon: {
-    backgroundColor: "#006472",
+    backgroundColor: colors.BlueI,
     padding: 10,
     borderRadius: 50,
   },
@@ -120,10 +124,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: "#006472",
-    fontWeight: "600",
+    fontSize: responsiveFontSize(16),
+    color: colors.BlueI,
+    fontFamily: "Cairo-Medium",
+    textAlign: "center",
   },
 });
 

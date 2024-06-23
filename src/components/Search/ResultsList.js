@@ -24,12 +24,13 @@ const ResultsList = ({ results, navigation }) => {
           console.log(item);
           return (
             <TouchableOpacity
+              activeOpacity={0.8}
               onPress={() =>
-                navigation.navigate("Doctor", {
-                  doctor: item,
+                navigation.navigate("DoctorStack", {
+                  screen: "Doctor",
+                  params: { doctorId: item._id },
                 })
-              }
-            >
+              }>
               <ResultsDetail doctor={item} />
             </TouchableOpacity>
           );
@@ -40,14 +41,8 @@ const ResultsList = ({ results, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 15,
-    marginBottom: 5,
-  },
   container: {
-    marginBottom: 10,
+    paddingBottom: 50,
   },
 });
 

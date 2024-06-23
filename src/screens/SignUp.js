@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
-import Button from "../components/auth/SubmitButton";
+import Button from "../components/SubmitButton";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import OrLine from "../components/auth/OrLine";
@@ -18,6 +18,15 @@ import MessagesModal from "../components/MessagesModal";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  colors,
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from "../../AppStyles";
+import GenderInput from "../components/GenderInput";
+import SafeScrollView from "../components/SafeScrollView";
+import Header from "../components/Header";
 
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
@@ -88,6 +97,18 @@ const SignUp = ({ navigation }) => {
       value: signUpData.phoneNumber,
       onChangeText: (text) => handleInputChange("phoneNumber", text),
     },
+    {
+      label: "Phone Number",
+      placeholder: "Enter your phone number",
+      value: signUpData.phoneNumber,
+      onChangeText: (text) => handleInputChange("phoneNumber", text),
+    },
+    {
+      label: "Phone Number",
+      placeholder: "Enter your phone number",
+      value: signUpData.phoneNumber,
+      onChangeText: (text) => handleInputChange("phoneNumber", text),
+    },
   ];
 
   const signupInputs = inputsData.map((input, index) => {
@@ -102,30 +123,6 @@ const SignUp = ({ navigation }) => {
       />
     );
   });
-
-  const GenderInput = () => {
-    const gender = signUpData.gender;
-    return (
-      <View style={styles.genderContainer}>
-        <Text style={styles.label}>Select Gender:</Text>
-        <RadioButton.Group
-          onValueChange={(newValue) => handleInputChange("gender", newValue)}
-          value={gender}
-        >
-          <View style={styles.genderSelectors}>
-            <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="MALE" color="#6200EE" />
-              <Text style={styles.radioButtonText}>Male</Text>
-            </View>
-            <View style={styles.radioButtonContainer}>
-              <RadioButton.Android value="FEMALE" color="#6200EE" />
-              <Text style={styles.radioButtonText}>Female</Text>
-            </View>
-          </View>
-        </RadioButton.Group>
-      </View>
-    );
-  };
 
   const [isPickerShow, setIsPickerShow] = useState(false);
   const showPicker = () => {
@@ -171,68 +168,65 @@ const SignUp = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.head}>SignUp</Text>
+    <SafeScrollView
+      header={
+        <Header title="SignUp" backButtonHandler={() => navigation.goBack()} />
+      }>
       <KeyboardAvoidingView
         style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
         behavior="padding"
         enabled
-        keyboardVerticalOffset={20}
-      >
-        <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
-          {signupInputs}
-          <GenderInput />
-          <DatePicker />
-          <Button
-            onPress={handleSignUp}
-            buttonText="SignUp"
-            isLoading={isLoading}
-          />
+        keyboardVerticalOffset={20}>
+        {signupInputs}
+        <GenderInput
+          gender={signUpData.gender}
+          handleInputChange={handleInputChange}
+        />
+        <DatePicker />
+        <Button
+          onPress={handleSignUp}
+          buttonText="SignUp"
+          isLoading={isLoading}
+        />
 
-          <HaveAccOrNot
-            text="Already have an account?"
-            routeName="Login"
-            navigation={navigation}
+        <HaveAccOrNot
+          text="Already have an account?"
+          routeName="Login"
+          navigation={navigation}
+        />
+        {state.errorMessage || state.successMessage ? (
+          <MessagesModal
+            errorMessage={state.errorMessage}
+            successMessage={state.successMessage}
+            clearMessage={clearMessage}
           />
-          {state.errorMessage || state.successMessage ? (
-            <MessagesModal
-              errorMessage={state.errorMessage}
-              successMessage={state.successMessage}
-              clearMessage={clearMessage}
-            />
-          ) : null}
-
-          {/* <OrLine /> */}
-        </ScrollView>
+        ) : null}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </SafeScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.White,
     paddingTop: StatusBar.currentHeight,
   },
   head: {
-    fontSize: 25,
+    fontSize: responsiveFontSize(30),
     textAlign: "center",
-    color: "#128393",
+    color: colors.BlueI,
     fontFamily: "Cairo-Medium",
-    marginBottom: 20,
-  },
-  form: {
-    marginHorizontal: 15,
+    marginBottom: responsiveHeight(20),
   },
   errorMessage: {
     fontSize: 16,
-    color: "red",
+    color: colors.Red,
     textAlign: "center",
   },
   successMessage: {
     fontSize: 16,
-    color: "green",
+    color: colors.Green,
     textAlign: "center",
   },
   genderContainer: {
@@ -242,7 +236,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 8,
-    color: "#6200EE",
+    color: colors.Violet,
   },
   radioButtonContainer: {
     flexDirection: "row",
@@ -260,7 +254,7 @@ const styles = StyleSheet.create({
 
   pickedDateContainer: {
     padding: 20,
-    backgroundColor: "#eee",
+    backgroundColor: colors.OffWhite,
     borderRadius: 10,
   },
   pickedDate: {

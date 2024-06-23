@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { CommonActions } from "@react-navigation/native";
+import { colors } from "../../../AppStyles";
 
 const TabButton = ({
   navigation,
@@ -28,20 +29,18 @@ const TabButton = ({
             })
           );
         }
-      }}
-    >
+      }}>
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
           paddingVertical: 8,
-          backgroundColor: currentTab == title ? "white" : "transparent",
+          backgroundColor: currentTab == title ? colors.White : "transparent",
           paddingLeft: 13,
           paddingRight: 35,
           borderRadius: 8,
           marginTop: 15,
-        }}
-      >
+        }}>
         <Text>{icon}</Text>
         <Text
           style={{
@@ -49,8 +48,7 @@ const TabButton = ({
             fontWeight: "bold",
             paddingLeft: 15,
             color: currentTab == title ? "#5359D1" : "white",
-          }}
-        >
+          }}>
           {title}
         </Text>
       </View>

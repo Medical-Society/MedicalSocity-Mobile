@@ -1,5 +1,5 @@
 import createDataContext from "./createDataContext";
-import patientApi from "../api/patient";
+import patientApi from "../services/patient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
 import { Context as userContext } from "./UserContext";
@@ -80,6 +80,7 @@ const tryLocalSignin = (dispatch) => {
           },
         });
         updateUserData(response.data.data.patient);
+        console.log(response.data.data.patient);
         dispatch({ type: "LOGIN", payload: token });
       }
     } catch (err) {
@@ -87,6 +88,7 @@ const tryLocalSignin = (dispatch) => {
         dispatch({ type: "LOGIN", payload: token });
       }
       const userData = await AsyncStorage.getItem("userData");
+      console.log("userData: ", userData);
       updateUserData(JSON.parse(userData));
       dispatch({ type: "CLEAR_LOADING" });
     } finally {
@@ -162,6 +164,12 @@ const clearMessage = (dispatch) => {
   };
 };
 
+const addError = (dispatch) => {
+  return (message) => {
+    dispatch({ type: "ADD_ERROR", payload: message });
+  };
+};
+
 export const { Provider, Context } = createDataContext(
   authReducer,
   {
@@ -171,6 +179,7 @@ export const { Provider, Context } = createDataContext(
     signout,
     clearMessage,
     forgetPassword,
+    addError,
   },
   { token: null, errorMessage: "", isLoading: true, successMessage: "" }
 );

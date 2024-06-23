@@ -1,14 +1,16 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  colors,
+  responsiveFontSize,
+  responsiveHeight,
+} from "../../../AppStyles";
 
 const HaveAccOrNot = ({ navigation, text, routeName }) => {
   return (
     <TouchableOpacity style={styles.haveAccOrNot}>
       <Text>{text}</Text>
-      <Text
-        style={{ color: "#128393" }}
-        onPress={() => navigation.navigate(routeName)}
-      >
+      <Text style={styles.text} onPress={() => navigation.navigate(routeName)}>
         {routeName === "SignUp" ? " Sign Up" : " Login"}
       </Text>
     </TouchableOpacity>
@@ -18,10 +20,17 @@ const HaveAccOrNot = ({ navigation, text, routeName }) => {
 const styles = StyleSheet.create({
   haveAccOrNot: {
     textAlign: "left",
-    marginBottom: 10,
-    fontSize: 16,
-    color: "#7B7B7B",
+    marginTop: responsiveHeight(10),
+    fontSize: responsiveFontSize(16),
+    color: colors.LightGrey,
     flexDirection: "row",
+    alignItems: "center",
+  },
+  text: {
+    color: colors.BlueI,
+    fontSize: responsiveFontSize(16),
+    fontFamily: "Cairo-Regular",
+    lineHeight: 30,
   },
 });
 export default HaveAccOrNot;

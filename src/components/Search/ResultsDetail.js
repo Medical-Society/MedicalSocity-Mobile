@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
-
+import { colors, responsiveHeight, responsiveWidth } from "../../../AppStyles";
 const ResultsDetail = ({ doctor }) => {
   return (
     <View style={styles.info}>
@@ -22,35 +22,31 @@ const ResultsDetail = ({ doctor }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginLeft: 15,
-  },
-
   info: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    elevation: 5,
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 10,
-    elevation: 5,
+
     borderRadius: 10,
-    backgroundColor: "#FFF",
+    backgroundColor: colors.White,
     margin: 10,
     padding: 10,
-    marginBottom: 10,
+    marginBottom: responsiveHeight(10),
   },
 
   doctorInfo: {
-    marginLeft: 10,
     flex: 1,
+    marginLeft: 10,
   },
   infoText: {
     fontSize: 16,
     fontFamily: "Cairo-Regular",
-    color: "#060B73",
+    color: colors.BlueI,
   },
   image: {
     height: 96,
@@ -59,7 +55,7 @@ const styles = StyleSheet.create({
   address: {
     fontSize: 14,
     fontFamily: "Cairo-Regular",
-    color: "#060B73",
+    color: colors.BlueI,
   },
 });
 

@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { TextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  colors,
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from "../../../AppStyles";
 
 const InputField = React.memo(
   ({ value, label, onChangeText, secureTextEntry, editable }) => {
@@ -20,12 +26,20 @@ const InputField = React.memo(
           secureTextEntry={!showPassword}
           label={label}
           editable={editable}
+          theme={{
+            colors: {
+              primary: colors.Black,
+              text: colors.Black,
+              placeholder: colors.Black,
+              background: colors.White,
+            },
+          }}
         />
         {secureTextEntry && (
           <MaterialCommunityIcons
             name={!showPassword ? "eye-off" : "eye"}
             size={24}
-            color="#aaa"
+            color={colors.LightGrey}
             style={styles.icon}
             onPress={toggleShowPassword}
           />
@@ -46,22 +60,22 @@ const styles = StyleSheet.create({
   },
   inputField: {
     borderRadius: 20,
-    paddingHorizontal: 10,
-    height: 60,
-    color: "#000",
-    borderColor: "#AEAEAE",
+    paddingHorizontal: responsiveWidth(10),
+    height: responsiveHeight(60),
+    color: colors.Black,
+    borderColor: colors.GreyII,
     borderWidth: StyleSheet.hairlineWidth,
-    marginBottom: 15,
-    backgroundColor: "#ffffff",
+    marginBottom: responsiveHeight(10),
+    backgroundColor: colors.White,
   },
   icon: {
     position: "absolute",
-    right: 20,
+    right: responsiveWidth(20),
   },
   input: {
-    fontSize: 16,
-    fontFamily: "Cairo-Regular",
     flex: 1,
+    fontSize: responsiveFontSize(16),
+    fontFamily: "Cairo-Regular",
   },
 });
 

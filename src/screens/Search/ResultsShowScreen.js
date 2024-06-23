@@ -9,10 +9,12 @@ import {
   Dimensions,
   Platform,
 } from "react-native";
-import doctorApi from "../../api/doctor";
+import doctorApi from "../../services/doctor";
 import ResultsList from "../../components/Search/ResultsList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
+import { responsiveHeight } from "../../../AppStyles";
+import Header from "../../components/Header";
 
 const COLORS = {
   primary: "#242760",
@@ -70,31 +72,10 @@ const ResultsShowScreen = ({ navigation, route }) => {
   const { results } = route.params;
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          marginHorizontal: 12,
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}
-          style={{
-            position: "absolute",
-            left: 0,
-          }}
-        >
-          <MaterialIcons
-            name="keyboard-arrow-left"
-            size={24}
-            color={COLORS.black}
-          />
-        </TouchableOpacity>
-
-        <Text style={{ ...FONTS.h3 }}>Search</Text>
-      </View>
+      <Header
+        title="Search Results"
+        backButtonHandler={() => navigation.goBack()}
+      />
       <ResultsList
         results={results}
         title="Search Results"
@@ -107,7 +88,7 @@ const ResultsShowScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 60,
+    marginBottom: responsiveHeight(80),
   },
   image: {
     height: 200,

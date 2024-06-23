@@ -4,6 +4,7 @@ import Welcome from "../../screens/Welcome";
 import Login from "../../screens/Login";
 import SignUp from "../../screens/SignUp";
 import ForgetPassword from "../../screens/ForgetPassword";
+import { colors } from "../../../AppStyles";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,11 +13,10 @@ const AuthStack = () => {
     <Stack.Navigator
       screenOptions={{
         contentStyle: {
-          backgroundColor: "#FFFFFF",
+          backgroundColor: colors.White,
         },
       }}
-      initialRouteName="Welcome"
-    >
+      initialRouteName="Welcome">
       <Stack.Screen
         name="Welcome"
         component={Welcome}

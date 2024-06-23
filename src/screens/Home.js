@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Modal,
   Image,
   FlatList,
   PixelRatio,
@@ -12,17 +13,18 @@ import {
   Platform,
 } from "react-native";
 import { useContext } from "react";
-import { Context as UserContext } from "../context/UserContext";
+import { Context as AuthContext } from "../context/AuthContext";
 import SearchBar from "../components/Search/SearchBar";
 import useResults from "../hooks/useResults";
 import ResultsList from "../components/Search/ResultsList";
 import { SafeAreaView } from "react-native-safe-area-context";
+import OcrModal from "../components/Ocr/OcrModal";
+import { colors } from "../../AppStyles";
 const DoctorCard = ({ doctor, navigation }) => {
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate("Doctor", { doctor })}
-    >
+      onPress={() => navigation.navigate("Doctor", { doctor })}>
       <Text style={styles.name}>{doctor.name}</Text>
       <Text style={styles.specialty}>{doctor.specialty}</Text>
       <Text style={styles.address}>{doctor.address}</Text>
@@ -53,14 +55,14 @@ const DoctorCircle = ({ doctor, navigation }) => {
     },
     name: {
       fontSize: normalize(16),
-      color: "#041E3F",
+      color: colors.BlueII,
       fontFamily: "Cairo-Regular",
     },
     specialty: {
       fontSize: normalize(14),
       marginBottom: 10,
       fontFamily: "Cairo-Regular",
-      color: "#7B7B7B",
+      color: colors.GreyI,
     },
   });
 
@@ -68,8 +70,7 @@ const DoctorCircle = ({ doctor, navigation }) => {
     <View>
       <TouchableOpacity
         style={styles.doctorCircle}
-        onPress={() => navigation.navigate("Doctor", { doctor })}
-      >
+        onPress={() => navigation.navigate("Doctor", { doctor })}>
         <Image source={doctor.image} style={styles.image} />
         <Text style={styles.name}>{doctor.name}</Text>
         <Text style={styles.specialty}>{doctor.specialty}</Text>
@@ -88,7 +89,7 @@ const normalize = (size) => {
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
 };
-const HomeCard = ({ feature, navigation }) => {
+const HomeCard = ({ feature, onPress }) => {
   const styles = StyleSheet.create({
     homeCard: {
       flexDirection: "row",
@@ -140,6 +141,12 @@ const HomeCard = ({ feature, navigation }) => {
     },
   });
 
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    }
+  };
+
   return (
     <View style={[styles.homeCard, { backgroundColor: feature.bgColor }]}>
       <View style={styles.cardCol}>
@@ -148,8 +155,7 @@ const HomeCard = ({ feature, navigation }) => {
         <TouchableOpacity
           style={styles.cardButton}
           title={feature.button}
-          onPress={() => navigation.navigate(feature.screen)}
-        >
+          onPress={handlePress}>
           <Text style={{ color: "white" }}>{feature.button}</Text>
         </TouchableOpacity>
       </View>
@@ -162,7 +168,9 @@ const HomeCard = ({ feature, navigation }) => {
 
 const Home = ({ navigation }) => {
   const [term, setTerm] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
   const [searchApi, results, errorMessage, setResults] = useResults();
+  const token = useContext(AuthContext).state.token;
 
   const doctors = [
     {
@@ -504,14 +512,21 @@ const Home = ({ navigation }) => {
   }, [results, navigation]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView style={styles.container}>
       <SearchBar
         term={term}
         onTermChange={setTerm}
         setResults={setResults}
-        onTermSubmit={() => searchApi(term)}
+        onTermSubmit={() => searchApi(term, token)}
       />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <OcrModal
+        navigation={navigation}
+        isVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+      <ScrollView
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}>
         <View>
           <View>
             <View style={styles.headBestDoctorsSection}>
@@ -533,22 +548,13 @@ const Home = ({ navigation }) => {
               title: "You can ask AI chat bot",
               text: "It would be answered immediately",
               button: "Try it now",
-              screen: "Search",
+              screen: "AiChatbot",
               image: require("../../assets/AiCardImg.png"),
-              bgColor: "#041E3F",
+              bgColor: colors.BlueII,
             }}
-            navigation={navigation}
-          />
-          <HomeCard
-            feature={{
-              title: "Try our bracelet and track your health",
-              text: " Your heart rate and oxygen pulse",
-              button: "Shop now",
-              screen: "Search",
-              image: require("../../assets/brecletCardImg.png"),
-              bgColor: "#440A05",
-            }}
-            navigation={navigation}
+            onPress={() =>
+              navigation.navigate("AiChatbot", { isFromStack: true })
+            }
           />
           <HomeCard
             feature={{
@@ -559,8 +565,19 @@ const Home = ({ navigation }) => {
               image: require("../../assets/Ocr.png"),
               bgColor: "#503453",
             }}
-            navigation={navigation}
+            onPress={() => setModalVisible(true)}
           />
+          <HomeCard
+            feature={{
+              title: "Try our bracelet and track your health",
+              text: " Your heart rate and oxygen pulse",
+              button: "Shop now",
+              screen: "Search",
+              image: require("../../assets/brecletCardImg.png"),
+              bgColor: "#440A05",
+            }}
+          />
+
           <HomeCard
             feature={{
               title: "Ask a specific doctor or our doctors in public",
@@ -570,7 +587,6 @@ const Home = ({ navigation }) => {
               image: require("../../assets/AiCardImg.png"),
               bgColor: "#3F3114",
             }}
-            navigation={navigation}
           />
         </View>
       </ScrollView>
@@ -581,8 +597,12 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.White,
+  },
+  scrollContainer: {
+    flex: 1,
     marginHorizontal: 10,
-    backgroundColor: "#fff",
+    backgroundColor: colors.White,
     marginBottom: 60,
   },
   headBestDoctorsSection: {
@@ -594,7 +614,7 @@ const styles = StyleSheet.create({
   headBestDoctors: {
     fontSize: normalize(16),
     fontFamily: "Cairo-Bold",
-    color: "#041E3F",
+    color: colors.BlueII,
   },
   headAllDoctors: {
     fontSize: normalize(15),
