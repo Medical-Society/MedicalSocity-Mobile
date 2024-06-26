@@ -82,6 +82,7 @@ export const hasNotch = (version) => {
 export const colors = {
   Gold: "#EFCE4A",
   White: "#FFFFFF",
+  WhiteI: "#F9F9F9",
   OffWhite: "#F0EEEE",
   Black: "#000000",
   DarkBlack: "#1E1E1Es",
@@ -295,7 +296,7 @@ export const mergeSameDays = (schedule) => {
   return mergedSchedule;
 };
 
-export const formatDateForPrescription = (date) => {
+export const formattedDYM = (date) => {
   const newDate = new Date(date);
   return `${newDate.getDate()}/${
     newDate.getMonth() + 1

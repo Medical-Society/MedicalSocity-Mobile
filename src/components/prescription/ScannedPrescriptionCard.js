@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, formattedDYM } from "../../../AppStyles";
 
-const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
+const ScannedPrescriptionCard = ({
+  prescription,
+  handlePressedPrescription,
+}) => {
   const date = formattedDYM(prescription?.createdAt);
-  const doctorName = prescription?.doctor?.englishFullName || "Dr. Unknown";
-  const specialization = prescription?.doctor?.specialization || "Unknown";
-  const address = prescription?.doctor?.clinicAddress || "Unknown";
+  const doctorName = prescription?.doctorName || "Unknown";
+  const patientName = prescription?.patientName || "Unknown";
 
   return (
     <TouchableOpacity
@@ -18,12 +20,10 @@ const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
         <Text style={styles.date}>{date}</Text>
         <View style={styles.rowOne}>
           <Text style={styles.name}>Dr/ {doctorName}</Text>
-          <Text style={styles.specialization}>{specialization}</Text>
+          <Text style={styles.address}>{prescription._id}</Text>
         </View>
         <View style={styles.rowOne}>
-          <Text style={styles.address}>
-            {address?.length > 30 ? `${address?.substring(0, 30)}...` : address}
-          </Text>
+          <Text style={styles.specialization}>Mr/Mrs. {patientName}</Text>
         </View>
       </View>
       <View style={styles.goToButton}>
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PrescriptionCard;
+export default ScannedPrescriptionCard;

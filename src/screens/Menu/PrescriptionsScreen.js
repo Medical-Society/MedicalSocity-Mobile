@@ -11,6 +11,7 @@ import { Context as UserContext } from "../../context/UserContext";
 import { Context as AuthContext } from "../../context/AuthContext";
 import usePaginatedFetch from "../../hooks/usePaginatedFetch";
 import { colors } from "../../../AppStyles";
+import SafeFlatListView from "../../components/SafeFlatListView";
 
 const PrescriptionsScreen = ({ navigation }) => {
   const backButtonHandler = () => {
@@ -24,15 +25,19 @@ const PrescriptionsScreen = ({ navigation }) => {
     isLoading,
     handleLoadMore,
   } = usePaginatedFetch(
-    `https://api-mcy9.onrender.com/api/v1/patients/${patientId}/prescriptions/`,
+    `https://api.medical-society.fr.to/api/v1/patients/${patientId}/prescriptions/`,
     "prescriptions"
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header title="Prescriptions" backButtonHandler={backButtonHandler} />
+    <SafeFlatListView
+      header={
+        <Header title="Prescriptions" backButtonHandler={backButtonHandler} />
+      }
+      marginBottom={10}>
       <FlatList
         data={prescriptions}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <PrescriptionCard
             prescription={item}
@@ -45,10 +50,10 @@ const PrescriptionsScreen = ({ navigation }) => {
         )}
         keyExtractor={(item) => item._id}
         onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.5}
         ListFooterComponent={isLoading && <ActivityIndicator size="large" />}
       />
-    </SafeAreaView>
+    </SafeFlatListView>
   );
 };
 

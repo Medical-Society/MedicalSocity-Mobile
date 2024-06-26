@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://chatbot-mgle.onrender.com",
+  baseURL: "https://api.medical-society.fr.to/api/v1/chats",
 });

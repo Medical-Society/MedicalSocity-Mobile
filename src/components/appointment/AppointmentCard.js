@@ -1,19 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, formatDateForAppointment } from "../../../AppStyles";
+import { colors, formattedDYM } from "../../../AppStyles";
 
 const AppointmentCard = ({ appointment, onPress }) => {
-  // create a dummy data for the appointment card of the previous appointment
-  //   const doctorName = "Dr. Ahmed";
-  //   const price = 200;
-  //   const noPatientBeforeMe = 2;
-  //   const address = "Cairo, Egypt";
-  //   const date = "3/3/2024";
-  //   const time = "10:00 AM";
-  //   const status = "finished";
-  //   const description = "This is a description for the appointment";
-
   const {
     doctorName,
     price,
@@ -33,7 +23,7 @@ const AppointmentCard = ({ appointment, onPress }) => {
     <View style={styles.card}>
       <View style={styles.header}>
         <Text style={styles.doctorName}>{doctorName}</Text>
-        <Text style={styles.date}>{date}</Text>
+        <Text style={styles.date}>{formattedDYM(date)}</Text>
       </View>
       <View style={styles.row}>
         <Text style={styles.price}>{price} LE</Text>

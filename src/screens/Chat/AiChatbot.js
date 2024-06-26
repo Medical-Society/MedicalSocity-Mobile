@@ -67,7 +67,6 @@ const FONTS = {
 };
 
 const AiChatbot = ({ navigation, route }) => {
-  const { isFromStack } = route.params || false;
   const [messages, setMessages] = useState([]);
   const { state } = useContext(AuthContext);
   const token = state.token;
@@ -124,8 +123,9 @@ const AiChatbot = ({ navigation, route }) => {
     );
   }, []);
 
-  const handleButton = () =>
-    navigation.navigate("HomeStack", { screen: "Home" });
+  const handleButton = () =>{
+    console.log("Printed")
+    navigation.navigate("HomeStack", { screen: "Home" });}
 
   return (
     <SafeAreaView style={styles.container}>

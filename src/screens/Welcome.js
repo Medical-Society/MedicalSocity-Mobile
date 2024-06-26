@@ -62,7 +62,7 @@ const Welcome = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
-        source={require("../../assets/welcomeBG.png")}
+        source={require("../../assets/welcomeBg.png")}
         style={styles.imageBg}
         resizeMode="cover">
         <Text style={styles.skip} onPress={handleSkip}>

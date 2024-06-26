@@ -19,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Skeleton from "../../components/Skeleton";
 import { Context as UserContext } from "../../context/UserContext";
 import { Context as AuthContext } from "../../context/AuthContext";
+
 const COLORS = {
   primary: "#242760",
   secondary: "#544C4C",
@@ -86,7 +87,7 @@ const MedicineField = ({ name, nOfTimes, note }) => {
   );
 };
 
-const ViewScannedPrescriptionScreen = ({ navigation, route, setMode }) => {
+const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
   const [prescription, setPrescription] = useState({
     doctorName: "",
     medicines: [],
@@ -105,7 +106,7 @@ const ViewScannedPrescriptionScreen = ({ navigation, route, setMode }) => {
   const token = authState.token;
 
   useEffect(() => {
-    getScannedPrescriptionById(route.params.prescriptionId);
+    getScannedPrescriptionById(prescriptionId);
   }, []);
 
   const getScannedPrescriptionById = async (prescriptionId) => {
@@ -113,7 +114,7 @@ const ViewScannedPrescriptionScreen = ({ navigation, route, setMode }) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `https://api-mcy9.onrender.com/api/v1/patients/${patientId}/scanned-prescriptions/${prescriptionId}`,
+        `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/${prescriptionId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -123,9 +124,6 @@ const ViewScannedPrescriptionScreen = ({ navigation, route, setMode }) => {
       console.log(response.data);
       setPrescription({
         doctorName: response.data.data.doctorName,
-        // medicines: response.data.data.medicines,
-        // diagnose: response.data.data.diagnose,
-        // diseases: response.data.data.diseases,
         ...response.data.data,
       });
     } catch (error) {
@@ -144,10 +142,6 @@ const ViewScannedPrescriptionScreen = ({ navigation, route, setMode }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        title="Scanned Prescription"
-        backButtonHandler={() => navigation.goBack()}
-      />
       {isLoading ? (
         <Skeleton />
       ) : (

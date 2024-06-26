@@ -10,10 +10,10 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ViewPrescriptionScreen from "../../screens/Prescription/ViewPrescriptionScreen";
-import EditPrescriptionScreen from "../../components/prescription/ScannedPrescriptionModal";
-import Header from "../../components/Header";
-
+import Header from "../Header";
+import ViewScannedPrescriptionScreen from "../../screens/Prescription/ViewScannedPrescriptionScreen";
+import EditScannedPrescriptionScreen from "../../screens/Prescription/EditScannedPrescriptionScreen";
+import SafeFlatListView from "../SafeFlatListView";
 const COLORS = {
   primary: "#242760",
   secondary: "#544C4C",
@@ -61,41 +61,35 @@ const FONTS = {
   body4: { fontSize: SIZES.body4, lineHeight: 20 },
 };
 
-const OcrResultScreen = ({ navigation, route }) => {
-  const { prescription } = route.params;
+const ScannedPrescriptionModal = ({ navigation, route }) => {
+  const prescriptionId = route.params.prescriptionId;
+  const defaultMode = route.params.mode;
+  const [mode, setMode] = useState(defaultMode);
 
-  const drugsData = drugs.map((drug, index) => {
-    return {
-      id: index + 1,
-      name: drug,
-      nOfTimes: "",
-      note: "",
-    };
-  });
-
-  const [mode, setMode] = useState("View");
-  const [prescriptionData, setPrescriptionData] = useState({
-    doctorName: "",
-    patientName: "",
-    age: "",
-    medicines: drugsData,
-  });
   return (
-    <SafeAreaView style={styles.container}>
-      <Header title="OCR" backButtonHandler={() => navigation.goBack()} />
+    <SafeFlatListView
+      header={
+        <Header
+          title={
+            mode === "Edit"
+              ? "Edit Scanned Prescription"
+              : "View Scanned Prescription"
+          }
+          backButtonHandler={() => navigation.goBack()}
+        />
+      }>
       {mode === "Edit" ? (
-        <EditPrescriptionScreen
-          prescriptionData={prescriptionData}
+        <EditScannedPrescriptionScreen
+          prescriptionId={prescriptionId}
           setMode={setMode}
-          setPrescriptionData={setPrescriptionData}
         />
       ) : (
-        <ViewPrescriptionScreen
-          prescriptionData={prescriptionData}
+        <ViewScannedPrescriptionScreen
+          prescriptionId={prescriptionId}
           setMode={setMode}
         />
       )}
-    </SafeAreaView>
+    </SafeFlatListView>
   );
 };
 
@@ -120,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OcrResultScreen;
+export default ScannedPrescriptionModal;

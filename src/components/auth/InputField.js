@@ -26,14 +26,6 @@ const InputField = React.memo(
           secureTextEntry={!showPassword}
           label={label}
           editable={editable}
-          theme={{
-            colors: {
-              primary: colors.Black,
-              text: colors.Black,
-              placeholder: colors.Black,
-              background: colors.White,
-            },
-          }}
         />
         {secureTextEntry && (
           <MaterialCommunityIcons
@@ -59,13 +51,10 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   inputField: {
-    borderRadius: 20,
     paddingHorizontal: responsiveWidth(10),
     height: responsiveHeight(60),
     color: colors.Black,
-    borderColor: colors.GreyII,
     borderWidth: StyleSheet.hairlineWidth,
-    marginBottom: responsiveHeight(10),
     backgroundColor: colors.White,
   },
   icon: {

@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.2.1",
     "@mindinventory/react-native-tab-bar-interaction": "^2.2.3",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.0.1",
@@ -18,7 +19,7 @@
     "@react-navigation/native-stack": "^6.9.17",
     "axios": "^1.6.7",
     "d3-shape": "^3.2.0",
-    "expo": "^51.0.11",
+    "expo": "~51.0.14",
     "expo-device": "~6.0.2",
     "expo-font": "~12.0.7",
     "expo-image-picker": "~15.0.5",
@@ -26,6 +27,7 @@
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.6",
     "firebase": "^10.12.2",
+    "install": "^0.13.0",
     "moti": "^0.28.1",
     "react": "18.2.0",
     "react-native": "0.74.2",
@@ -38,7 +40,9 @@
     "react-native-screens": "3.31.1",
     "react-native-size-scaling": "^0.5.1",
     "react-native-svg": "15.2.0",
-    "react-native-svg-transformer": "^0.10.0"
+    "react-native-svg-transformer": "^0.10.0",
+    "react-native-uuid": "^2.0.2",
+    "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0"

@@ -87,11 +87,6 @@ const MedicineField = ({ name, nOfTimes, note }) => {
 };
 
 const ViewPrescriptionScreen = ({ navigation, route }) => {
-  // const { doctorName, medicines, diagnose, diseases } =
-  //   route.params.prescription;
-
-  // const [doctorName, setDoctorName] = useState("");
-
   const [prescription, setPrescription] = useState({
     doctorName: "",
     medicines: [],
@@ -116,7 +111,7 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `https://api-mcy9.onrender.com/api/v1/patients/${patientId}/prescriptions/${prescriptionId}`,
+        `https://api.medical-society.fr.to/api/v1/patients/${patientId}/prescriptions/${prescriptionId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

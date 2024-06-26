@@ -57,7 +57,7 @@ const postImage = async (
     const formData = await createFormData(uri);
 
     const response = await axios.post(
-      `https://api-mcy9.onrender.com/api/v1/patients/${patientId}/scanned-prescriptions/`,
+      `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/`,
       formData,
       {
         headers: {
@@ -67,6 +67,10 @@ const postImage = async (
       }
     );
     console.log("Prescription submitted successfully:", response.data);
+    navigation.navigate("ScannedPrescriptionModal", {
+      prescriptionId: response.data.data._id,
+      mode: "Edit",
+    });
   } catch (error) {
     console.error("Error submitting prescription:", error.response.data);
     // Handle error here

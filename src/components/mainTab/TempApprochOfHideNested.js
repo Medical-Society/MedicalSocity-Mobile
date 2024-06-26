@@ -1,10 +1,12 @@
 import React, { useState, useMemo, useContext } from "react";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../../screens/Home";
 import { getPathDown } from "./curve";
 import { Svg, Path, Rect, G, ClipPath } from "react-native-svg";
 import { Context as UserContext } from "../../context/UserContext";
 import { scale } from "react-native-size-scaling";
+
 import {
   View,
   Image,
@@ -22,10 +24,6 @@ import AiChatbot from "../../screens/Chat/AiChatbot";
 import { useNavigation } from "@react-navigation/native";
 import { colors, responsiveHeight, responsiveWidth } from "../../../AppStyles";
 import { Ionicons } from "@expo/vector-icons";
-import ChatsScreen from "../../screens/Chat/ChatsScreen";
-import HomeIcon from "../../../assets/SvgIcons.js/HomeIcon";
-import CalendarIcon from "../../../assets/SvgIcons.js/CalendarIcon";
-import ChatsIcon from "../../../assets/SvgIcons.js/ChatsIcon";
 
 const Tab = createBottomTabNavigator();
 
@@ -74,6 +72,18 @@ const MenuIcon = React.memo(({ focused, patientName }) => {
   );
 });
 
+const toHideTabs = ["Appointments", "Prescriptions", "ScannedPrescriptions"];
+
+function getTabBarVisibility(route) {
+  console.log("route", route);
+  const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+
+  if (toHideTabs.includes(routeName)) {
+    return "none";
+  }
+  return "flex";
+}
+
 const MainTab = () => {
   const [maxWidth, setMaxWidth] = useState(Dimensions.get("window").width + 1);
   const returnPathDown = getPathDown(maxWidth, 60, 50);
@@ -83,10 +93,11 @@ const MainTab = () => {
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
-      screenOptions={{
+      screenOptions={({ route }) => ({
         tabBarShowLabel: false,
         headerShown: false,
         tabBarStyle: {
+          display: getTabBarVisibility(route),
           position: "absolute",
           bottom: 0,
           left: 0,
@@ -97,7 +108,7 @@ const MainTab = () => {
           borderTopRightRadius: 32,
           backgroundColor: colors.BlueII,
         },
-      }}>
+      })}>
       <Tab.Screen
         name="MenuStack"
         component={MenuStack}
@@ -105,26 +116,27 @@ const MainTab = () => {
           tabBarIcon: ({ focused }) => (
             <MenuIcon
               focused={focused}
-              width={27}
-              height={26}
+              width={35}
+              height={35}
               patientName={patientName}
             />
           ),
         }}
       />
       <Tab.Screen
-        name="Chats"
-        component={ChatsScreen}
+        name="Notifications"
+        component={Notifications}
         options={{
           headerShown: false,
-          tabBarIcon: ({ focused }) => <ChatsIcon focused={focused} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon name="notifications" focused={focused} />
+          ),
         }}
       />
       <Tab.Screen
         name="Ai"
         component={AiChatbot}
         options={{
-          tabBarStyle: { display: "none", zIndex: -50 },
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -133,7 +145,7 @@ const MainTab = () => {
                 backgroundColor: colors.BlueII,
                 height: Platform.OS === "ios" ? 70 : 60,
                 width: Platform.OS === "ios" ? 70 : 60,
-                top: Platform.OS === "ios" ? -30 : -20,
+                top: Platform.OS === "ios" ? -40 : -30,
                 borderRadius: Platform.OS === "ios" ? 35 : 30,
                 borderWidth: 3,
                 borderColor: "transparent",
@@ -153,11 +165,10 @@ const MainTab = () => {
       <Tab.Screen
         name="Calendar"
         component={Calendar}
-        listeners={{
-          tabPress: (e) => {},
-        }}
         options={{
-          tabBarIcon: ({ focused }) => <CalendarIcon focused={focused} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon name="calendar" focused={focused} />
+          ),
         }}
       />
 
@@ -165,7 +176,7 @@ const MainTab = () => {
         name="HomeStack"
         component={HomeStack}
         options={{
-          tabBarIcon: ({ focused }) => <HomeIcon focused={focused} />,
+          tabBarIcon: ({ focused }) => <Icon name="home" focused={focused} />,
         }}
       />
     </Tab.Navigator>

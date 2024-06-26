@@ -1,15 +1,12 @@
 import React from "react";
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors } from "../../AppStyles";
 
-const SafeScrollView = ({ children, header, marginBottom = 60 }) => {
+const SafeFlatListView = ({ children, header, marginBottom = 60 }) => {
   return (
     <SafeAreaView style={styles.container}>
       {header}
-      <ScrollView
-        style={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}>
+      <View style={styles.mainContainer}>
         <View
           style={{
             ...styles.marginedContainer,
@@ -17,7 +14,7 @@ const SafeScrollView = ({ children, header, marginBottom = 60 }) => {
           }}>
           {children}
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -25,9 +22,9 @@ const SafeScrollView = ({ children, header, marginBottom = 60 }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.White,
+    backgroundColor: "white",
   },
-  scrollContainer: {
+  mainContainer: {
     flex: 1,
     marginHorizontal: 10,
   },
@@ -36,4 +33,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SafeScrollView;
+export default SafeFlatListView;

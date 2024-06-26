@@ -32,7 +32,7 @@ const LatestWorkScreen = ({ navigation, route }) => {
   //   setIsLoading(true);
   //   try {
   //     const response = await axios.get(
-  //       `https://api-mcy9.onrender.com/api/v1/doctors/${doctorId}/posts`,
+  //       `https://api.medical-society.fr.to/api/v1/doctors/${doctorId}/posts`,
   //       {
   //         params: {
   //           page: currentPage,
@@ -72,7 +72,7 @@ const LatestWorkScreen = ({ navigation, route }) => {
     isLoading,
     handleLoadMore,
   } = usePaginatedFetch(
-    `https://api-mcy9.onrender.com/api/v1/doctors/${doctorId}/posts`,
+    `https://api.medical-society.fr.to/api/v1/doctors/${doctorId}/posts`,
     "posts"
   );
 
