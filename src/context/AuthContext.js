@@ -3,11 +3,21 @@ import patientApi from "../services/patient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
 import { Context as userContext } from "./UserContext";
+import io from "socket.io-client";
 
 const authReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      return { ...state, token: action.payload, errorMessage: "" };
+      return {
+        ...state,
+        token: action.payload,
+        socket: io("https://api.medical-society.fr.to/", {
+          extraHeaders: {
+            Authorization: `bearer ${action.payload}`,
+          },
+        }),
+        errorMessage: "",
+      };
     case "SIGNOUT":
       return { ...state, token: null, errorMessage: "" };
     case "ADD_ERROR":
@@ -181,5 +191,11 @@ export const { Provider, Context } = createDataContext(
     forgetPassword,
     addError,
   },
-  { token: null, errorMessage: "", isLoading: true, successMessage: "" }
+  {
+    token: null,
+    errorMessage: "",
+    isLoading: true,
+    successMessage: "",
+    socket: null,
+  }
 );

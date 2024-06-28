@@ -158,7 +158,7 @@ const DoctorScreen = ({ navigation, route }) => {
               <Button
                 buttonText="Book Appointment"
                 onPress={() =>
-                  navigation.navigate("Appointments", { doctorId })
+                  navigation.navigate("DoctorAppointments", { doctorId })
                 }
               />
             </View>

@@ -77,6 +77,8 @@ const MenuIcon = React.memo(({ focused, patientName }) => {
 const MainTab = () => {
   const [maxWidth, setMaxWidth] = useState(Dimensions.get("window").width + 1);
   const returnPathDown = getPathDown(maxWidth, 60, 50);
+  const [modalOpen, setModalOpen] = useState(false);
+
   const { state } = useContext(UserContext);
   const patientName = state.userData.patientName;
   console.log("state", state.userData.patientName);

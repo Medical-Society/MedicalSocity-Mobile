@@ -34,6 +34,7 @@ const messagesDataBuilder = (chats) => {
       chatId: chat._id,
       fullName: chat.doctor.englishFullName,
       userImage: chat.doctor.avatar,
+      doctorId: chat.doctor._id,
       isOnline: true,
       lastMessage: lastMessage.text,
       lastMessageTime,
@@ -47,7 +48,7 @@ const ChatsScreen = ({ navigation }) => {
   const [term, setTerm] = useState("");
   const [results, setResults] = useState([]);
   const { state } = useContext(AuthContext);
-  const { token } = state;
+  const { token, socket } = state;
 
   const getChats = async () => {
     try {
@@ -72,6 +73,36 @@ const ChatsScreen = ({ navigation }) => {
     });
     return subscriber;
   }, [navigation]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("listen message", ({ _id, text, createdAt, userId }) => {
+        console.log("listen message", _id, text, createdAt, userId);
+        setChats((previousChats) => {
+          const newChats = previousChats.map((chat) => {
+            if (chat.doctorId === userId) {
+              return {
+                ...chat,
+                lastMessage: text,
+                lastMessageTime: new Date(createdAt).toLocaleTimeString(
+                  "en-US",
+                  {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                  }
+                ),
+                messageInQueue:
+                  chat.messageInQueue === 0 ? 1 : chat.messageInQueue + 1,
+              };
+            }
+            return chat;
+          });
+          return newChats;
+        });
+      });
+    }
+  }, [socket]);
 
   const handleSearch = (text) => {
     setTerm(text);

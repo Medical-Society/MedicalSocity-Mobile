@@ -18,9 +18,8 @@ import { Context as AuthContext } from "../../context/AuthContext";
 import FilledStarIcon from "../../../assets/SvgIcons.js/FilledStarIcon";
 import EmptyStarIcon from "../../../assets/SvgIcons.js/EmptyStarIcon";
 
-import { Path } from "react-native-svg";
 import MultiLineTextInput from "../../components/MultiLineTextInput";
-const DEFAULT_RATING = 3;
+const DEFAULT_RATING = 0;
 
 const ReviewsScreen = ({ navigation, route }) => {
   const doctorId = route.params.doctorId;
@@ -31,11 +30,9 @@ const ReviewsScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const { state } = useContext(AuthContext);
-  const [defaultRating, setDefaultRating] = useState(0);
+  const [defaultRating, setDefaultRating] = useState(DEFAULT_RATING);
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
   const [reviewContent, setReviewContent] = useState("");
-  const starImageFilled = require("../../../assets/star_filled.png");
-  const starImageCorner = require("../../../assets/star_corner.png");
 
   const limit = 10;
 
@@ -180,6 +177,7 @@ const styles = StyleSheet.create({
   customRatingBarStyle: {
     justifyContent: "center",
     alignSelf: "center",
+    alignItems: "center",
     flexDirection: "row",
     marginTop: 10,
     marginBottom: 20,

@@ -8,9 +8,10 @@ const db = database;
 const HomeIotScreen = () => {
   const [data, setData] = useState({});
   const [appState, setAppState] = useState(AppState.currentState);
+  const [sensorId, setSensorId] = useState("349f033c");
 
   useEffect(() => {
-    const dbRef = ref(db, "test");
+    const dbRef = ref(db, sensorId);
     const unsubscribe = onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       setData(data);
@@ -24,14 +25,14 @@ const HomeIotScreen = () => {
   }, []);
 
   const handleButtonClick = () => {
-    const dbRef = ref(db, "test");
+    const dbRef = ref(db, sensorId);
     update(dbRef, { state: 0 });
   };
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {
       if (nextAppState === "background" || nextAppState === "inactive") {
-        const dbRef = ref(db, "test");
+        const dbRef = ref(db, sensorId);
         update(dbRef, { state: 1 });
         setAppState(nextAppState);
       }

@@ -26,7 +26,8 @@ import Header from "../../components/Header";
 import Button from "../../components/SubmitButton";
 import MessagesModal from "../../components/MessagesModal";
 import LoadingModal from "../../components/LoadingModal";
-const AppointmentsScreen = ({
+
+const DoctorAppointmentsScreen = ({
   navigation,
   route: {
     params: { doctorId },
@@ -332,4 +333,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppointmentsScreen;
+export default DoctorAppointmentsScreen;

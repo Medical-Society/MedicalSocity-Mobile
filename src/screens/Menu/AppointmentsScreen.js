@@ -46,17 +46,25 @@ const AppointmentsScreen = ({ navigation }) => {
       }
       marginBottom={10}>
       <FlatList
-        data={appointments}
+        data={
+          // sort appointments by status (PENDING, IN_PROGRESS, FINISHED, CANCELED) then by date
+          appointments.sort((a, b) => {
+            const statusOrder = {
+              PENDING: 1,
+              IN_PROGRESS: 2,
+              FINISHED: 3,
+              CANCELED: 4,
+            };
+            if (statusOrder[a.status] !== statusOrder[b.status]) {
+              return statusOrder[a.status] - statusOrder[b.status];
+            } else {
+              return new Date(a.createdAt) - new Date(b.createdAt);
+            }
+          })
+        }
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <AppointmentCard
-            appointment={item}
-            handlePressedAppointment={() =>
-              navigation.navigate("AppointmentDetails", {
-                appointmentId: item._id,
-              })
-            }
-          />
+          <AppointmentCard appointment={item} navigation={navigation} />
         )}
         keyExtractor={(item) => item._id}
         onEndReached={handleLoadMore}

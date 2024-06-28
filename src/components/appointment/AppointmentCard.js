@@ -15,9 +15,8 @@ const AppointmentCard = ({ appointment, onPress }) => {
     description,
   } = appointment;
 
-  const buttonText =
-    status === "finished" ? "View Prescription" : "Cancel appointment";
-  const buttonColor = status === "finished" ? colors.BlueI : colors.DarkRed;
+  const buttonText = status === "FINISHED" ? "Finished" : "Cancel appointment";
+  const buttonColor = status === "FINISHED" ? colors.BlueI : colors.DarkRed;
 
   return (
     <View style={styles.card}>
@@ -33,8 +32,21 @@ const AppointmentCard = ({ appointment, onPress }) => {
         {noPatientBeforeMe} patients before you
       </Text>
       <Text style={styles.description}>{description}</Text>
-      <TouchableOpacity style={{ ...styles.button, borderColor: buttonColor }}>
-        <Text style={{ ...styles.buttonText, color: buttonColor }}>
+      <TouchableOpacity
+        style={{
+          ...styles.button,
+          borderColor: buttonColor,
+          backgroundColor:
+            status === "FINISHED" ? colors.LightGrey : colors.White,
+        }}
+        disabled={status === "FINISHED"}>
+        <Text
+          style={{
+            ...styles.buttonText,
+            color: buttonColor,
+
+            color: status === "FINISHED" ? colors.Black : colors.Red,
+          }}>
           {buttonText}
         </Text>
       </TouchableOpacity>
@@ -106,6 +118,13 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#900F06",
     fontSize: 14,
+  },
+  disabledButton: {
+    alignItems: "center",
+    borderColor: "#7A7A7A",
+    borderRadius: 5,
+    borderWidth: 1,
+    paddingVertical: 16,
   },
 });
 
