@@ -1,40 +1,54 @@
-import React, { useContext } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { colors } from "../../../AppStyles";
+import React, { useContext, useState } from "react";
+import { FlatList } from "react-native";
 import Header from "../../components/Header";
 import AppointmentCard from "../../components/appointment/AppointmentCard";
-import SafeScrollView from "../../components/SafeScrollView";
 import SafeFlatListView from "../../components/SafeFlatListView";
 import usePaginatedFetch from "../../hooks/usePaginatedFetch";
 import { Context as AuthContext } from "../../context/AuthContext";
 import { ActivityIndicator } from "react-native-paper";
+import LoadingModal from "../../components/LoadingModal";
+import MessagesModal from "../../components/MessagesModal";
+import ConfirmModal from "../../components/ConfirmModal";
+import patientApi from "../../services/patient";
+
 const AppointmentsScreen = ({ navigation }) => {
-  /*
-  const doctorName = "Dr. Ahmed";
-  const price = 200;
-  const noPatientBeforeMe = 2;
-  const address = "Cairo, Egypt";
-  const date = "3/3/2024";
-  const time = "10:00 AM";
-  const status = "finished";
-  const description = "This is a description for the appointment";
-  const buttonText =
-    status === "finished" ? "View Prescription" : "Cancel appointment";
-  const buttonColor = status === "finished" ? colors.BlueI : colors.DarkRed;
-
-  convert the above data to an object and pass it to the AppointmentCard component
-
-  */
-
   const {
     data: appointments,
-    isLoading,
+    isLoading: fetchingAppointmentsLoading,
     handleLoadMore,
+    reFetchData: refreshAppointments,
   } = usePaginatedFetch(
     `https://api.medical-society.fr.to/api/v1/patients/appointments`,
     "appointments"
   );
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteAppointmentId, setDeleteAppointmentId] = useState("");
+
+  const [message, setMessage] = useState({
+    successMessage: "",
+    errorMessage: "",
+  });
+  const { state } = useContext(AuthContext);
+  const { token } = state;
+
+  const cancelAppointment = async () => {
+    setIsLoading(true);
+    try {
+      await patientApi.delete(`/appointments/${deleteAppointmentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMessage({ successMessage: "Appointment canceled successfully" });
+    } catch (error) {
+      setMessage({ errorMessage: "An error occurred, please try again" });
+    }
+    setDeleteAppointmentId("");
+    setIsLoading(false);
+    setModalVisible(false);
+  };
 
   return (
     <SafeFlatListView
@@ -45,31 +59,53 @@ const AppointmentsScreen = ({ navigation }) => {
         />
       }
       marginBottom={10}>
+      <LoadingModal loading={isLoading} />
+      <ConfirmModal
+        visibility={modalVisible}
+        content={`Are you sure you want to cancel this appointment?`}
+        onConfirm={cancelAppointment}
+        onCancel={() => setModalVisible(false)}
+      />
+
+      <MessagesModal
+        successMessage={message.successMessage}
+        errorMessage={message.errorMessage}
+        clearMessage={() => {
+          setMessage({ successMessage: "", errorMessage: "" });
+          refreshAppointments();
+        }}
+      />
+
       <FlatList
-        data={
-          // sort appointments by status (PENDING, IN_PROGRESS, FINISHED, CANCELED) then by date
-          appointments.sort((a, b) => {
-            const statusOrder = {
-              PENDING: 1,
-              IN_PROGRESS: 2,
-              FINISHED: 3,
-              CANCELED: 4,
-            };
-            if (statusOrder[a.status] !== statusOrder[b.status]) {
-              return statusOrder[a.status] - statusOrder[b.status];
-            } else {
-              return new Date(a.createdAt) - new Date(b.createdAt);
-            }
-          })
-        }
+        data={appointments.sort((a, b) => {
+          const statusOrder = {
+            IN_PROGRESS: 1,
+            PENDING: 2,
+            FINISHED: 3,
+            CANCELED: 4,
+          };
+          if (statusOrder[a.status] !== statusOrder[b.status]) {
+            return statusOrder[a.status] - statusOrder[b.status];
+          } else {
+            return new Date(b.date) - new Date(a.date);
+          }
+        })}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <AppointmentCard appointment={item} navigation={navigation} />
+          <AppointmentCard
+            appointment={item}
+            onPress={() => {
+              setModalVisible(true);
+              setDeleteAppointmentId(item._id);
+            }}
+          />
         )}
         keyExtractor={(item) => item._id}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
-        ListFooterComponent={isLoading && <ActivityIndicator size="large" />}
+        ListFooterComponent={
+          fetchingAppointmentsLoading && <ActivityIndicator size="large" />
+        }
       />
     </SafeFlatListView>
   );

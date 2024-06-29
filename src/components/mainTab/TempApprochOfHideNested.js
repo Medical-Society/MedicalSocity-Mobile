@@ -75,7 +75,6 @@ const MenuIcon = React.memo(({ focused, patientName }) => {
 const toHideTabs = ["Appointments", "Prescriptions", "ScannedPrescriptions"];
 
 function getTabBarVisibility(route) {
-  console.log("route", route);
   const routeName = getFocusedRouteNameFromRoute(route) ?? "";
 
   if (toHideTabs.includes(routeName)) {
@@ -89,7 +88,6 @@ const MainTab = () => {
   const returnPathDown = getPathDown(maxWidth, 60, 50);
   const { state } = useContext(UserContext);
   const patientName = state.userData.patientName;
-  console.log("state", state.userData.patientName);
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"

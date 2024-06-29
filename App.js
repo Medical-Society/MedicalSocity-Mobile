@@ -54,13 +54,6 @@ const App = () => {
         options={{ headerShown: false }}
       />
     );
-    // return (
-    //   <Stack.Screen
-    //     name="mainStack"
-    //     component={MainStack}
-    //     options={{ headerShown: false }}
-    //   />
-    // );
   }, [state.token]);
 
   return (
@@ -77,11 +70,11 @@ const App = () => {
           initialRouteName="Welcome">
           {resolvedScreen}
           {authOrMainFlowScreen}
-          {/* <Stack.Screen
+          <Stack.Screen
             name="IOT"
             component={HomeIotScreen}
             options={{ headerShown: false }}
-          /> */}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

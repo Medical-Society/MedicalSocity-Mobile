@@ -1,51 +1,79 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import { colors, formattedDYM } from "../../../AppStyles";
 
-const AppointmentCard = ({ appointment, onPress }) => {
-  const {
-    doctorName,
-    price,
-    noPatientBeforeMe,
-    address,
-    date,
-    time,
-    status,
-    description,
-  } = appointment;
+const buildButtonStatusBased = (status) => {
+  switch (status) {
+    case "PENDING":
+      return {
+        buttonText: "Cancel appointment",
+        mainColor: colors.DarkRed,
+        backgroundColor: colors.White,
+      };
+    case "IN_PROGRESS":
+      return {
+        buttonText: "In progress",
+        mainColor: colors.BlueI,
+        backgroundColor: colors.LightGrey,
+      };
+    case "FINISHED":
+      return {
+        buttonText: "Finished",
+        mainColor: colors.BlueI,
+        backgroundColor: colors.LightGrey,
+      };
+    case "CANCELED":
+      return {
+        buttonText: "Canceled",
+        mainColor: colors.White,
+        backgroundColor: colors.DarkRed,
+      };
+  }
+};
 
-  const buttonText = status === "FINISHED" ? "Finished" : "Cancel appointment";
-  const buttonColor = status === "FINISHED" ? colors.BlueI : colors.DarkRed;
+const AppointmentCard = ({ appointment, onPress }) => {
+  const { price, noPatientBeforeMe, doctor, date, time, status, description } =
+    appointment;
+
+  const { buttonText, mainColor, backgroundColor } =
+    buildButtonStatusBased(status);
 
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        {
+          backgroundColor:
+            status === "PENDING" ? colors.White : colors.LightGrey,
+        },
+      ]}>
       <View style={styles.header}>
-        <Text style={styles.doctorName}>{doctorName}</Text>
+        <Text style={styles.doctorName}>{doctor.englishFullName}</Text>
         <Text style={styles.date}>{formattedDYM(date)}</Text>
       </View>
       <View style={styles.row}>
         <Text style={styles.price}>{price} LE</Text>
         <Text style={styles.time}>{time}</Text>
       </View>
-      <Text style={styles.patientsBefore}>
-        {noPatientBeforeMe} patients before you
-      </Text>
+      {status === "PENDING" && (
+        <Text style={styles.patientsBefore}>
+          {noPatientBeforeMe} patients before you
+        </Text>
+      )}
+
       <Text style={styles.description}>{description}</Text>
       <TouchableOpacity
+        onPress={onPress}
         style={{
           ...styles.button,
-          borderColor: buttonColor,
-          backgroundColor:
-            status === "FINISHED" ? colors.LightGrey : colors.White,
+          borderColor: mainColor,
+          backgroundColor: backgroundColor,
         }}
-        disabled={status === "FINISHED"}>
+        disabled={status !== "PENDING"}>
         <Text
           style={{
             ...styles.buttonText,
-            color: buttonColor,
-
-            color: status === "FINISHED" ? colors.Black : colors.Red,
+            color: mainColor,
           }}>
           {buttonText}
         </Text>

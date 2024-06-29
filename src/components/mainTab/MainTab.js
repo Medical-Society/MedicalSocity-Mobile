@@ -26,6 +26,7 @@ import ChatsScreen from "../../screens/Chat/ChatsScreen";
 import HomeIcon from "../../../assets/SvgIcons.js/HomeIcon";
 import CalendarIcon from "../../../assets/SvgIcons.js/CalendarIcon";
 import ChatsIcon from "../../../assets/SvgIcons.js/ChatsIcon";
+import AiIcon from "../../../assets/SvgIcons.js/AiIcon";
 
 const Tab = createBottomTabNavigator();
 
@@ -81,7 +82,7 @@ const MainTab = () => {
 
   const { state } = useContext(UserContext);
   const patientName = state.userData.patientName;
-  console.log("state", state.userData.patientName);
+  
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
@@ -140,14 +141,7 @@ const MainTab = () => {
                 borderWidth: 3,
                 borderColor: "transparent",
               }}>
-              <Image
-                resizeMode="contain"
-                source={require("../../../assets/ai.png")}
-                style={{
-                  width: 50,
-                  height: 50,
-                }}
-              />
+              <AiIcon />
             </View>
           ),
         }}
@@ -155,9 +149,6 @@ const MainTab = () => {
       <Tab.Screen
         name="Calendar"
         component={Calendar}
-        listeners={{
-          tabPress: (e) => {},
-        }}
         options={{
           tabBarIcon: ({ focused }) => <CalendarIcon focused={focused} />,
         }}

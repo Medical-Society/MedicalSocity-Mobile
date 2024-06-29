@@ -104,7 +104,6 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
         token,
         patientId
       );
-      setSelectedImage(result.assets[0].uri);
     }
   };
   const handlePermission = async () => {

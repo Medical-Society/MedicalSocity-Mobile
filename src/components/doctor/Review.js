@@ -14,8 +14,6 @@ import FilledStarIcon from "../../../assets/SvgIcons.js/FilledStarIcon";
 const Review = memo(({ review: { patient, rating, comment } }) => {
   const [patientName, setPatientName] = useState("Peter");
   const { state } = useContext(AuthContext);
-  console.log("rating", rating);
-
   useEffect(() => {
     setPatientName(patient.patientName);
   }, []);

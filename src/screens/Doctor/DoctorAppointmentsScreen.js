@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  Modal,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -20,12 +19,12 @@ import doctorApi from "../../services/doctor";
 import patientApi from "../../services/patient";
 import {
   Context as AuthContext,
-  Provider as AuthProvider,
 } from "../../context/AuthContext";
 import Header from "../../components/Header";
 import Button from "../../components/SubmitButton";
 import MessagesModal from "../../components/MessagesModal";
 import LoadingModal from "../../components/LoadingModal";
+import ConfirmModal from "../../components/ConfirmModal";
 
 const DoctorAppointmentsScreen = ({
   navigation,
@@ -130,58 +129,28 @@ const DoctorAppointmentsScreen = ({
         />
 
         <LoadingModal loading={loading} />
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <View style={styles.iconsView}>
-                <MaterialIcons
-                  name="date-range"
-                  size={responsiveFontSize(50)}
-                  color={colors.Black}
-                />
-              </View>
-              <Text
-                style={{
-                  fontFamily: "Cairo-SemiBold",
-                  fontSize: responsiveFontSize(20),
-                  color: colors.DarkCyan,
-                  textAlign: "center",
-                }}>
-                The appointment you want to book {"\n"} is on{" "}
-                {convertTo12HourFormat(selectedTime)[0]}{" "}
-                {convertTo12HourFormat(selectedTime)[2]} {"\n"} at{" "}
-                {convertTo12HourFormat(selectedTime)[1]}
-              </Text>
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity
-                  style={{ ...styles.modalButton, backgroundColor: colors.Red }}
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                  }}>
-                  <Text style={styles.modalButtonText}>Close</Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={{
-                    ...styles.modalButton,
-                    backgroundColor: colors.Green,
-                  }}
-                  onPress={() => {
-                    bookAppointment(selectedTime);
-                    setModalVisible(!modalVisible);
-                  }}>
-                  <Text style={styles.modalButtonText}>Confirm</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+        <ConfirmModal
+          visibility={modalVisible}
+          handleVisibility={() => setModalVisible(false)}
+          icon={
+            <MaterialIcons
+              name="date-range"
+              size={responsiveFontSize(50)}
+              color={colors.Black}
+            />
+          }
+          content={`The appointment you want to book \n is on ${
+            convertTo12HourFormat(selectedTime)[0]
+          } ${convertTo12HourFormat(selectedTime)[2]} \n at ${
+            convertTo12HourFormat(selectedTime)[1]
+          }`}
+          onCancel={() => setModalVisible(false)}
+          onConfirm={() => {
+            bookAppointment(selectedTime);
+            setModalVisible(false);
+          }}
+        />
 
         <View>
           <Text style={styles.title}>Choose the time of your appointment</Text>
@@ -244,7 +213,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   date: {
     paddingHorizontal: responsiveWidth(20),
     paddingVertical: responsiveHeight(20),
@@ -289,47 +257,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
     padding: responsiveWidth(20),
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
-  iconsView: {
-    position: "absolute",
-    top: responsiveHeight(-30),
-    backgroundColor: "white",
-    borderRadius: 50,
-  },
-  icon: {
-    fontSize: responsiveFontSize(60),
-    marginBottom: responsiveHeight(20),
-    borderRadius: 50,
-  },
-  modalContent: {
-    backgroundColor: "white",
-    padding: responsiveWidth(20),
-    borderRadius: 10,
-    alignItems: "center",
-    paddingVertical: responsiveHeight(40),
-    marginHorizontal: responsiveWidth(20),
-  },
-  modalButton: {
-    paddingVertical: responsiveHeight(10),
-    paddingHorizontal: responsiveWidth(20),
-    borderRadius: 5,
-    marginTop: responsiveHeight(20),
-  },
-  modalButtonText: {
-    color: "white",
-    fontSize: responsiveFontSize(16),
-    textAlign: "center",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
   },
 });
 

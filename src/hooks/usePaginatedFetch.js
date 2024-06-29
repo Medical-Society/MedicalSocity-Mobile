@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useContext } from "react";
 import axios from "axios";
 import { Context as AuthContext } from "../context/AuthContext";
 
-const usePaginatedFetch = (url, value, navigation = null, limit = 10) => {
+const usePaginatedFetch = (url, value) => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -13,13 +13,19 @@ const usePaginatedFetch = (url, value, navigation = null, limit = 10) => {
     fetchData();
   }, [currentPage]);
 
+  const reFetchData = () => {
+    setData([]);
+    setCurrentPage(1);
+    fetchData();
+  };
+
   const fetchData = async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(url, {
         params: {
           page: currentPage,
-          limit,
+          limit: 10,
         },
         headers: {
           Authorization: `Bearer ${state.token}`,
@@ -54,6 +60,7 @@ const usePaginatedFetch = (url, value, navigation = null, limit = 10) => {
     data,
     isLoading,
     handleLoadMore,
+    reFetchData,
   };
 };
 

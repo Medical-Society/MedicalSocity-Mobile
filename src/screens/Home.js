@@ -23,6 +23,7 @@ import { colors } from "../../AppStyles";
 import SafeScrollView from "../components/SafeScrollView";
 import HomeCard from "../components/home/HomeCard";
 import DoctorCircle from "../components/home/DoctorCircle";
+import DoctorIcon from "../../assets/SvgIcons.js/DoctorIcon";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const scale = SCREEN_WIDTH / 320;
@@ -426,17 +427,6 @@ const Home = ({ navigation }) => {
       />
       <HomeCard
         feature={{
-          title: "Scan your prescriptions",
-          text: "Convert your hard copy prescriptions to digital form",
-          button: "Try it now",
-          screen: "Search",
-          image: require("../../assets/Ocr.png"),
-          bgColor: "#503453",
-        }}
-        onPress={() => setModalVisible(true)}
-      />
-      <HomeCard
-        feature={{
           title: "Try our bracelet and track your health",
           text: " Your heart rate and oxygen pulse",
           button: "Shop now",
@@ -445,16 +435,31 @@ const Home = ({ navigation }) => {
           bgColor: "#440A05",
         }}
       />
+      <HomeCard
+        feature={{
+          title: "Scan your prescriptions",
+          text: "Convert your hard copy prescriptions to digital form",
+          button: "Try it now",
+          screen: "Search",
+          image: require("../../assets/Ocr.png"),
+          bgColor: "#5A0542",
+          reverse: true,
+        }}
+        onPress={() => setModalVisible(true)}
+      />
+      
 
       <HomeCard
         feature={{
-          title: "Ask a specific doctor or our doctors in public",
+          title: "Ask Your Doctor in Chat",
           text: "It would be answered in 24 hours",
           button: "Try it now",
           screen: "Search",
-          image: require("../../assets/AiCardImg.png"),
-          bgColor: "#3F3114",
+          bgColor: "#005A68",
+          reverse: true,
         }}
+        onPress={() => navigation.navigate("Chats")}
+        svgIcon={<DoctorIcon />}
       />
     </SafeScrollView>
   );
