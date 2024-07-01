@@ -1,30 +1,15 @@
-import React, { lazy } from "react";
+import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { colors } from "../../../AppStyles";
 
-const Menu = lazy(() => import("../../screens/Menu/MenuScreen"));
-const EditProfile = lazy(() => import("../../screens/Menu/YouAccountScreen"));
-const NotificationsSettings = lazy(() =>
-  import("../../screens/Menu/NotificationsSettings")
-);
-const HelpSupportScreen = lazy(() =>
-  import("../../screens/Menu/HelpSupportScreen")
-);
-const ReportProblemScreen = lazy(() =>
-  import("../../screens/Menu/ReportProblemScreen")
-);
-const TermsPoliciesScreen = lazy(() =>
-  import("../../screens/Menu/TermsPoliciesScreen")
-);
-const PrescriptionsScreen = lazy(() =>
-  import("../../screens/Menu/PrescriptionsScreen")
-);
-const ScannedPrescriptionsScreen = lazy(() =>
-  import("../../screens/Menu/ScannedPrescriptionsScreen")
-);
-const AppointmentsScreen = lazy(() =>
-  import("../../screens/Menu/AppointmentsScreen")
-);
+import Menu from "../../screens/Menu/MenuScreen";
+import EditProfile from "../../screens/Menu/YouAccountScreen";
+import NotificationsSettings from "../../screens/Menu/NotificationsSettings";
+import HelpSupportScreen from "../../screens/Menu/HelpSupportScreen";
+import ReportProblemScreen from "../../screens/Menu/ReportProblemScreen";
+import TermsPoliciesScreen from "../../screens/Menu/TermsPoliciesScreen";
+import PrescriptionsScreen from "../../screens/Menu/PrescriptionsScreen";
+import ScannedPrescriptionsScreen from "../../screens/Menu/ScannedPrescriptionsScreen";
+import AppointmentsScreen from "../../screens/Menu/AppointmentsScreen";
 
 const Stack = createNativeStackNavigator();
 

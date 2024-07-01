@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Drawer from "../drawer/Drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AiChatbot from "../../screens/Chat/AiChatbot";
 import DoctorStack from "../DoctorStack/DoctorStack";
@@ -12,14 +11,13 @@ import PrescriptionsScreen from "../../screens/Menu/PrescriptionsScreen";
 import ScannedPrescriptionsScreen from "../../screens/Menu/ScannedPrescriptionsScreen";
 import AppointmentsScreen from "../../screens/Menu/AppointmentsScreen";
 import ScannedPrescriptionModal from "../prescription/ScannedPrescriptionModal";
-import ChatsScreen from "../../screens/Chat/ChatsScreen";
 import ChatScreen from "../../screens/Chat/ChatScreen";
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Drawer"
+      initialRouteName="MainTab"
       screenOptions={{
         headerShown: false,
         contentStyle: {

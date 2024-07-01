@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "MedicalSociety",
-    "slug": "MedicalSociety",
+    "name": "Medical Society",
+    "slug": "medicalsociety",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/msslogo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "resizeMode": "contain",
@@ -23,7 +23,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.peter_torki.MedicalSociety"
+      "package": "com.peter_torki.mss"
     },
     "web": {
       "favicon": "./assets/favicon.png"

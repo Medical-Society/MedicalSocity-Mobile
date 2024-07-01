@@ -93,18 +93,6 @@ const Profile = ({ navigation }) => {
     },
     {
       component: (width, height, color, style) => (
-        <SettingsIcon
-          width={width}
-          height={height}
-          fill={color}
-          style={style}
-        />
-      ),
-      text: "Settings",
-      action: navigateToPrescriptions,
-    },
-    {
-      component: (width, height, color, style) => (
         <LogoutIcon width={width} height={height} fill={color} style={style} />
       ),
       text: "Log out",

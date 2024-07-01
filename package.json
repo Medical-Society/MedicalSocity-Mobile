@@ -22,7 +22,7 @@
     "expo": "~51.0.14",
     "expo-device": "~6.0.2",
     "expo-font": "~12.0.7",
-    "expo-image-picker": "~15.0.5",
+    "expo-image-picker": "~15.0.6",
     "expo-linear-gradient": "~13.0.2",
     "expo-notifications": "~0.28.9",
     "expo-status-bar": "~1.12.1",

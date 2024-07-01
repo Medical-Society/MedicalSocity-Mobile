@@ -20,7 +20,6 @@ const ScannedPrescriptionCard = ({
         <Text style={styles.date}>{date}</Text>
         <View style={styles.rowOne}>
           <Text style={styles.name}>Dr/ {doctorName}</Text>
-          <Text style={styles.address}>{prescription._id}</Text>
         </View>
         <View style={styles.rowOne}>
           <Text style={styles.specialization}>Mr/Mrs. {patientName}</Text>

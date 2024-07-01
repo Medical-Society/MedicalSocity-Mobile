@@ -428,8 +428,8 @@ const Home = ({ navigation }) => {
       <HomeCard
         feature={{
           title: "Try our bracelet and track your health",
-          text: " Your heart rate and oxygen pulse",
-          button: "Shop now",
+          text: " Your heart rate",
+          button: "Try it now",
           screen: "Search",
           image: require("../../assets/brecletCardImg.png"),
           bgColor: "#440A05",
@@ -447,7 +447,6 @@ const Home = ({ navigation }) => {
         }}
         onPress={() => setModalVisible(true)}
       />
-      
 
       <HomeCard
         feature={{

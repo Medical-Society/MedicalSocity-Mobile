@@ -1,10 +1,7 @@
 import React, { useState, useMemo, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../../screens/Home";
 import { getPathDown } from "./curve";
-import { Svg, Path, Rect, G, ClipPath } from "react-native-svg";
 import { Context as UserContext } from "../../context/UserContext";
-import { scale } from "react-native-size-scaling";
 import {
   View,
   Image,
@@ -12,14 +9,10 @@ import {
   Dimensions,
   StyleSheet,
   Platform,
-  TouchableOpacity,
 } from "react-native";
-import Calendar from "../../screens/Calendar";
-import Notifications from "../../screens/Notifications";
 import MenuStack from "../Menu/MenuStack";
 import HomeStack from "../home/HomeStack";
 import AiChatbot from "../../screens/Chat/AiChatbot";
-import { useNavigation } from "@react-navigation/native";
 import { colors, responsiveHeight, responsiveWidth } from "../../../AppStyles";
 import { Ionicons } from "@expo/vector-icons";
 import ChatsScreen from "../../screens/Chat/ChatsScreen";
@@ -27,34 +20,9 @@ import HomeIcon from "../../../assets/SvgIcons.js/HomeIcon";
 import CalendarIcon from "../../../assets/SvgIcons.js/CalendarIcon";
 import ChatsIcon from "../../../assets/SvgIcons.js/ChatsIcon";
 import AiIcon from "../../../assets/SvgIcons.js/AiIcon";
+import Calendar from "../../screens/Calendar";
 
 const Tab = createBottomTabNavigator();
-
-const getImageNameBased = (name) => {
-  switch (name) {
-    case "home":
-      return require("../../../assets/home.png");
-    case "notifications":
-      return require("../../../assets/notifications.png");
-
-    case "calendar":
-      return require("../../../assets/calendar.png");
-  }
-};
-
-const Icon = React.memo(({ name, focused }) => {
-  return (
-    <Image
-      style={{
-        resizeMode: "contain",
-        width: 30,
-        height: 30,
-        tintColor: focused ? colors.White : colors.LightBlue,
-      }}
-      source={getImageNameBased(name)}
-    />
-  );
-});
 
 const MenuIcon = React.memo(({ focused, patientName }) => {
   const firstTwoLetters = patientName
@@ -82,7 +50,7 @@ const MainTab = () => {
 
   const { state } = useContext(UserContext);
   const patientName = state.userData.patientName;
-  
+
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"

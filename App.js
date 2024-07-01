@@ -23,7 +23,7 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   const { state } = useContext(AuthContext);
-
+  
   const resolvedScreen = useMemo(() => {
     if (state.isLoading) {
       return (
@@ -70,11 +70,11 @@ const App = () => {
           initialRouteName="Welcome">
           {resolvedScreen}
           {authOrMainFlowScreen}
-          <Stack.Screen
+          {/* <Stack.Screen
             name="IOT"
             component={HomeIotScreen}
             options={{ headerShown: false }}
-          />
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

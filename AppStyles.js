@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions, PixelRatio, Platform } from "react-native";
 import * as Device from "expo-device";
+import * as FileSystem from "expo-file-system";
 
 // styles in app.js
 export const styles = StyleSheet.create({
@@ -301,4 +302,30 @@ export const formattedDYM = (date) => {
   return `${newDate.getDate()}/${
     newDate.getMonth() + 1
   }/${newDate.getFullYear()}`;
+};
+
+export const createFormData = async (uri) => {
+  try {
+    const fileName = uri.split("/").pop(); // Get the file name from the URI
+    const fileType = fileName.split(".").pop(); // Get the file extension
+
+    const formData = new FormData();
+
+    // Fetch the image data from URI using Expo's FileSystem module
+    const fileUri = FileSystem.cacheDirectory + fileName;
+    await FileSystem.downloadAsync(uri, fileUri);
+
+    const file = {
+      uri: fileUri,
+      name: fileName,
+      type: `image/${fileType}`,
+    };
+
+    formData.append("image", file);
+
+    return formData;
+  } catch (error) {
+    console.error("Error creating FormData:", error);
+    throw error; // Rethrow the error to be caught by the calling function
+  }
 };

@@ -17,38 +17,14 @@ import GalleryIcon from "../../../assets/gallery.png";
 import { colors } from "../../../AppStyles";
 import { Context as UserContext } from "../../context/UserContext";
 import * as FileSystem from "expo-file-system";
+import { createFormData } from "../../../AppStyles";
 import axios from "axios";
-const createFormData = async (uri) => {
-  try {
-    const fileName = uri.split("/").pop(); // Get the file name from the URI
-    const fileType = fileName.split(".").pop(); // Get the file extension
-
-    const formData = new FormData();
-
-    // Fetch the image data from URI using Expo's FileSystem module
-    const fileUri = FileSystem.cacheDirectory + fileName;
-    await FileSystem.downloadAsync(uri, fileUri);
-
-    const file = {
-      uri: fileUri,
-      name: fileName,
-      type: `image/${fileType}`,
-    };
-
-    formData.append("image", file);
-
-    return formData;
-  } catch (error) {
-    console.error("Error creating FormData:", error);
-    throw error; // Rethrow the error to be caught by the calling function
-  }
-};
 
 const postImage = async (
   uri,
   navigation,
   setLoading,
-  addError,
+  setMessage,
   token,
   patientId
 ) => {
@@ -66,25 +42,34 @@ const postImage = async (
         },
       }
     );
-    console.log("Prescription submitted successfully:", response.data);
+    setMessage({
+      errorMessage: "",
+      successMessage: "Prescription submitted successfully",
+    });
+
     navigation.navigate("ScannedPrescriptionModal", {
       prescriptionId: response.data.data._id,
       mode: "Edit",
     });
   } catch (error) {
-    console.error("Error submitting prescription:", error.response.data);
-    // Handle error here
+    setMessage({
+      errorMessage: "Error submitting prescription",
+      successMessage: "",
+    });
   } finally {
     setLoading(false);
   }
 };
 
 const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
-
   const [loading, setLoading] = useState(false);
-  const { clearMessage, state: authState, addError } = useContext(AuthContext);
-  const { errorMessage, successMessage } = authState;
+  const { state: authState } = useContext(AuthContext);
+
+  const [message, setMessage] = useState({
+    errorMessage: "",
+    successMessage: "",
+  });
+
   const { state: userState } = useContext(UserContext);
   const token = authState.token;
   const patientId = userState.userData._id;
@@ -100,12 +85,13 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
         result.assets[0].uri,
         navigation,
         setLoading,
-        addError,
+        setMessage,
         token,
         patientId
       );
     }
   };
+
   const handlePermission = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== "granted") {
@@ -123,20 +109,28 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
 
     if (!result.canceled) {
       setModalVisible(false);
-      postImage(result.assets[0].uri, navigation, setLoading, addError);
-      setSelectedImage(result.assets[0].uri);
+      postImage(
+        result.uri,
+        navigation,
+        setLoading,
+        setMessage,
+        token,
+        patientId
+      );
     }
   };
   return (
     <View>
-      {loading ? <LoadingModal loading={loading} /> : null}
-      {errorMessage || successMessage ? (
-        <MessagesModal
-          errorMessage={errorMessage}
-          successMessage={successMessage}
-          clearMessage={clearMessage}
-        />
-      ) : null}
+      <LoadingModal loading={loading} />
+
+      <MessagesModal
+        errorMessage={message.errorMessage}
+        successMessage={message.successMessage}
+        clearMessage={() =>
+          setMessage({ errorMessage: "", successMessage: "" })
+        }
+      />
+
       <Modal
         animationType="fade"
         transparent={true}
@@ -154,7 +148,6 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
                 style={styles.button}
                 onPress={() => {
                   handlePermission();
-                  // setModalVisible(false);
                 }}>
                 <Image source={CameraIcon} style={styles.icon} />
               </TouchableOpacity>

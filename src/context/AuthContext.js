@@ -35,7 +35,6 @@ const authReducer = (state, action) => {
 
 const signup = (dispatch) => {
   return async (patientObject, navigation, setIsLoading) => {
-    patientObject.address = "Ism";
     patientObject.email = patientObject.email.toLowerCase();
     if (patientObject.password !== patientObject.confirmPassword) {
       dispatch({
@@ -44,8 +43,6 @@ const signup = (dispatch) => {
       });
       return;
     }
-
-    console.log(patientObject);
 
     delete patientObject.confirmPassword;
 

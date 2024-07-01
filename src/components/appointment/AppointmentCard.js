@@ -32,8 +32,7 @@ const buildButtonStatusBased = (status) => {
 };
 
 const AppointmentCard = ({ appointment, onPress }) => {
-  const { price, noPatientBeforeMe, doctor, date, time, status, description } =
-    appointment;
+  const { price, doctor, date, time, status, description } = appointment;
 
   const { buttonText, mainColor, backgroundColor } =
     buildButtonStatusBased(status);
@@ -55,11 +54,6 @@ const AppointmentCard = ({ appointment, onPress }) => {
         <Text style={styles.price}>{price} LE</Text>
         <Text style={styles.time}>{time}</Text>
       </View>
-      {status === "PENDING" && (
-        <Text style={styles.patientsBefore}>
-          {noPatientBeforeMe} patients before you
-        </Text>
-      )}
 
       <Text style={styles.description}>{description}</Text>
       <TouchableOpacity

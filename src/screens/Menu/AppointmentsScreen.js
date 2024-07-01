@@ -22,6 +22,8 @@ const AppointmentsScreen = ({ navigation }) => {
     "appointments"
   );
 
+  console.log("appointments", appointments)
+
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteAppointmentId, setDeleteAppointmentId] = useState("");
@@ -77,19 +79,7 @@ const AppointmentsScreen = ({ navigation }) => {
       />
 
       <FlatList
-        data={appointments.sort((a, b) => {
-          const statusOrder = {
-            IN_PROGRESS: 1,
-            PENDING: 2,
-            FINISHED: 3,
-            CANCELED: 4,
-          };
-          if (statusOrder[a.status] !== statusOrder[b.status]) {
-            return statusOrder[a.status] - statusOrder[b.status];
-          } else {
-            return new Date(b.date) - new Date(a.date);
-          }
-        })}
+        data={appointments}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <AppointmentCard

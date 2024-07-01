@@ -15,54 +15,41 @@ import { ActivityIndicator } from "react-native-paper";
 import axios from "axios";
 import MessagesModal from "../../components/MessagesModal";
 import { Context as AuthContext } from "../../context/AuthContext";
+import { Context as UserContext } from "../../context/UserContext";
 import FilledStarIcon from "../../../assets/SvgIcons.js/FilledStarIcon";
 import EmptyStarIcon from "../../../assets/SvgIcons.js/EmptyStarIcon";
-
+import usePaginatedFetch from "../../hooks/usePaginatedFetch";
 import MultiLineTextInput from "../../components/MultiLineTextInput";
+
 const DEFAULT_RATING = 0;
 
 const ReviewsScreen = ({ navigation, route }) => {
   const doctorId = route.params.doctorId;
 
-  const [reviews, setReviews] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const { state } = useContext(AuthContext);
+  const [message, setMessage] = useState({
+    successMessage: "",
+    errorMessage: "",
+  });
+
   const [defaultRating, setDefaultRating] = useState(DEFAULT_RATING);
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
   const [reviewContent, setReviewContent] = useState("");
+  const { state: authState } = useContext(AuthContext);
+  const { state: userState } = useContext(UserContext);
 
-  const limit = 10;
+  const {
+    data: reviews,
+    isLoading,
+    handleLoadMore,
+    reFetchData: reFetchReviews,
+  } = usePaginatedFetch(
+    `https://api.medical-society.fr.to/api/v1/doctors/${doctorId}/reviews?patientId=${userState.userData._id}`,
+    "reviews"
+  );
 
-  useEffect(() => {
-    fetchReviews();
-  }, [currentPage]);
-
-  const fetchReviews = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(
-        `https://api.medical-society.fr.to/api/v1/doctors/${doctorId}/reviews?page=${currentPage}&limit=${limit}`
-      );
-
-      const { data } = response.data;
-      setReviews((prevReviews) => [
-        ...prevReviews,
-        ...data.reviews.filter(
-          (review) =>
-            !prevReviews.find((prevReview) => prevReview._id === review._id)
-        ),
-      ]);
-
-      setTotalPages(data.totalPages);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching reviews:", error);
-      setIsLoading(false);
-    }
-  };
+  const isPatientReviewed = reviews.some(
+    (review) => review.patient._id === userState.userData._id
+  );
 
   const addReview = async (rating) => {
     try {
@@ -74,24 +61,18 @@ const ReviewsScreen = ({ navigation, route }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${state.token}`,
+            Authorization: `Bearer ${authState.token}`,
           },
         }
       );
-      setSuccessMessage("Review added successfully");
-      fetchReviews();
-      setReviewContent("");
-      setDefaultRating(DEFAULT_RATING);
+      setMessage({ successMessage: "Review added successfully" });
+      reFetchReviews();
     } catch (error) {
-      console.error("Error adding review:", error);
+      setMessage({ errorMessage: error.response.data.message });
     }
+    setReviewContent("");
+    setDefaultRating(DEFAULT_RATING);
   };
-
-  const handleLoadMore = useCallback(() => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  }, [currentPage, totalPages]);
 
   const handleTextChange = useCallback((text) => {
     setReviewContent(text);
@@ -122,23 +103,30 @@ const ReviewsScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Reviews" backButtonHandler={backButtonHandler} />
-      <View style={styles.addReviewContainer}>
-        <MultiLineTextInput
-          placeholder="Write your review here"
-          value={reviewContent}
-          handleTextChange={handleTextChange}
-        />
-      </View>
-      <View style={styles.rateContainer}>
-        <Text style={styles.rateText}>Tap to rate</Text>
-        <CustomRatingBar />
-        {successMessage && (
-          <MessagesModal
-            successMessage={successMessage}
-            clearMessage={() => setSuccessMessage("")}
-          />
-        )}
-      </View>
+      {!isPatientReviewed && (
+        <>
+          <View style={styles.addReviewContainer}>
+            <MultiLineTextInput
+              placeholder="Write your review here"
+              value={reviewContent}
+              handleTextChange={handleTextChange}
+            />
+          </View>
+          <View style={styles.rateContainer}>
+            <Text style={styles.rateText}>Tap to rate</Text>
+            <CustomRatingBar />
+          </View>
+        </>
+      )}
+
+      <MessagesModal
+        errorMessage={message.errorMessage}
+        successMessage={message.successMessage}
+        clearMessage={() => {
+          setMessage({ successMessage: "", errorMessage: "" });
+        }}
+      />
+
       <FlatList
         data={reviews}
         keyExtractor={(item) => item._id}

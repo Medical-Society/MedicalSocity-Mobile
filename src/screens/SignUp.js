@@ -61,6 +61,7 @@ const SignUp = ({ navigation }) => {
   }, []);
 
   const handleSignUp = useCallback(() => {
+    console.log("signUpData", signUpData);
     signup(signUpData, navigation, setIsLoading);
   }, [signup, signUpData, isLoading]);
 
@@ -98,16 +99,10 @@ const SignUp = ({ navigation }) => {
       onChangeText: (text) => handleInputChange("phoneNumber", text),
     },
     {
-      label: "Phone Number",
-      placeholder: "Enter your phone number",
-      value: signUpData.phoneNumber,
-      onChangeText: (text) => handleInputChange("phoneNumber", text),
-    },
-    {
-      label: "Phone Number",
-      placeholder: "Enter your phone number",
-      value: signUpData.phoneNumber,
-      onChangeText: (text) => handleInputChange("phoneNumber", text),
+      label: "Address",
+      placeholder: "Enter your address",
+      value: signUpData.address,
+      onChangeText: (text) => handleInputChange("address", text),
     },
   ];
 
