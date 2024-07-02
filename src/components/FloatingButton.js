@@ -22,24 +22,6 @@ export function FloatingButton({ onPress, style, ...rest }) {
     }
   })
 
-  const pinAnimatedStyle = useAnimatedStyle(() => {
-    const translateYAnimation = interpolate(
-      animation.value,
-      [0, 1],
-      [0, -20],
-    )
-
-    return {
-      transform: [
-        {
-          scale: withSpring(animation.value)
-        },
-        {
-          translateY: withSpring(translateYAnimation)
-        }
-      ]
-    }
-  })
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
     const translateYAnimation = interpolate(

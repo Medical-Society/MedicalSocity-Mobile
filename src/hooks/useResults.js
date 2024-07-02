@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import doctorApi from "../services/doctor";
 
 export default () => {
@@ -19,7 +19,7 @@ export default () => {
       });
       setResults(response.data.data.doctors);
     } catch (err) {
-      console.log(err.response);
+      setErrorMessage(err.response.data.message);
     }
   };
 

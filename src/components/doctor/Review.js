@@ -1,6 +1,5 @@
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import {
   responsiveFontSize,
   colors,
@@ -8,15 +7,14 @@ import {
   responsiveWidth,
 } from "../../../AppStyles";
 
-import { Context as AuthContext } from "../../context/AuthContext";
 import FilledStarIcon from "../../../assets/SvgIcons.js/FilledStarIcon";
 
+// eslint-disable-next-line react/display-name
 const Review = memo(({ review: { patient, rating, comment } }) => {
   const [patientName, setPatientName] = useState("Peter");
-  const { state } = useContext(AuthContext);
   useEffect(() => {
     setPatientName(patient.patientName);
-  }, []);
+  }, [patient.patientName]);
 
   const ratingBuilder = (rating) => {
     let ratingArray = [];

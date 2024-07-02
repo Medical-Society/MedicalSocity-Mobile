@@ -3,17 +3,10 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
-  Image,
-  TextInput,
   Dimensions,
-  Modal,
   StyleSheet,
   KeyboardAvoidingView,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialIcons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
 import { Context as UserContext } from "../../context/UserContext";
 import MessagesModal from "../../components/MessagesModal";
 import LoadingModal from "../../components/LoadingModal";
@@ -69,29 +62,13 @@ const FONTS = {
 };
 
 const EditProfile = ({ navigation }) => {
-  const { state, updateUserDataServer, postImage, clearMessage } =
-    useContext(UserContext);
+  const { state, updateUserDataServer, clearMessage } = useContext(UserContext);
   const { userData, errorMessage, successMessage } = state;
 
-  const [selectedImage, setSelectedImage] = useState(userData?.avatar);
   const [name, setName] = useState(userData?.patientName);
   const [address, setAddress] = useState(userData?.address);
   const [phoneNumber, setPhoneNumber] = useState(userData?.phoneNumber);
   const [loading, setLoading] = useState(false);
-
-  const handleImageSelection = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      postImage(result.assets[0].uri, navigation, setLoading);
-      setSelectedImage(result.assets[0].uri);
-    }
-  };
 
   return (
     <SafeScrollView
@@ -117,48 +94,18 @@ const EditProfile = ({ navigation }) => {
         enabled
         keyboardVerticalOffset={100}>
         <View>
-          {/* <View style={styles.inputContainer}>
-              <Text style={styles.label}>Name</Text>
-              <View style={styles.textInputContainer}>
-                <TextInput
-                  value={name}
-                  onChangeText={(value) => setName(value)}
-                  style={styles.textInput}
-                />
-              </View>
-            </View> */}
           <InputField
             label="Name"
             value={name}
             onChangeText={(value) => setName(value)}
           />
 
-          {/* <View style={styles.inputContainer}>
-              <Text style={styles.label}>Address</Text>
-              <View style={styles.textInputContainer}>
-                <TextInput
-                  value={address}
-                  onChangeText={(value) => setAddress(value)}
-                  style={styles.textInput}
-                />
-              </View>
-            </View> */}
           <InputField
             label="Address"
             value={address}
             onChangeText={(value) => setAddress(value)}
           />
 
-          {/* <View style={styles.inputContainer}>
-              <Text style={styles.label}>Phone Number</Text>
-              <View style={styles.textInputContainer}>
-                <TextInput
-                  value={phoneNumber}
-                  onChangeText={(value) => setPhoneNumber(value)}
-                  style={styles.textInput}
-                />
-              </View>
-            </View> */}
           <InputField
             label="Phone Number"
             value={phoneNumber}
@@ -173,7 +120,6 @@ const EditProfile = ({ navigation }) => {
                   patientName: name,
                   address,
                   phoneNumber,
-                  avatar: selectedImage,
                 },
                 navigation,
                 setLoading

@@ -4,16 +4,13 @@ import {
   Text,
   StyleSheet,
   KeyboardAvoidingView,
-  ScrollView,
   TouchableOpacity,
   Dimensions,
-  FlatList,
   TextInput,
   Platform,
   VirtualizedList,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import Skeleton from "../../components/Skeleton";
 import { Context as UserContext } from "../../context/UserContext";
@@ -113,7 +110,7 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
 
   useEffect(() => {
     getScannedPrescriptionById(prescriptionId);
-  }, []);
+  }, [getScannedPrescriptionById, prescriptionId]);
 
   const [localData, setLocalData] = useState(prescription);
   const [isLoading, setIsLoading] = useState(true);
@@ -122,53 +119,62 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
   const patientId = userState.userData._id;
   const token = authState.token;
 
-  const getScannedPrescriptionById = async (prescriptionId) => {
-    console.log("prescriptionId", prescriptionId);
-    console.log("patientId", patientId);
-    console.log("token", token);
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/${prescriptionId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setLocalData({
-        doctorName: response.data.data.doctorName,
-        medicines: response.data.data.medicines.map((medicine) => ({
-          ...medicine,
-          _id: uuid.v4(),
-        })),
-        patientName: response.data.data.patientName,
-      });
-    } catch (error) {
-      console.log("Error fetching scanned prescription:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDelete = (id) => {
-    console.log("id", id);
-    const newMedicines = localData.medicines.filter(
-      (medicine) => medicine._id !== id
-    );
-    setLocalData({ ...localData, medicines: newMedicines });
-  };
-
-  const handleChange = (id, field, value) => {
-    console.log("id", id, "field", field, "value", value);
-    const newMedicines = localData.medicines.map((medicine) => {
-      if (medicine._id === id) {
-        return { ...medicine, [field]: value };
+  const getScannedPrescriptionById = useCallback(
+    async (prescriptionId) => {
+      console.log("prescriptionId", prescriptionId);
+      console.log("patientId", patientId);
+      console.log("token", token);
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/${prescriptionId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setLocalData({
+          doctorName: response.data.data.doctorName,
+          medicines: response.data.data.medicines.map((medicine) => ({
+            ...medicine,
+            _id: uuid.v4(),
+          })),
+          patientName: response.data.data.patientName,
+        });
+      } catch (error) {
+        console.log("Error fetching scanned prescription:", error);
+      } finally {
+        setIsLoading(false);
       }
-      return medicine;
-    });
-    setLocalData({ ...localData, medicines: newMedicines });
-  };
+    },
+    [patientId, token]
+  );
+
+  const handleDelete = useCallback(
+    (id) => {
+      console.log("id", id);
+      const newMedicines = localData.medicines.filter(
+        (medicine) => medicine._id !== id
+      );
+      setLocalData({ ...localData, medicines: newMedicines });
+    },
+    [localData]
+  );
+
+  const handleChange = useCallback(
+    (id, field, value) => {
+      console.log("id", id, "field", field, "value", value);
+      const newMedicines = localData.medicines.map((medicine) => {
+        if (medicine._id === id) {
+          return { ...medicine, [field]: value };
+        }
+        return medicine;
+      });
+      setLocalData({ ...localData, medicines: newMedicines });
+    },
+    [localData]
+  );
 
   const patchPrescription = async (newPrescription, callback) => {
     console.log("newPrescription", newPrescription);
@@ -241,7 +247,7 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
         />
       );
     },
-    [localData]
+    [handleChange, handleDelete]
   );
 
   return (

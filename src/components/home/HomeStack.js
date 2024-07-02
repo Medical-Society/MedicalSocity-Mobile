@@ -1,9 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../../screens/Home";
 import ResultsShowScreen from "../../screens/Search/ResultsShowScreen";
-import AiChatbot from "../../screens/Chat/AiChatbot";
 import { colors } from "../../../AppStyles";
 const Stack = createNativeStackNavigator();
 const HomeStack = () => {
@@ -30,6 +28,5 @@ const HomeStack = () => {
   );
 };
 
-const styles = StyleSheet.create({});
 
 export default HomeStack;

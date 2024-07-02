@@ -1,19 +1,11 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { getPathDown } from "./curve";
 import { Context as UserContext } from "../../context/UserContext";
-import {
-  View,
-  Image,
-  Text,
-  Dimensions,
-  StyleSheet,
-  Platform,
-} from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import MenuStack from "../Menu/MenuStack";
 import HomeStack from "../home/HomeStack";
 import AiChatbot from "../../screens/Chat/AiChatbot";
-import { colors, responsiveHeight, responsiveWidth } from "../../../AppStyles";
+import { colors, responsiveWidth } from "../../../AppStyles";
 import { Ionicons } from "@expo/vector-icons";
 import ChatsScreen from "../../screens/Chat/ChatsScreen";
 import HomeIcon from "../../../assets/SvgIcons.js/HomeIcon";
@@ -23,8 +15,9 @@ import AiIcon from "../../../assets/SvgIcons.js/AiIcon";
 import Calendar from "../../screens/Calendar";
 
 const Tab = createBottomTabNavigator();
+/* eslint-disable react/display-name */
 
-const MenuIcon = React.memo(({ focused, patientName }) => {
+const MenuIcon = React.memo(({ patientName }) => {
   const firstTwoLetters = patientName
     ?.split(" ")
     ?.map((name) => name.charAt(0))
@@ -44,10 +37,6 @@ const MenuIcon = React.memo(({ focused, patientName }) => {
 });
 
 const MainTab = () => {
-  const [maxWidth, setMaxWidth] = useState(Dimensions.get("window").width + 1);
-  const returnPathDown = getPathDown(maxWidth, 60, 50);
-  const [modalOpen, setModalOpen] = useState(false);
-
   const { state } = useContext(UserContext);
   const patientName = state.userData.patientName;
 

@@ -130,7 +130,7 @@ const HomeIotScreen = () => {
       update(dbRef, { state: 1 }); // Reset state to 1 in the database
       unsubscribe(); // Unsubscribe from Firebase listener
     };
-  }, []);
+  }, [sensorId]);
 
   const handleButtonClick = () => {
     const dbRef = ref(db, sensorId);
@@ -154,7 +154,7 @@ const HomeIotScreen = () => {
     return () => {
       subscription && subscription.remove(); // Cleanup AppState listener
     };
-  }, []);
+  }, [sensorId]);
 
   return (
     <View style={styles.container}>

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { StyleSheet, Text } from "react-native";
 import { colors } from "../../../AppStyles";
 
@@ -29,7 +29,7 @@ export default function AnimatedTyping(props) {
   let timeoutsRef = useRef(timeouts);
   timeoutsRef.current = timeouts;
 
-  let typingAnimation = () => {
+  let typingAnimation = useCallback(() => {
     if (textIndexRef.current < props.text[messageIndexRef.current].length) {
       setText(
         textRef.current +
@@ -57,7 +57,7 @@ export default function AnimatedTyping(props) {
         props.onComplete();
       }
     }
-  };
+  }, [props]);
 
   let newLineAnimation = () => {
     setText(textRef.current + "\n");
@@ -83,7 +83,7 @@ export default function AnimatedTyping(props) {
       clearTimeout(timeoutsRef.current.secondNewLineTimeout);
       clearInterval(timeoutsRef.current.cursorTimeout);
     };
-  }, []);
+  }, [typingAnimation]);
 
   return (
     <Text style={styles.text}>

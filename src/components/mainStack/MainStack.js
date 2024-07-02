@@ -1,11 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AiChatbot from "../../screens/Chat/AiChatbot";
 import DoctorStack from "../DoctorStack/DoctorStack";
 import MainTab from "../mainTab/MainTab";
 import ViewPrescription from "../../screens/Prescription/ViewPrescriptionScreen";
-import ViewScannedPrescriptionScreen from "../../screens/Prescription/ViewScannedPrescriptionScreen";
 import { colors } from "../../../AppStyles";
 import PrescriptionsScreen from "../../screens/Menu/PrescriptionsScreen";
 import ScannedPrescriptionsScreen from "../../screens/Menu/ScannedPrescriptionsScreen";
@@ -50,7 +48,5 @@ const MainStack = () => {
     </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default MainStack;

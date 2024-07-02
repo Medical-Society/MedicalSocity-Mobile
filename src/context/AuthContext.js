@@ -48,7 +48,7 @@ const signup = (dispatch) => {
 
     try {
       setIsLoading(true);
-      const response = await patientApi.post("/signup", patientObject);
+      await patientApi.post("/signup", patientObject);
       dispatch({
         type: "ADD_SUCCESS",
         payload:
@@ -90,7 +90,7 @@ const tryLocalSignin = (dispatch) => {
         console.log(response.data.data.patient);
         dispatch({ type: "LOGIN", payload: token });
       }
-    } catch (err) {
+    } catch (_) {
       if (token) {
         dispatch({ type: "LOGIN", payload: token });
       }
@@ -135,7 +135,7 @@ const forgetPassword = (dispatch) => {
   return async (personEmail, navigation) => {
     personEmail.email = personEmail.email.toLowerCase();
     try {
-      const response = await patientApi.post("/forgot-password", personEmail);
+      await patientApi.post("/forgot-password", personEmail);
       dispatch({
         type: "ADD_SUCCESS",
         payload: "A reset password link has been sent to your email.",

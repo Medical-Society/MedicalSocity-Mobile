@@ -56,7 +56,7 @@ const DoctorAppointmentsScreen = ({
       }
     };
     getDoctorAvailableTime();
-  }, []);
+  }, [doctorId, token]);
 
   const keys = useMemo(() => Object.keys(weekDays), [weekDays]);
 
@@ -163,7 +163,7 @@ const DoctorAppointmentsScreen = ({
             }}
             keyExtractor={(item) => item.dateNextWeekDay}
             renderItem={({ item }) => {
-              const [convertedDate, convertedTime] = convertTo12HourFormat(
+              const [, convertedTime] = convertTo12HourFormat(
                 item.dateNextWeekDay
               );
               return (

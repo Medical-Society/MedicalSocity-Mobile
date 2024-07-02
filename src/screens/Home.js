@@ -1,324 +1,23 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Modal,
-  Image,
-  FlatList,
-  PixelRatio,
-  Dimensions,
-  Platform,
-} from "react-native";
+import { Text, StyleSheet, View, FlatList } from "react-native";
 import { useContext } from "react";
 import { Context as AuthContext } from "../context/AuthContext";
 import SearchBar from "../components/Search/SearchBar";
 import useResults from "../hooks/useResults";
-import ResultsList from "../components/Search/ResultsList";
-import { SafeAreaView } from "react-native-safe-area-context";
 import OcrModal from "../components/Ocr/OcrModal";
-import { colors } from "../../AppStyles";
+import { colors, responsiveFontSize } from "../../AppStyles";
 import SafeScrollView from "../components/SafeScrollView";
 import HomeCard from "../components/home/HomeCard";
 import DoctorCircle from "../components/home/DoctorCircle";
 import DoctorIcon from "../../assets/SvgIcons.js/DoctorIcon";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
-const scale = SCREEN_WIDTH / 320;
-const normalize = (size) => {
-  const newSize = size * scale;
-  if (Platform.OS === "ios") {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize));
-  } else {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
-  }
-};
-
 const Home = ({ navigation }) => {
   const [term, setTerm] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [searchApi, results, errorMessage, setResults] = useResults();
+  const [searchApi, results, , setResults] = useResults();
   const token = useContext(AuthContext).state.token;
 
   const doctors = [
-    {
-      name: "Dr. Peter Joseph",
-      specialty: "Cardiologist",
-      address:
-        "His Address in details His Address in details His Address in details",
-      price: 200,
-      about:
-        "about about him about him about him about him about him about him about him about him about him about him about him about him him about him about him about him about",
-      schedule: [
-        {
-          id: 1,
-          day: "Mon",
-          date: "12",
-        },
-        {
-          id: 2,
-          day: "Tue",
-          date: "13",
-        },
-        {
-          id: 3,
-          day: "Wed",
-          date: "14",
-        },
-        {
-          id: 4,
-          day: "Thu",
-          date: "15",
-        },
-        {
-          id: 5,
-          day: "Sat",
-          date: "17",
-        },
-        {
-          id: 6,
-          day: "Sun",
-          date: "18",
-        },
-      ],
-      appointments: {
-        morning: "9:00 AM - 12:00 PM",
-        evening: "5:00 PM - 7:00 PM",
-      },
-      image: require("../../assets/doctor2.png"),
-    },
-    {
-      name: "Dr. Peter Joseph",
-      specialty: "Cardiologist",
-      address:
-        "His Address in details His Address in details His Address in details",
-      price: 200,
-      about:
-        "about about him about him about him about him about him about him about him about him about him about him about him about him him about him about him about him about",
-      schedule: [
-        {
-          id: 1,
-          day: "Mon",
-          date: "12",
-        },
-        {
-          id: 2,
-          day: "Tue",
-          date: "13",
-        },
-        {
-          id: 3,
-          day: "Wed",
-          date: "14",
-        },
-        {
-          id: 4,
-          day: "Thu",
-          date: "15",
-        },
-        {
-          id: 5,
-          day: "Sat",
-          date: "17",
-        },
-        {
-          id: 6,
-          day: "Sun",
-          date: "18",
-        },
-      ],
-      appointments: {
-        morning: "9:00 AM - 12:00 PM",
-        evening: "5:00 PM - 7:00 PM",
-      },
-      image: require("../../assets/doctor2.png"),
-    },
-    {
-      name: "Dr. Peter Joseph",
-      specialty: "Cardiologist",
-      address:
-        "His Address in details His Address in details His Address in details",
-      price: 200,
-      about:
-        "about about him about him about him about him about him about him about him about him about him about him about him about him him about him about him about him about",
-      schedule: [
-        {
-          id: 1,
-          day: "Mon",
-          date: "12",
-        },
-        {
-          id: 2,
-          day: "Tue",
-          date: "13",
-        },
-        {
-          id: 3,
-          day: "Wed",
-          date: "14",
-        },
-        {
-          id: 4,
-          day: "Thu",
-          date: "15",
-        },
-        {
-          id: 5,
-          day: "Sat",
-          date: "17",
-        },
-        {
-          id: 6,
-          day: "Sun",
-          date: "18",
-        },
-      ],
-      appointments: {
-        morning: "9:00 AM - 12:00 PM",
-        evening: "5:00 PM - 7:00 PM",
-      },
-      image: require("../../assets/doctor2.png"),
-    },
-    {
-      name: "Dr. Peter Joseph",
-      specialty: "Cardiologist",
-      address:
-        "His Address in details His Address in details His Address in details",
-      price: 200,
-      about:
-        "about about him about him about him about him about him about him about him about him about him about him about him about him him about him about him about him about",
-      schedule: [
-        {
-          id: 1,
-          day: "Mon",
-          date: "12",
-        },
-        {
-          id: 2,
-          day: "Tue",
-          date: "13",
-        },
-        {
-          id: 3,
-          day: "Wed",
-          date: "14",
-        },
-        {
-          id: 4,
-          day: "Thu",
-          date: "15",
-        },
-        {
-          id: 5,
-          day: "Sat",
-          date: "17",
-        },
-        {
-          id: 6,
-          day: "Sun",
-          date: "18",
-        },
-      ],
-      appointments: {
-        morning: "9:00 AM - 12:00 PM",
-        evening: "5:00 PM - 7:00 PM",
-      },
-      image: require("../../assets/doctor2.png"),
-    },
-    {
-      name: "Dr. Peter Joseph",
-      specialty: "Cardiologist",
-      address:
-        "His Address in details His Address in details His Address in details",
-      price: 200,
-      about:
-        "about about him about him about him about him about him about him about him about him about him about him about him about him him about him about him about him about",
-      schedule: [
-        {
-          id: 1,
-          day: "Mon",
-          date: "12",
-        },
-        {
-          id: 2,
-          day: "Tue",
-          date: "13",
-        },
-        {
-          id: 3,
-          day: "Wed",
-          date: "14",
-        },
-        {
-          id: 4,
-          day: "Thu",
-          date: "15",
-        },
-        {
-          id: 5,
-          day: "Sat",
-          date: "17",
-        },
-        {
-          id: 6,
-          day: "Sun",
-          date: "18",
-        },
-      ],
-      appointments: {
-        morning: "9:00 AM - 12:00 PM",
-        evening: "5:00 PM - 7:00 PM",
-      },
-      image: require("../../assets/doctor2.png"),
-    },
-    {
-      name: "Dr. Peter Joseph",
-      specialty: "Cardiologist",
-      address:
-        "His Address in details His Address in details His Address in details",
-      price: 200,
-      about:
-        "about about him about him about him about him about him about him about him about him about him about him about him about him him about him about him about him about",
-      schedule: [
-        {
-          id: 1,
-          day: "Mon",
-          date: "12",
-        },
-        {
-          id: 2,
-          day: "Tue",
-          date: "13",
-        },
-        {
-          id: 3,
-          day: "Wed",
-          date: "14",
-        },
-        {
-          id: 4,
-          day: "Thu",
-          date: "15",
-        },
-        {
-          id: 5,
-          day: "Sat",
-          date: "17",
-        },
-        {
-          id: 6,
-          day: "Sun",
-          date: "18",
-        },
-      ],
-      appointments: {
-        morning: "9:00 AM - 12:00 PM",
-        evening: "5:00 PM - 7:00 PM",
-      },
-      image: require("../../assets/doctor2.png"),
-    },
     {
       name: "Dr. Peter Joseph",
       specialty: "Cardiologist",
@@ -373,7 +72,7 @@ const Home = ({ navigation }) => {
       setResults([]);
     });
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, setResults]);
 
   useEffect(() => {
     if (results.length !== 0) {
@@ -472,12 +171,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   headBestDoctors: {
-    fontSize: normalize(16),
+    fontSize: responsiveFontSize(16),
     fontFamily: "Cairo-Bold",
     color: colors.BlueII,
   },
   headAllDoctors: {
-    fontSize: normalize(15),
+    fontSize: responsiveFontSize(15),
     color: "#060B73",
     fontFamily: "Cairo-Regular",
   },

@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
-import { colors, responsiveHeight, responsiveWidth } from "../../../AppStyles";
+import { colors, responsiveHeight } from "../../../AppStyles";
 const ResultsDetail = ({ doctor }) => {
   return (
     <View style={styles.info}>

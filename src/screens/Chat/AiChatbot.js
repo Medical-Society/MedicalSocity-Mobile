@@ -1,21 +1,8 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  TextInput,
-  Dimensions,
-  Modal,
-  StyleSheet,
-  KeyboardAvoidingView,
-} from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialIcons } from "@expo/vector-icons";
-import aiChatbot from "../../services/Ai";
-import axios from "axios";
+
 import Header from "../../components/Header";
 import { Context as AuthContext } from "../../context/AuthContext";
 import aiApi from "../../services/Ai";
@@ -71,34 +58,37 @@ const AiChatbot = ({ navigation, route }) => {
   const { state } = useContext(AuthContext);
   const token = state.token;
 
-  const callChatbot = async ({ text: message }) => {
-    try {
-      const response = await aiApi.post("/message", {
-        message: message,
-        user_id: token,
-      });
+  const callChatbot = useCallback(
+    async ({ text: message }) => {
+      try {
+        const response = await aiApi.post("/message", {
+          message: message,
+          user_id: token,
+        });
 
-      const newMessage = {
-        _id:
-          Math.floor(Math.random() * Math.floor(Math.random() * 1000000)) +
-          Math.floor(Math.random() * 10000000),
-        text: response.data.response,
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      };
-      setMessages((previousMessages) =>
-        GiftedChat.append(previousMessages, newMessage)
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error sending message to chatbot:", error);
-      throw error;
-    }
-  };
+        const newMessage = {
+          _id:
+            Math.floor(Math.random() * Math.floor(Math.random() * 1000000)) +
+            Math.floor(Math.random() * 10000000),
+          text: response.data.response,
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: "React Native",
+            avatar: "https://placeimg.com/140/140/any",
+          },
+        };
+        setMessages((previousMessages) =>
+          GiftedChat.append(previousMessages, newMessage)
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error sending message to chatbot:", error);
+        throw error;
+      }
+    },
+    [token]
+  );
 
   useEffect(() => {
     setMessages([
@@ -115,17 +105,21 @@ const AiChatbot = ({ navigation, route }) => {
     ]);
   }, []);
 
-  const onSend = useCallback((messages = []) => {
-    const lastMessage = messages[messages.length - 1];
-    callChatbot(lastMessage);
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
-    );
-  }, []);
+  const onSend = useCallback(
+    (messages = []) => {
+      const lastMessage = messages[messages.length - 1];
+      callChatbot(lastMessage);
+      setMessages((previousMessages) =>
+        GiftedChat.append(previousMessages, messages)
+      );
+    },
+    [callChatbot]
+  );
 
-  const handleButton = () =>{
-    console.log("Printed")
-    navigation.navigate("HomeStack", { screen: "Home" });}
+  const handleButton = () => {
+    console.log("Printed");
+    navigation.navigate("HomeStack", { screen: "Home" });
+  };
 
   return (
     <SafeAreaView style={styles.container}>

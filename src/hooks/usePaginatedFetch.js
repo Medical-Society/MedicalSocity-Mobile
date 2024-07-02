@@ -11,7 +11,7 @@ const usePaginatedFetch = (url, value) => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, fetchData]);
 
   const reFetchData = useCallback(() => {
     setData([]);

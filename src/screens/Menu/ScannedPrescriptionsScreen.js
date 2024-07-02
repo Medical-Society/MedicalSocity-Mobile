@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useContext } from "react";
 
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../components/Header";
-import PrescriptionCard from "../../components/prescription/PrescriptionCard";
 import { ActivityIndicator } from "react-native-paper";
 import usePaginatedFetch from "../../hooks/usePaginatedFetch";
 import { Context as UserContext } from "../../context/UserContext";

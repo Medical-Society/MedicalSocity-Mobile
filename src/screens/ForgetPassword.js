@@ -1,14 +1,5 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
-import {
-  Text,
-  StyleSheet,
-  View,
-  StatusBar,
-  Alert,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useState, useContext, useCallback } from "react";
+import { StyleSheet, View } from "react-native";
 
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 
@@ -27,7 +18,7 @@ const ForgetPassword = ({ navigation }) => {
 
   const handleForget = useCallback(() => {
     forgetPassword({ email }, navigation);
-  }, [email, forgetPassword]);
+  }, [email, forgetPassword, navigation]);
 
   return (
     <SafeScrollView header={<Header title="Forget Password" />}>

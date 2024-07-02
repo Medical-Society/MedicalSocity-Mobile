@@ -9,14 +9,12 @@ import {
 } from "react-native";
 import MessagesModal from "../MessagesModal";
 import LoadingModal from "../LoadingModal";
-import patientApi from "../../services/patient";
 import * as ImagePicker from "expo-image-picker";
 import { Context as AuthContext } from "../../context/AuthContext";
 import CameraIcon from "../../../assets/camera.png";
 import GalleryIcon from "../../../assets/gallery.png";
 import { colors } from "../../../AppStyles";
 import { Context as UserContext } from "../../context/UserContext";
-import * as FileSystem from "expo-file-system";
 import { createFormData } from "../../../AppStyles";
 import axios from "axios";
 
@@ -51,7 +49,7 @@ const postImage = async (
       prescriptionId: response.data.data._id,
       mode: "Edit",
     });
-  } catch (error) {
+  } catch (_) {
     setMessage({
       errorMessage: "Error submitting prescription",
       successMessage: "",
@@ -131,13 +129,7 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
         }
       />
 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={isVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}>
+      <Modal animationType="fade" transparent={true} visible={isVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View

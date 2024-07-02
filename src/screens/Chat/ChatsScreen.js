@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import SafeScrollView from "../../components/SafeScrollView";
-import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../AppStyles";
-import { TextInput } from "react-native-paper";
 import SearchBar from "../../components/Search/SearchBar";
 import SafeFlatListView from "../../components/SafeFlatListView";
 import chatsApi from "../../services/chats";
@@ -50,7 +47,7 @@ const ChatsScreen = ({ navigation }) => {
   const { state } = useContext(AuthContext);
   const { token, socket } = state;
 
-  const getChats = async () => {
+  const getChats = useCallback(async () => {
     try {
       const response = await chatsApi.get("/", {
         headers: {
@@ -61,18 +58,18 @@ const ChatsScreen = ({ navigation }) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     getChats();
-  }, []);
+  }, [getChats]);
 
   useEffect(() => {
     const subscriber = navigation.addListener("focus", () => {
       getChats();
     });
     return subscriber;
-  }, [navigation]);
+  }, [getChats, navigation]);
 
   useEffect(() => {
     if (socket) {

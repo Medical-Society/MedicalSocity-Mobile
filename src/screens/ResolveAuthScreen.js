@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Context as AuthContext } from "../context/AuthContext";
 import { useFonts } from "expo-font";
 import AnimatedTyping from "../components/Splash/AnimatedTyping";
@@ -28,7 +28,7 @@ const ResolveAuthScreen = () => {
     if (fontsLoaded && introFinished) {
       tryLocalSignin();
     }
-  }, [fontsLoaded, introFinished]);
+  }, [fontsLoaded, introFinished, tryLocalSignin]);
 
   return (
     <View style={styles.container}>

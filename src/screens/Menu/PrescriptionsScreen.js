@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useContext } from "react";
 
 import { FlatList, StyleSheet, View, Text } from "react-native";
 import Header from "../../components/Header";

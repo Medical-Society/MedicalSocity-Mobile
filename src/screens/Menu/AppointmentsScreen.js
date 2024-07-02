@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { FlatList, RefreshControl } from "react-native";
 import Header from "../../components/Header";
 import AppointmentCard from "../../components/appointment/AppointmentCard";
@@ -45,21 +45,28 @@ const AppointmentsScreen = ({ navigation }) => {
       });
       setMessage({ successMessage: "Appointment canceled successfully" });
     } catch (error) {
-      setMessage({ errorMessage: "An error occurred, please try again" });
+      setMessage({ errorMessage: error.response.data.message });
     }
     setDeleteAppointmentId("");
     setIsLoading(false);
     setModalVisible(false);
   };
 
-  const onRefresh = useCallback(() => {
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true);
+  //   const timeout = setTimeout(() => {
+  //     refreshAppointments();
+  //     setRefreshing(false);
+  //   }, 2000);
+  //   return () => clearTimeout(timeout);
+  // }, [setRefreshing, refreshAppointments]);
+  const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    const timeout = setTimeout(() => {
+    setTimeout(() => {
       refreshAppointments();
       setRefreshing(false);
     }, 2000);
-    return () => clearTimeout(timeout);
-  }, []);
+  }, [refreshAppointments]);
 
   return (
     <SafeFlatListView

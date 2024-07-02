@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import SafeScrollView from "../../components/SafeScrollView";
 import Header from "../../components/Header";
-import InputField from "../../components/auth/InputField";
 import MultiLineTextInput from "../../components/MultiLineTextInput";
 import SubmitButton from "../../components/SubmitButton";
 import MessagesModal from "../../components/MessagesModal";

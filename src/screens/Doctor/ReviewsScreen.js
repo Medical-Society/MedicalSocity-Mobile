@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
-  TextInput,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../components/Header";
@@ -31,8 +29,9 @@ const ReviewsScreen = ({ navigation, route }) => {
     errorMessage: "",
   });
 
+  const maxRating = [1, 2, 3, 4, 5];
   const [defaultRating, setDefaultRating] = useState(DEFAULT_RATING);
-  const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+
   const [reviewContent, setReviewContent] = useState("");
   const { state: authState } = useContext(AuthContext);
   const { state: userState } = useContext(UserContext);
@@ -53,7 +52,7 @@ const ReviewsScreen = ({ navigation, route }) => {
 
   const addReview = async (rating) => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `https://api.medical-society.fr.to/api/v1/doctors/${doctorId}/reviews`,
         {
           rating,

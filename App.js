@@ -10,20 +10,16 @@ import {
   Context as AuthContext,
   Provider as AuthProvider,
 } from "./src/context/AuthContext";
-import {
-  Context as UserContext,
-  Provider as UserProvider,
-} from "./src/context/UserContext";
+import { Provider as UserProvider } from "./src/context/UserContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainStack from "./src/components/mainStack/MainStack";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "./AppStyles";
-import HomeIotScreen from "./src/screens/IOT/HomeIotScreen";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const { state } = useContext(AuthContext);
-  
+
   const resolvedScreen = useMemo(() => {
     if (state.isLoading) {
       return (
@@ -81,7 +77,7 @@ const App = () => {
   );
 };
 
-export default () => {
+const AppWithProviders = () => {
   return (
     <UserProvider>
       <AuthProvider>
@@ -90,3 +86,5 @@ export default () => {
     </UserProvider>
   );
 };
+
+export default AppWithProviders;

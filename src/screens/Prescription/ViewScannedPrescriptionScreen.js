@@ -1,72 +1,20 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  KeyboardAvoidingView,
-  ScrollView,
   TouchableOpacity,
-  Dimensions,
   FlatList,
 } from "react-native";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
-import SubmitButton from "../../components/SubmitButton";
 import { colors } from "../../../AppStyles";
 import { MaterialIcons } from "@expo/vector-icons";
-import Header from "../../components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Skeleton from "../../components/Skeleton";
 import { Context as UserContext } from "../../context/UserContext";
 import { Context as AuthContext } from "../../context/AuthContext";
 
-const COLORS = {
-  primary: "#242760",
-  secondary: "#544C4C",
-  white: "#FFFFFF",
-  black: "#000000",
-  gray: "rgba(36, 39, 96, 0.05)",
-  secondaryGray: "rgba(84, 76, 76, 0.14)",
-};
-const { height, width } = Dimensions.get("window");
-
-const SIZES = {
-  small: 4,
-  base: 8,
-  font: 14,
-  radius: 30,
-  padding: 10,
-  padding2: 12,
-  padding3: 16,
-  largeTitle: 50,
-  h1: 30,
-  h2: 20,
-  h3: 18,
-  h4: 16,
-  body1: 30,
-  body2: 20,
-  body3: 18,
-  body4: 14,
-  body5: 12,
-  width,
-  height,
-};
-
-const FONTS = {
-  largeTitle: {
-    fontFamily: "Cairo-Regular",
-    fontSize: SIZES.largeTitle,
-    lineHeight: 55,
-  },
-  h1: { fontSize: SIZES.h1, lineHeight: 36, fontFamily: "Cairo-Regular" },
-  h2: { fontSize: SIZES.h2, lineHeight: 30, fontFamily: "Cairo-Regular" },
-  h3: { fontSize: SIZES.h3, lineHeight: 22, fontFamily: "Cairo-Regular" },
-  h4: { fontSize: SIZES.h4, lineHeight: 20, fontFamily: "Cairo-Regular" },
-  body1: { fontSize: SIZES.body1, lineHeight: 36, fontFamily: "Cairo-Regular" },
-  body2: { fontSize: SIZES.body2, lineHeight: 30, fontFamily: "Cairo-Regular" },
-  body3: { fontSize: SIZES.body3, lineHeight: 22, fontFamily: "Cairo-Regular" },
-  body4: { fontSize: SIZES.body4, lineHeight: 20, fontFamily: "Cairo-Regular" },
-};
 const InfoField = ({ title, value }) => {
   return (
     <View style={styles.infoFiled}>
@@ -78,7 +26,7 @@ const InfoField = ({ title, value }) => {
 
 const MedicineField = ({ name, nOfTimes, note }) => {
   return (
-    <View style={{ flexDirection: "column", marginVertical: SIZES.base }}>
+    <View style={{ flexDirection: "column", marginVertical: 8 }}>
       <Text style={styles.mainText}>{name}</Text>
       <Text style={styles.valueText}>
         {nOfTimes ? nOfTimes : "X times"} a day
@@ -107,34 +55,37 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
 
   useEffect(() => {
     getScannedPrescriptionById(prescriptionId);
-  }, []);
+  }, [getScannedPrescriptionById, prescriptionId]);
 
-  const getScannedPrescriptionById = async (prescriptionId) => {
-    console.log("prescriptionId", prescriptionId);
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/${prescriptionId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response.data);
-      setPrescription({
-        doctorName: response.data.data.doctorName,
-        ...response.data.data,
-      });
-    } catch (error) {
-      console.log(
-        "Error fetching scanned prescription:",
-        error.response.data.message
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const getScannedPrescriptionById = useCallback(
+    async (prescriptionId) => {
+      console.log("prescriptionId", prescriptionId);
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/${prescriptionId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data);
+        setPrescription({
+          doctorName: response.data.data.doctorName,
+          ...response.data.data,
+        });
+      } catch (error) {
+        console.log(
+          "Error fetching scanned prescription:",
+          error.response.data.message
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [patientId, token]
+  );
 
   useEffect(() => {
     console.log(prescription);
@@ -157,8 +108,8 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
           <View
             style={{
               borderBottomWidth: 1,
-              borderBottomColor: COLORS.primary,
-              marginVertical: SIZES.base,
+              borderBottomColor: colors.GreyII,
+              marginVertical: 10,
             }}
           />
           <FlatList
@@ -198,15 +149,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 5,
-  },
-  headerText: {
-    ...FONTS.h3,
-    color: COLORS.primary,
-  },
-  secondaryText: {
-    ...FONTS.h3,
-    color: COLORS.secondary,
-    marginVertical: SIZES.small,
   },
   mainText: {
     fontSize: 20,

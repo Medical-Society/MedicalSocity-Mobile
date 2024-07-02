@@ -1,12 +1,9 @@
-import React, { useEffect, useContext, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect, useContext, useState, useCallback } from "react";
 import SafeFlatListView from "../../components/SafeFlatListView";
 import Header from "../../components/Header";
-import io from "socket.io-client";
 import { Context as AuthContext } from "../../context/AuthContext";
 import chatsApi from "../../services/chats";
 import { GiftedChat } from "react-native-gifted-chat";
-import uuid from "react-native-uuid";
 
 const ChatScreen = ({ navigation, route }) => {
   const chatId = route.params.chatId;
@@ -16,7 +13,7 @@ const ChatScreen = ({ navigation, route }) => {
   const [patient, setPatient] = useState({});
   const [messages, setMessages] = useState([]);
 
-  const getChatById = async () => {
+  const getChatById = useCallback(async () => {
     try {
       const response = await chatsApi.get(`/${chatId}`, {
         headers: {
@@ -42,11 +39,11 @@ const ChatScreen = ({ navigation, route }) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [chatId, token]);
 
   useEffect(() => {
     getChatById();
-  }, []);
+  }, [getChatById]);
 
   useEffect(() => {
     if (socket) {
@@ -66,7 +63,7 @@ const ChatScreen = ({ navigation, route }) => {
         );
       });
     }
-  }, [socket]);
+  }, [patient.avatar, patient.patientName, socket]);
 
   const onSend = (newMessages) => {
     console.log("newMessages", newMessages[0]);
@@ -96,7 +93,5 @@ const ChatScreen = ({ navigation, route }) => {
     </SafeFlatListView>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default ChatScreen;

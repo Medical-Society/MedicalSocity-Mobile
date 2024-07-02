@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import React, { useState, useContext, useEffect, useCallback } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import SafeScrollView from "../components/SafeScrollView";
 import Header from "../components/Header";
 import patientApi from "../services/patient";
@@ -23,7 +23,7 @@ const Calendar = ({ navigation }) => {
   const { state } = useContext(AuthContext);
   const { token } = state;
 
-  const fetchAppointments = async () => {
+  const fetchAppointments = useCallback(async () => {
     try {
       const response = await patientApi.get("/appointments", {
         headers: {
@@ -38,11 +38,11 @@ const Calendar = ({ navigation }) => {
     } catch (error) {
       console.error("Error fetching appointments:", error);
     }
-  };
+  }, [setPendingAppointments, token]);
 
   useEffect(() => {
     fetchAppointments();
-  }, []);
+  }, [fetchAppointments]);
 
   const appointments = PendingAppointments.map((appointment) => {
     const { hour, day } = convertTimestamp(appointment.date);
@@ -60,7 +60,7 @@ const Calendar = ({ navigation }) => {
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [fetchAppointments, navigation]);
   return (
     <SafeScrollView
       header={<Header title="Calendar" navigation={navigation} />}>
@@ -105,10 +105,6 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 8,
     backgroundColor: "#cce5ff",
-  },
-  text: {
-    fontSize: 16,
-    textAlign: "center",
   },
   scheduleContainer: {
     flexDirection: "column",

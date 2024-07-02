@@ -9,6 +9,7 @@ import {
   responsiveWidth,
 } from "../../../AppStyles";
 
+// eslint-disable-next-line react/display-name
 const InputField = React.memo(
   ({ value, label, onChangeText, secureTextEntry, editable }) => {
     const [showPassword, setShowPassword] = useState(!secureTextEntry);
