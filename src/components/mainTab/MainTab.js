@@ -1,55 +1,23 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../../screens/Home";
-import { getPathDown } from "./curve";
-import { Svg, Path, Rect, G, ClipPath } from "react-native-svg";
 import { Context as UserContext } from "../../context/UserContext";
-import { scale } from "react-native-size-scaling";
-import {
-  View,
-  Image,
-  Text,
-  Dimensions,
-  StyleSheet,
-  Platform,
-  TouchableOpacity,
-} from "react-native";
-import Calendar from "../../screens/Calendar";
-import Notifications from "../../screens/Notifications";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import MenuStack from "../Menu/MenuStack";
 import HomeStack from "../home/HomeStack";
 import AiChatbot from "../../screens/Chat/AiChatbot";
-import { useNavigation } from "@react-navigation/native";
-import { colors, responsiveHeight, responsiveWidth } from "../../../AppStyles";
+import { colors, responsiveWidth } from "../../../AppStyles";
+import { Ionicons } from "@expo/vector-icons";
+import ChatsScreen from "../../screens/Chat/ChatsScreen";
+import HomeIcon from "../../../assets/SvgIcons.js/HomeIcon";
+import CalendarIcon from "../../../assets/SvgIcons.js/CalendarIcon";
+import ChatsIcon from "../../../assets/SvgIcons.js/ChatsIcon";
+import AiIcon from "../../../assets/SvgIcons.js/AiIcon";
+import Calendar from "../../screens/Calendar";
 
 const Tab = createBottomTabNavigator();
+/* eslint-disable react/display-name */
 
-const getImageNameBased = (name) => {
-  switch (name) {
-    case "home":
-      return require("../../../assets/home.png");
-    case "notifications":
-      return require("../../../assets/notifications.png");
-
-    case "calendar":
-      return require("../../../assets/calendar.png");
-  }
-};
-
-const Icon = React.memo(({ name, focused }) => {
-  return (
-    <Image
-      style={{
-        width: 30,
-        height: 30,
-        tintColor: focused ? colors.White : colors.LightBlue,
-      }}
-      source={getImageNameBased(name)}
-    />
-  );
-});
-
-const MenuIcon = React.memo(({ focused, patientName }) => {
+const MenuIcon = React.memo(({ patientName }) => {
   const firstTwoLetters = patientName
     ?.split(" ")
     ?.map((name) => name.charAt(0))
@@ -61,112 +29,76 @@ const MenuIcon = React.memo(({ focused, patientName }) => {
       <View style={styles.menuNameCircle}>
         <Text style={styles.menuName}>{firstTwoLetters}</Text>
       </View>
-      <View style={styles.menuImageCircle}>
-        <Image
-          style={styles.menuImage}
-          source={require("../../../assets/menu.png")}
-        />
+      <View style={styles.iconContainer}>
+        <Ionicons name="menu" size={14} color="white" />
       </View>
     </View>
   );
 });
 
 const MainTab = () => {
-  const [maxWidth, setMaxWidth] = useState(Dimensions.get("window").width + 1);
-  const returnPathDown = getPathDown(maxWidth, 60, 50);
   const { state } = useContext(UserContext);
   const patientName = state.userData.patientName;
-  console.log("state", state.userData.patientName);
+
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
       screenOptions={{
+        tabBarShowLabel: false,
+        headerShown: false,
         tabBarStyle: {
-          height: responsiveHeight(50),
           position: "absolute",
-          backgroundColor:
-            Platform.OS !== "ios" ? "transparent" : colors.BlueII,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: Platform.OS === "ios" ? 90 : 60,
           borderTopWidth: 0,
-        },
-        contentStyle: {
-          backgroundColor: colors.White,
+          borderTopLeftRadius: 32,
+          borderTopRightRadius: 32,
+          backgroundColor: colors.BlueII,
         },
       }}>
       <Tab.Screen
         name="MenuStack"
         component={MenuStack}
         options={{
-          headerShown: false,
-          tabBarItemStyle: {
-            margin: 0,
-            backgroundColor: colors.BlueII,
-          },
           tabBarIcon: ({ focused }) => (
             <MenuIcon
               focused={focused}
-              width={35}
-              height={35}
+              width={27}
+              height={26}
               patientName={patientName}
             />
-          ),
-
-          tabBarIconStyle: {
-            marginBottom: Platform.OS === "ios" ? 20 : 0,
-          },
-          tabBarLabel: ({ focused }) => (
-            <Text
-              style={focused ? styles.activeText : styles.inactiveText}></Text>
           ),
         }}
       />
       <Tab.Screen
-        name="Notifications"
-        component={Notifications}
+        name="Chats"
+        component={ChatsScreen}
         options={{
           headerShown: false,
-          tabBarItemStyle: {
-            margin: 0,
-            backgroundColor: colors.BlueII,
-          },
-          tabBarIcon: ({ focused }) => (
-            <Icon name="notifications" focused={focused} />
-          ),
-          tabBarIconStyle: {
-            marginBottom: Platform.OS === "ios" ? 20 : 0,
-          },
-          tabBarLabel: ({ focused }) => (
-            <Text
-              style={focused ? styles.activeText : styles.inactiveText}></Text>
-          ),
+          tabBarIcon: ({ focused }) => <ChatsIcon focused={focused} />,
         }}
       />
       <Tab.Screen
         name="Ai"
         component={AiChatbot}
         options={{
-          headerShown: false,
-          unmountOnBlur: false,
-          tabBarItemStyle: {
-            margin: 0,
-            zIndex: -50,
-          },
           tabBarStyle: { display: "none", zIndex: -50 },
           tabBarIcon: ({ focused }) => (
-            <View style={styles.aiIcon}>
-              <Image
-                style={{
-                  width: responsiveWidth(50),
-                  height: responsiveHeight(50),
-                }}
-                source={require("../../../assets/ai.png")}
-              />
-            </View>
-          ),
-          tabBarLabel: () => (
-            <View>
-              <Svg width={maxWidth} height={scale(60)}>
-                <Path fill={colors.BlueII} {...{ d: returnPathDown }} />
-              </Svg>
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: colors.BlueII,
+                height: Platform.OS === "ios" ? 70 : 60,
+                width: Platform.OS === "ios" ? 70 : 60,
+                top: Platform.OS === "ios" ? -30 : -20,
+                borderRadius: Platform.OS === "ios" ? 35 : 30,
+                borderWidth: 3,
+                borderColor: "transparent",
+              }}>
+              <AiIcon />
             </View>
           ),
         }}
@@ -174,50 +106,16 @@ const MainTab = () => {
       <Tab.Screen
         name="Calendar"
         component={Calendar}
-        listeners={{
-          tabPress: (e) => {},
-        }}
         options={{
-          headerShown: false,
-          tabBarItemStyle: {
-            margin: 0,
-            backgroundColor: colors.BlueII,
-          },
-          tabBarIcon: ({ focused }) => (
-            <Icon name="calendar" focused={focused} />
-          ),
-
-          tabBarIconStyle: {
-            marginBottom: Platform.OS === "ios" ? 20 : 0,
-          },
-          tabBarLabel: ({ focused }) => (
-            <Text
-              style={focused ? styles.activeText : styles.inactiveText}></Text>
-          ),
+          tabBarIcon: ({ focused }) => <CalendarIcon focused={focused} />,
         }}
       />
 
       <Tab.Screen
         name="HomeStack"
         component={HomeStack}
-        listeners={{
-          tabPress: (e) => {},
-        }}
         options={{
-          headerShown: false,
-          tabBarItemStyle: {
-            margin: 0,
-            backgroundColor: colors.BlueII,
-          },
-          tabBarIcon: ({ focused }) => <Icon name="home" focused={focused} />,
-
-          tabBarIconStyle: {
-            marginBottom: Platform.OS === "ios" ? 20 : 0,
-          },
-          tabBarLabel: ({ focused }) => (
-            <Text
-              style={focused ? styles.activeText : styles.inactiveText}></Text>
-          ),
+          tabBarIcon: ({ focused }) => <HomeIcon focused={focused} />,
         }}
       />
     </Tab.Navigator>
@@ -252,9 +150,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
   },
   menuIcon: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    borderRadius: 50,
   },
   menuNameCircle: {
     width: 40,
@@ -273,11 +169,11 @@ const styles = StyleSheet.create({
   },
   menuImageCircle: {
     position: "absolute",
-    left: responsiveWidth(25),
-    top: Platform.OS === "ios" ? responsiveHeight(10) : responsiveHeight(30),
-    width: responsiveWidth(20),
-    height: responsiveWidth(20),
-    borderRadius: responsiveWidth(25) / 2,
+    bottom: 0,
+    right: 0,
+    width: 20,
+    height: 20,
+    borderRadius: 35,
     backgroundColor: colors.BlueI,
     display: "flex",
     justifyContent: "center",
@@ -286,6 +182,14 @@ const styles = StyleSheet.create({
   menuImage: {
     width: responsiveWidth(10),
     height: responsiveWidth(10),
+  },
+  iconContainer: {
+    position: "absolute",
+    bottom: -5,
+    right: -5,
+    backgroundColor: colors.BlueII,
+    borderRadius: 12,
+    padding: 4,
   },
 });
 export default MainTab;

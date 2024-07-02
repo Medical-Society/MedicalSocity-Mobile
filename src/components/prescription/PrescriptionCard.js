@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, formatDateForPrescription } from "../../../AppStyles";
+import { colors, formattedDYM } from "../../../AppStyles";
 
 const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
-  const date = formatDateForPrescription(prescription?.createdAt);
+  const date = formattedDYM(prescription?.createdAt);
   const doctorName = prescription?.doctor?.englishFullName || "Dr. Unknown";
   const specialization = prescription?.doctor?.specialization || "Unknown";
   const address = prescription?.doctor?.clinicAddress || "Unknown";
@@ -17,7 +17,7 @@ const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
       <View style={styles.card}>
         <Text style={styles.date}>{date}</Text>
         <View style={styles.rowOne}>
-          <Text style={styles.name}>{doctorName}</Text>
+          <Text style={styles.name}>Dr/ {doctorName}</Text>
           <Text style={styles.specialization}>{specialization}</Text>
         </View>
         <View style={styles.rowOne}>
@@ -42,7 +42,6 @@ const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     marginTop: 18,
-    marginHorizontal: 24,
   },
   card: {
     justifyContent: "center",

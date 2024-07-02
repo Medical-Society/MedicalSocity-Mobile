@@ -3,7 +3,13 @@ import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { colors } from "../../../AppStyles";
 
-const SearchBar = ({ term, onTermChange, onTermSubmit, setResults }) => {
+const SearchBar = ({
+  term,
+  onTermChange,
+  placeholder,
+  onTermSubmit,
+  setResults,
+}) => {
   return (
     <View style={styles.backgroundStyle}>
       <Feather name="search" style={styles.iconStyle} />
@@ -11,7 +17,7 @@ const SearchBar = ({ term, onTermChange, onTermSubmit, setResults }) => {
         autoCapitalize="none"
         autoCorrect={false}
         style={styles.inputStyle}
-        placeholder="Search for doctor, lab or pharmacy"
+        placeholder={placeholder}
         value={term}
         onChangeText={onTermChange}
         onEndEditing={onTermSubmit}
@@ -31,9 +37,9 @@ const SearchBar = ({ term, onTermChange, onTermSubmit, setResults }) => {
 const styles = StyleSheet.create({
   backgroundStyle: {
     backgroundColor: colors.OffWhite,
-    height: 50,
+    height: 40,
     borderRadius: 5,
-    marginHorizontal: 15,
+    marginHorizontal: 10,
     flexDirection: "row",
     marginBottom: 10,
   },
@@ -43,7 +49,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   iconStyle: {
-    fontSize: 30,
+    fontSize: 25,
     alignSelf: "center",
     marginHorizontal: 15,
   },

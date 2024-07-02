@@ -6,7 +6,6 @@ import {
   StatusBar,
   TouchableOpacity,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../components/SubmitButton";
 import InputField from "../components/auth/InputField";
@@ -17,7 +16,6 @@ import {
   colors,
   responsiveFontSize,
   responsiveHeight,
-  responsiveWidth,
 } from "../../AppStyles";
 import SafeScrollView from "../components/SafeScrollView";
 import Header from "../components/Header";
@@ -36,7 +34,7 @@ const Login = ({ navigation }) => {
       setIsLoading(false);
     });
     return unsubscribe;
-  }, [navigation]);
+  }, [clearMessage, navigation]);
 
   const handleLogin = useCallback(() => {
     login({ email, password }, setIsLoading);

@@ -1,44 +1,49 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useContext } from "react";
 
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../components/Header";
-import PrescriptionCard from "../../components/prescription/PrescriptionCard";
 import { ActivityIndicator } from "react-native-paper";
 import usePaginatedFetch from "../../hooks/usePaginatedFetch";
 import { Context as UserContext } from "../../context/UserContext";
+import SafeFlatListView from "../../components/SafeFlatListView";
+import ScannedPrescriptionCard from "../../components/prescription/ScannedPrescriptionCard";
 
 const ScannedPrescriptionsScreen = ({ navigation }) => {
   const { state: userState } = useContext(UserContext);
 
   const patientId = userState.userData._id;
+
   const {
     data: prescriptions,
     isLoading,
     handleLoadMore,
   } = usePaginatedFetch(
-    `https://api-mcy9.onrender.com/api/v1/patients/${patientId}/scanned-prescriptions/`,
-    "scannedPrescriptions",
-    navigation
+    `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/`,
+    "scannedPrescriptions"
   );
   const backButtonHandler = () => {
     navigation.goBack();
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
-        title="Scanned Prescriptions"
-        backButtonHandler={backButtonHandler}
-      />
+    <SafeFlatListView
+      header={
+        <Header
+          title="Scanned Prescriptions"
+          backButtonHandler={backButtonHandler}
+        />
+      }
+      marginBottom={10}>
       <FlatList
         data={prescriptions}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <PrescriptionCard
+          <ScannedPrescriptionCard
             prescription={item}
             handlePressedPrescription={() =>
-              navigation.navigate("ViewScannedPrescription", {
+              navigation.navigate("ScannedPrescriptionModal", {
                 prescriptionId: item._id,
+                mode: "View",
               })
             }
             isScanned={true}
@@ -54,7 +59,7 @@ const ScannedPrescriptionsScreen = ({ navigation }) => {
           <Text style={styles.mainText}>No scanned prescriptions found</Text>
         </View>
       )}
-    </SafeAreaView>
+    </SafeFlatListView>
   );
 };
 

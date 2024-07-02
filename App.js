@@ -10,15 +10,11 @@ import {
   Context as AuthContext,
   Provider as AuthProvider,
 } from "./src/context/AuthContext";
-import {
-  Context as UserContext,
-  Provider as UserProvider,
-} from "./src/context/UserContext";
+import { Provider as UserProvider } from "./src/context/UserContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainStack from "./src/components/mainStack/MainStack";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "./AppStyles";
-import HomeIotScreen from "./src/screens/IOT/HomeIotScreen";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -38,7 +34,7 @@ const App = () => {
   }, [state.isLoading]);
 
   const authOrMainFlowScreen = useMemo(() => {
-    if (!state.token) {
+    if (state.token) {
       return (
         <Stack.Screen
           name="mainStack"
@@ -68,20 +64,20 @@ const App = () => {
             },
           }}
           initialRouteName="Welcome">
-          {/* {resolvedScreen}
-          {authOrMainFlowScreen} */}
-          <Stack.Screen
+          {resolvedScreen}
+          {authOrMainFlowScreen}
+          {/* <Stack.Screen
             name="IOT"
             component={HomeIotScreen}
             options={{ headerShown: false }}
-          />
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );
 };
 
-export default () => {
+const AppWithProviders = () => {
   return (
     <UserProvider>
       <AuthProvider>
@@ -90,3 +86,5 @@ export default () => {
     </UserProvider>
   );
 };
+
+export default AppWithProviders;

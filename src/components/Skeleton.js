@@ -1,13 +1,8 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 import { MotiView } from "moti";
 import { Skeleton } from "moti/skeleton";
-import {
-  colors,
-  margin,
-  responsiveHeight,
-  responsiveWidth,
-} from "../../AppStyles";
+import { colors, responsiveHeight, responsiveWidth } from "../../AppStyles";
 
 const Spacer = ({ height = 16 }) => <MotiView style={{ height }} />;
 

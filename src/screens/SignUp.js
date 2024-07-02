@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   StatusBar,
-  ScrollView,
   Platform,
   TouchableOpacity,
   KeyboardAvoidingView,
@@ -12,17 +11,13 @@ import {
 import Button from "../components/SubmitButton";
 import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
-import OrLine from "../components/auth/OrLine";
 import { Context as AuthContext } from "../context/AuthContext";
 import MessagesModal from "../components/MessagesModal";
-import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   colors,
   responsiveFontSize,
   responsiveHeight,
-  responsiveWidth,
 } from "../../AppStyles";
 import GenderInput from "../components/GenderInput";
 import SafeScrollView from "../components/SafeScrollView";
@@ -32,7 +27,7 @@ const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
 
-  const initialSignUpData = {
+  const initialSignUpData = React.useMemo(() => ({
     patientName: "",
     email: "",
     password: "",
@@ -41,7 +36,7 @@ const SignUp = ({ navigation }) => {
     gender: "",
     address: "",
     phoneNumber: "",
-  };
+  }), []);
   const [signUpData, setSignUpData] = useState(initialSignUpData);
 
   useEffect(() => {
@@ -50,7 +45,7 @@ const SignUp = ({ navigation }) => {
       setSignUpData(initialSignUpData);
     });
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, clearMessage, initialSignUpData]);
 
   // useEffect(() => {
   //   console.log(signUpData);
@@ -61,8 +56,9 @@ const SignUp = ({ navigation }) => {
   }, []);
 
   const handleSignUp = useCallback(() => {
+    console.log("signUpData", signUpData);
     signup(signUpData, navigation, setIsLoading);
-  }, [signup, signUpData, isLoading]);
+  }, [signup, signUpData, navigation]);
 
   const inputsData = [
     {
@@ -98,16 +94,10 @@ const SignUp = ({ navigation }) => {
       onChangeText: (text) => handleInputChange("phoneNumber", text),
     },
     {
-      label: "Phone Number",
-      placeholder: "Enter your phone number",
-      value: signUpData.phoneNumber,
-      onChangeText: (text) => handleInputChange("phoneNumber", text),
-    },
-    {
-      label: "Phone Number",
-      placeholder: "Enter your phone number",
-      value: signUpData.phoneNumber,
-      onChangeText: (text) => handleInputChange("phoneNumber", text),
+      label: "Address",
+      placeholder: "Enter your address",
+      value: signUpData.address,
+      onChangeText: (text) => handleInputChange("address", text),
     },
   ];
 

@@ -1,50 +1,74 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { colors, formatDateForAppointment } from "../../../AppStyles";
+import { colors, formattedDYM } from "../../../AppStyles";
+
+const buildButtonStatusBased = (status) => {
+  switch (status) {
+    case "PENDING":
+      return {
+        buttonText: "Cancel appointment",
+        mainColor: colors.DarkRed,
+        backgroundColor: colors.White,
+      };
+    case "IN_PROGRESS":
+      return {
+        buttonText: "In progress",
+        mainColor: colors.BlueI,
+        backgroundColor: colors.LightGrey,
+      };
+    case "FINISHED":
+      return {
+        buttonText: "Finished",
+        mainColor: colors.BlueI,
+        backgroundColor: colors.LightGrey,
+      };
+    case "CANCELED":
+      return {
+        buttonText: "Canceled",
+        mainColor: colors.White,
+        backgroundColor: colors.DarkRed,
+      };
+  }
+};
 
 const AppointmentCard = ({ appointment, onPress }) => {
-  // create a dummy data for the appointment card of the previous appointment
-  //   const doctorName = "Dr. Ahmed";
-  //   const price = 200;
-  //   const noPatientBeforeMe = 2;
-  //   const address = "Cairo, Egypt";
-  //   const date = "3/3/2024";
-  //   const time = "10:00 AM";
-  //   const status = "finished";
-  //   const description = "This is a description for the appointment";
+  const { price, doctor, date, time, status, description } = appointment;
 
-  const {
-    doctorName,
-    price,
-    noPatientBeforeMe,
-    address,
-    date,
-    time,
-    status,
-    description,
-  } = appointment;
-
-  const buttonText =
-    status === "finished" ? "View Prescription" : "Cancel appointment";
-  const buttonColor = status === "finished" ? colors.BlueI : colors.DarkRed;
+  const { buttonText, mainColor, backgroundColor } =
+    buildButtonStatusBased(status);
 
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        {
+          backgroundColor:
+            status === "PENDING" ? colors.White : colors.LightGrey,
+        },
+      ]}>
       <View style={styles.header}>
-        <Text style={styles.doctorName}>{doctorName}</Text>
-        <Text style={styles.date}>{date}</Text>
+        <Text style={styles.doctorName}>{doctor.englishFullName}</Text>
+        <Text style={styles.date}>{formattedDYM(date)}</Text>
       </View>
       <View style={styles.row}>
         <Text style={styles.price}>{price} LE</Text>
         <Text style={styles.time}>{time}</Text>
       </View>
-      <Text style={styles.patientsBefore}>
-        {noPatientBeforeMe} patients before you
-      </Text>
+
       <Text style={styles.description}>{description}</Text>
-      <TouchableOpacity style={{ ...styles.button, borderColor: buttonColor }}>
-        <Text style={{ ...styles.buttonText, color: buttonColor }}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          ...styles.button,
+          borderColor: mainColor,
+          backgroundColor: backgroundColor,
+        }}
+        disabled={status !== "PENDING"}>
+        <Text
+          style={{
+            ...styles.buttonText,
+            color: mainColor,
+          }}>
           {buttonText}
         </Text>
       </TouchableOpacity>
@@ -116,6 +140,13 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#900F06",
     fontSize: 14,
+  },
+  disabledButton: {
+    alignItems: "center",
+    borderColor: "#7A7A7A",
+    borderRadius: 5,
+    borderWidth: 1,
+    paddingVertical: 16,
   },
 });
 

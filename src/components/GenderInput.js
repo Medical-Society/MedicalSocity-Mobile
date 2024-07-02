@@ -12,22 +12,22 @@ const GenderInput = ({ gender, handleInputChange }) => {
         <View style={styles.genderSelectors}>
           <View style={styles.radioButtonContainer}>
             <RadioButton.Android
-              value="Male"
+              value="MALE"
               color={colors.Violet}
               // add text to the radio button
               label="Male"
             />
             <Text
               style={styles.radioButtonText}
-              onPress={() => handleInputChange("gender", "Male")}>
+              onPress={() => handleInputChange("gender", "MALE")}>
               Male
             </Text>
           </View>
           <View style={styles.radioButtonContainer}>
-            <RadioButton.Android value="Female" color={colors.Violet} />
+            <RadioButton.Android value="FEMALE" color={colors.Violet} />
             <Text
               style={styles.radioButtonText}
-              onPress={() => handleInputChange("gender", "Female")}>
+              onPress={() => handleInputChange("gender", "FEMALE")}>
               Female
             </Text>
           </View>

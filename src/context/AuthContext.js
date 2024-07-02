@@ -3,11 +3,21 @@ import patientApi from "../services/patient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
 import { Context as userContext } from "./UserContext";
+import io from "socket.io-client";
 
 const authReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      return { ...state, token: action.payload, errorMessage: "" };
+      return {
+        ...state,
+        token: action.payload,
+        socket: io("https://api.medical-society.fr.to/", {
+          extraHeaders: {
+            Authorization: `bearer ${action.payload}`,
+          },
+        }),
+        errorMessage: "",
+      };
     case "SIGNOUT":
       return { ...state, token: null, errorMessage: "" };
     case "ADD_ERROR":
@@ -25,7 +35,6 @@ const authReducer = (state, action) => {
 
 const signup = (dispatch) => {
   return async (patientObject, navigation, setIsLoading) => {
-    patientObject.address = "Ism";
     patientObject.email = patientObject.email.toLowerCase();
     if (patientObject.password !== patientObject.confirmPassword) {
       dispatch({
@@ -35,13 +44,11 @@ const signup = (dispatch) => {
       return;
     }
 
-    console.log(patientObject);
-
     delete patientObject.confirmPassword;
 
     try {
       setIsLoading(true);
-      const response = await patientApi.post("/signup", patientObject);
+      await patientApi.post("/signup", patientObject);
       dispatch({
         type: "ADD_SUCCESS",
         payload:
@@ -83,7 +90,7 @@ const tryLocalSignin = (dispatch) => {
         console.log(response.data.data.patient);
         dispatch({ type: "LOGIN", payload: token });
       }
-    } catch (err) {
+    } catch (_) {
       if (token) {
         dispatch({ type: "LOGIN", payload: token });
       }
@@ -128,7 +135,7 @@ const forgetPassword = (dispatch) => {
   return async (personEmail, navigation) => {
     personEmail.email = personEmail.email.toLowerCase();
     try {
-      const response = await patientApi.post("/forgot-password", personEmail);
+      await patientApi.post("/forgot-password", personEmail);
       dispatch({
         type: "ADD_SUCCESS",
         payload: "A reset password link has been sent to your email.",
@@ -181,5 +188,11 @@ export const { Provider, Context } = createDataContext(
     forgetPassword,
     addError,
   },
-  { token: null, errorMessage: "", isLoading: true, successMessage: "" }
+  {
+    token: null,
+    errorMessage: "",
+    isLoading: true,
+    successMessage: "",
+    socket: null,
+  }
 );

@@ -1,17 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-} from "react-native";
+import { Text, StyleSheet, View, Image, FlatList } from "react-native";
 import Button from "../../components/SubmitButton";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialIcons } from "@expo/vector-icons";
 import Skeleton from "../../components/Skeleton";
 import {
   colors,
@@ -62,7 +52,7 @@ const DoctorScreen = ({ navigation, route }) => {
       }
     };
     fetchDoctor();
-  }, []);
+  }, [doctorId]);
 
   useEffect(() => {
     const doctorWeekdays = { ...doctor.availableTime.weekdays };
@@ -158,7 +148,7 @@ const DoctorScreen = ({ navigation, route }) => {
               <Button
                 buttonText="Book Appointment"
                 onPress={() =>
-                  navigation.navigate("Appointments", { doctorId })
+                  navigation.navigate("DoctorAppointments", { doctorId })
                 }
               />
             </View>

@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, responsiveFontSize, responsiveHeight } from "../../AppStyles";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProgressPoints = ({ step }) => {
   return (
@@ -62,7 +61,7 @@ const Welcome = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
-        source={require("../../assets/welcomeBG.png")}
+        source={require("../../assets/welcomeBg.png")}
         style={styles.imageBg}
         resizeMode="cover">
         <Text style={styles.skip} onPress={handleSkip}>

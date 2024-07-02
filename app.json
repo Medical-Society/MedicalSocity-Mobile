@@ -1,33 +1,32 @@
 {
   "expo": {
-    "name": "MedicalSociety",
-    "slug": "MedicalSociety",
+    "name": "Medical Society",
+    "slug": "medicalsociety",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/msslogo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "packagerOpts": {
-      "sourceExts": ["js", "jsx", "svgx"],
-      "transformer": "node_modules/react-native-svg-transformer/index.js"
-    },
+    // "packagerOpts": {
+    //   "sourceExts": ["js", "jsx", "svgx"],
+    //   "transformer": "node_modules/react-native-svg-transformer/index.js"
+    // },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/msslogo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.peter_torki.MedicalSociety"
+      "package": "com.peter_torki.mss"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/msslogo.png"
     },
     "extra": {
       "eas": {
@@ -39,7 +38,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Selecct and upload images.",
+          "photosPermission": "The app accesses your photos to let you share them with your friends.",
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ]

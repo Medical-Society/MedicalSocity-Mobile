@@ -1,7 +1,6 @@
 import React from "react";
 import {
   View,
-  Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
@@ -21,7 +20,6 @@ const ResultsList = ({ results, navigation }) => {
         data={results}
         keyExtractor={(result) => result._id}
         renderItem={({ item }) => {
-          console.log(item);
           return (
             <TouchableOpacity
               activeOpacity={0.8}

@@ -2,50 +2,42 @@ import { useState, useEffect, useCallback, useContext } from "react";
 import axios from "axios";
 import { Context as AuthContext } from "../context/AuthContext";
 
-const usePaginatedFetch = (
-  url,
-  value,
-  navigation = null,
-  limit = 10,
-  params = {},
-  dependencies = []
-) => {
+const usePaginatedFetch = (url, value) => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { state } = useContext(AuthContext);
 
   useEffect(() => {
-    if (navigation) {
-      const unsubscribe = navigation.addListener("focus", () => {
-        fetchData();
-      });
-      return unsubscribe;
-    } else {
-      fetchData();
-    }
-  }, [currentPage, navigation, ...dependencies]);
+    fetchData();
+  }, [currentPage, fetchData]);
 
-  const fetchData = async () => {
+  const reFetchData = useCallback(() => {
+    setData([]);
+    setCurrentPage(1);
+    fetchData();
+  }, [fetchData]);
+
+  const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(url, {
         params: {
-          ...params,
           page: currentPage,
-          limit,
+          limit: 10,
         },
         headers: {
           Authorization: `Bearer ${state.token}`,
         },
       });
-      console.log("response", response.data.data[value]);
-      setData((prevData) =>
-        currentPage === 1
-          ? response.data.data[value]
-          : [...prevData, ...response.data.data[value]]
-      );
+
+      setData((prevData) => [
+        ...prevData,
+        ...response.data.data[value].filter(
+          (item) => !prevData.find((prevItem) => prevItem._id === item._id)
+        ),
+      ]);
 
       setTotalPages(response.data.data.totalPages);
     } catch (error) {
@@ -56,7 +48,7 @@ const usePaginatedFetch = (
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage, state.token, url, value]);
 
   const handleLoadMore = useCallback(() => {
     if (currentPage < totalPages) {
@@ -68,6 +60,7 @@ const usePaginatedFetch = (
     data,
     isLoading,
     handleLoadMore,
+    reFetchData,
   };
 };
 

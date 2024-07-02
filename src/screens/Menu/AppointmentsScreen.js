@@ -1,67 +1,122 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { colors } from "../../../AppStyles";
+import React, { useContext, useState } from "react";
+import { FlatList, RefreshControl } from "react-native";
 import Header from "../../components/Header";
 import AppointmentCard from "../../components/appointment/AppointmentCard";
-import SafeScrollView from "../../components/SafeScrollView";
+import SafeFlatListView from "../../components/SafeFlatListView";
+import usePaginatedFetch from "../../hooks/usePaginatedFetch";
+import { Context as AuthContext } from "../../context/AuthContext";
+import { ActivityIndicator } from "react-native-paper";
+import LoadingModal from "../../components/LoadingModal";
+import MessagesModal from "../../components/MessagesModal";
+import ConfirmModal from "../../components/ConfirmModal";
+import patientApi from "../../services/patient";
 
 const AppointmentsScreen = ({ navigation }) => {
-  /*
-  const doctorName = "Dr. Ahmed";
-  const price = 200;
-  const noPatientBeforeMe = 2;
-  const address = "Cairo, Egypt";
-  const date = "3/3/2024";
-  const time = "10:00 AM";
-  const status = "finished";
-  const description = "This is a description for the appointment";
-  const buttonText =
-    status === "finished" ? "View Prescription" : "Cancel appointment";
-  const buttonColor = status === "finished" ? colors.BlueI : colors.DarkRed;
+  const {
+    data: appointments,
+    isLoading: fetchingAppointmentsLoading,
+    handleLoadMore,
+    reFetchData: refreshAppointments,
+  } = usePaginatedFetch(
+    `https://api.medical-society.fr.to/api/v1/patients/appointments`,
+    "appointments"
+  );
 
-  convert the above data to an object and pass it to the AppointmentCard component
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteAppointmentId, setDeleteAppointmentId] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
+  const [message, setMessage] = useState({
+    successMessage: "",
+    errorMessage: "",
+  });
 
+  const { state } = useContext(AuthContext);
+  const { token } = state;
 
-  */
-  const appointment1 = {
-    doctorName: "Dr. Ahmed",
-    price: 200,
-    date: "3/3/2024",
-    noPatientBeforeMe: 2,
-    address: "Cairo, Egypt",
-    time: "10:00 AM",
-    status: "finished",
+  const cancelAppointment = async () => {
+    setIsLoading(true);
+    try {
+      await patientApi.delete(`/appointments/${deleteAppointmentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMessage({ successMessage: "Appointment canceled successfully" });
+    } catch (error) {
+      setMessage({ errorMessage: error.response.data.message });
+    }
+    setDeleteAppointmentId("");
+    setIsLoading(false);
+    setModalVisible(false);
   };
 
-  const appointment2 = {
-    doctorName: "Dr. Mohamed",
-    price: 300,
-    date: "4/3/2024",
-    noPatientBeforeMe: 3,
-    address: "Giza, Egypt",
-    time: "11:00 AM",
-    status: "upcoming",
-  };
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true);
+  //   const timeout = setTimeout(() => {
+  //     refreshAppointments();
+  //     setRefreshing(false);
+  //   }, 2000);
+  //   return () => clearTimeout(timeout);
+  // }, [setRefreshing, refreshAppointments]);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      refreshAppointments();
+      setRefreshing(false);
+    }, 2000);
+  }, [refreshAppointments]);
 
   return (
-    <SafeScrollView
+    <SafeFlatListView
       header={
         <Header
           title="Appointments"
           backButtonHandler={() => navigation.goBack()}
         />
-      }>
-      <AppointmentCard
-        appointment={appointment1}
-        onPress={() => console.log("Appointment Pressed")}
+      }
+      marginBottom={10}>
+      <LoadingModal loading={isLoading} />
+      <ConfirmModal
+        visibility={modalVisible}
+        content={`Are you sure you want to cancel this appointment?`}
+        onConfirm={cancelAppointment}
+        onCancel={() => setModalVisible(false)}
       />
-      <AppointmentCard
-        appointment={appointment2}
-        onPress={() => console.log("Appointment Pressed")}
+
+      <MessagesModal
+        successMessage={message.successMessage}
+        errorMessage={message.errorMessage}
+        clearMessage={() => {
+          setMessage({ successMessage: "", errorMessage: "" });
+          refreshAppointments();
+        }}
       />
-    </SafeScrollView>
+
+      <FlatList
+        data={appointments}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <AppointmentCard
+            appointment={item}
+            onPress={() => {
+              setModalVisible(true);
+              setDeleteAppointmentId(item._id);
+            }}
+          />
+        )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        keyExtractor={(item) => item._id}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          fetchingAppointmentsLoading && <ActivityIndicator size="large" />
+        }
+      />
+    </SafeFlatListView>
   );
 };
 
