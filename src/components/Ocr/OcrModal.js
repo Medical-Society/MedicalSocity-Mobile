@@ -44,10 +44,13 @@ const postImage = async (
       errorMessage: "",
       successMessage: "Prescription submitted successfully",
     });
-
     navigation.navigate("ScannedPrescriptionModal", {
       prescriptionId: response.data.data._id,
       mode: "Edit",
+    });
+    setMessage({
+      errorMessage: "",
+      successMessage: "",
     });
   } catch (_) {
     setMessage({

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { FlatList, RefreshControl } from "react-native";
 import Header from "../../components/Header";
 import AppointmentCard from "../../components/appointment/AppointmentCard";
@@ -52,15 +52,7 @@ const AppointmentsScreen = ({ navigation }) => {
     setModalVisible(false);
   };
 
-  // const onRefresh = useCallback(() => {
-  //   setRefreshing(true);
-  //   const timeout = setTimeout(() => {
-  //     refreshAppointments();
-  //     setRefreshing(false);
-  //   }, 2000);
-  //   return () => clearTimeout(timeout);
-  // }, [setRefreshing, refreshAppointments]);
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       refreshAppointments();
@@ -84,7 +76,6 @@ const AppointmentsScreen = ({ navigation }) => {
         onConfirm={cancelAppointment}
         onCancel={() => setModalVisible(false)}
       />
-
       <MessagesModal
         successMessage={message.successMessage}
         errorMessage={message.errorMessage}
@@ -93,7 +84,6 @@ const AppointmentsScreen = ({ navigation }) => {
           refreshAppointments();
         }}
       />
-
       <FlatList
         data={appointments}
         showsVerticalScrollIndicator={false}

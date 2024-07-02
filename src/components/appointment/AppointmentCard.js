@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { colors, formattedDYM } from "../../../AppStyles";
-
+import patientsApi from "../../services/patient";
 const buildButtonStatusBased = (status) => {
   switch (status) {
     case "PENDING":
@@ -33,9 +33,27 @@ const buildButtonStatusBased = (status) => {
 
 const AppointmentCard = ({ appointment, onPress }) => {
   const { price, doctor, date, time, status, description } = appointment;
+  const [numberOfPatientsBeforeYou, setNumberOfPatientsBeforeYou] = useState(0);
 
   const { buttonText, mainColor, backgroundColor } =
     buildButtonStatusBased(status);
+
+  useEffect(() => {
+    getNumberOfPatientsBeforeYou();
+  }, [getNumberOfPatientsBeforeYou]);
+
+  const getNumberOfPatientsBeforeYou = useCallback(async () => {
+    try {
+      // /appointments/:appointmentId/beforeYou
+      const response = await patientsApi.get(
+        `/appointments/${appointment._id}/beforeYou`
+      );
+      console.log(response.data.data.appointmentsBeforeYou);
+      setNumberOfPatientsBeforeYou(response.data.data.appointmentsBeforeYou);
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  }, [appointment._id]);
 
   return (
     <View
@@ -50,6 +68,15 @@ const AppointmentCard = ({ appointment, onPress }) => {
         <Text style={styles.doctorName}>{doctor.englishFullName}</Text>
         <Text style={styles.date}>{formattedDYM(date)}</Text>
       </View>
+
+      {appointment.status === "PENDING" && (
+        <View style={styles.row}>
+          <Text style={styles.patientsBefore}>
+            {numberOfPatientsBeforeYou} patients before you
+          </Text>
+        </View>
+      )}
+
       <View style={styles.row}>
         <Text style={styles.price}>{price} LE</Text>
         <Text style={styles.time}>{time}</Text>

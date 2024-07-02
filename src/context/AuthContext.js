@@ -76,7 +76,6 @@ const signup = (dispatch) => {
 
 const tryLocalSignin = (dispatch) => {
   const { updateUserData } = useContext(userContext);
-
   return async () => {
     const token = await AsyncStorage.getItem("token");
     try {

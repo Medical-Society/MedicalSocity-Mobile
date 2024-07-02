@@ -311,14 +311,22 @@ export const createFormData = async (uri) => {
 
     const formData = new FormData();
 
-    // Fetch the image data from URI using Expo's FileSystem module
-    const fileUri = FileSystem.cacheDirectory + fileName;
-    await FileSystem.downloadAsync(uri, fileUri);
+    // Check if the URI is a remote URL
+    if (uri.startsWith("http://") || uri.startsWith("https://")) {
+      // Download the file using FileSystem
+      const fileUri = FileSystem.cacheDirectory + fileName;
+      await FileSystem.downloadAsync(uri, fileUri);
+      uri = fileUri; // Update the URI to the downloaded file URI
+    }
 
+    // Determine the MIME type
+    const mimeType = fileType === "jpg" ? "image/jpeg" : `image/${fileType}`;
+
+    // Create the file object
     const file = {
-      uri: fileUri,
+      uri: uri,
       name: fileName,
-      type: `image/${fileType}`,
+      type: mimeType,
     };
 
     formData.append("image", file);

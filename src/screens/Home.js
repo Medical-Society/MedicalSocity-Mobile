@@ -133,6 +133,7 @@ const Home = ({ navigation }) => {
           image: require("../../assets/brecletCardImg.png"),
           bgColor: "#440A05",
         }}
+        onPress={() => navigation.navigate("IotStack")}
       />
       <HomeCard
         feature={{

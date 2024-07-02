@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   listItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 2,
+    marginVertical: 8,
     paddingLeft: 2,
   },
   listItemText: {

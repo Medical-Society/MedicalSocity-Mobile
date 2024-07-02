@@ -15,6 +15,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainStack from "./src/components/mainStack/MainStack";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "./AppStyles";
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {
