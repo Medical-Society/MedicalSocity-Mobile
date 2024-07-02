@@ -10,6 +10,7 @@ import TermsPoliciesScreen from "../../screens/Menu/TermsPoliciesScreen";
 import PrescriptionsScreen from "../../screens/Menu/PrescriptionsScreen";
 import ScannedPrescriptionsScreen from "../../screens/Menu/ScannedPrescriptionsScreen";
 import AppointmentsScreen from "../../screens/Menu/AppointmentsScreen";
+import ContactUs from "../../screens/Menu/ContactUs";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ const MenuStack = ({ navigation }) => {
       <Stack.Screen name="Help&Support" component={HelpSupportScreen} />
       <Stack.Screen name="TermsAndPolicies" component={TermsPoliciesScreen} />
       <Stack.Screen name="ReportProblem" component={ReportProblemScreen} />
+      <Stack.Screen name="ContactUs" component={ContactUs} />
     </Stack.Navigator>
   );
 };

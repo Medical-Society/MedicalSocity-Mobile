@@ -29,7 +29,6 @@ const Profile = ({ navigation }) => {
   };
 
   const navigateToEditProfile = () => navigateTo("EditProfile");
-  const navigateToNotifications = () => navigateTo("NotificationsSettings");
   const navigateToSupport = () => navigateTo("Help&Support");
   const navigateToTermsAndPolicies = () => navigateTo("TermsAndPolicies");
   const navigateToPrescriptions = () => navigateTo("Prescriptions");
@@ -37,6 +36,7 @@ const Profile = ({ navigation }) => {
     navigateTo("ScannedPrescriptions");
   const navigateToAppointmentsScreen = () => navigateTo("Appointments");
   const navigateToReportProblem = () => navigateTo("ReportProblem");
+  const navigateToContactUs = () => navigateTo("ContactUs");
 
   const RecentlyDoctorIcon = (props) => (
     <SvgIconBuilder {...props}>
@@ -105,6 +105,10 @@ const Profile = ({ navigation }) => {
     {
       text: "Terms and Policies",
       action: navigateToTermsAndPolicies,
+    },
+    {
+      text: "Contact Us",
+      action: navigateToContactUs,
     },
     {
       text: "About Us",

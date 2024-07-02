@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { FlatList } from "react-native";
+import React, { useCallback, useContext, useState } from "react";
+import { FlatList, RefreshControl } from "react-native";
 import Header from "../../components/Header";
 import AppointmentCard from "../../components/appointment/AppointmentCard";
 import SafeFlatListView from "../../components/SafeFlatListView";
@@ -22,16 +22,16 @@ const AppointmentsScreen = ({ navigation }) => {
     "appointments"
   );
 
-  console.log("appointments", appointments)
-
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteAppointmentId, setDeleteAppointmentId] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
   const [message, setMessage] = useState({
     successMessage: "",
     errorMessage: "",
   });
+
   const { state } = useContext(AuthContext);
   const { token } = state;
 
@@ -51,6 +51,15 @@ const AppointmentsScreen = ({ navigation }) => {
     setIsLoading(false);
     setModalVisible(false);
   };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    const timeout = setTimeout(() => {
+      refreshAppointments();
+      setRefreshing(false);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <SafeFlatListView
@@ -90,6 +99,9 @@ const AppointmentsScreen = ({ navigation }) => {
             }}
           />
         )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         keyExtractor={(item) => item._id}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}

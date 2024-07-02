@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 
-import { FlatList, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { FlatList, StyleSheet, View, Text } from "react-native";
 import Header from "../../components/Header";
 import PrescriptionCard from "../../components/prescription/PrescriptionCard";
-import axios from "axios";
 import { ActivityIndicator } from "react-native-paper";
 
 import { Context as UserContext } from "../../context/UserContext";
-import { Context as AuthContext } from "../../context/AuthContext";
 import usePaginatedFetch from "../../hooks/usePaginatedFetch";
 import { colors } from "../../../AppStyles";
 import SafeFlatListView from "../../components/SafeFlatListView";
@@ -53,6 +50,12 @@ const PrescriptionsScreen = ({ navigation }) => {
         onEndReachedThreshold={0.5}
         ListFooterComponent={isLoading && <ActivityIndicator size="large" />}
       />
+
+      {!isLoading && prescriptions.length === 0 && (
+        <View style={styles.mainContainer}>
+          <Text style={styles.mainText}>No scanned prescriptions found</Text>
+        </View>
+      )}
     </SafeFlatListView>
   );
 };
@@ -61,6 +64,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.White,
+  },
+  mainContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  mainText: {
+    fontSize: 20,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

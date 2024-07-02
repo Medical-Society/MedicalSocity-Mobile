@@ -8,14 +8,17 @@ import SubmitButton from "../../components/SubmitButton";
 import MessagesModal from "../../components/MessagesModal";
 const ReportProblemScreen = ({ navigation }) => {
   const [problem, setProblem] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [message, setMessage] = useState({
+    successMessage: "",
+    errorMessage: "",
+  });
 
   const handleSubmit = () => {
     if (problem) {
-      setSuccessMessage("Your problem has been submitted successfully");
+      setMessage({ successMessage: "Problem reported successfully" });
       setProblem("");
     } else {
-      setSuccessMessage("Please write your problem first");
+      setMessage({ errorMessage: "Please write your problem" });
     }
   };
 
@@ -35,8 +38,11 @@ const ReportProblemScreen = ({ navigation }) => {
         />
       </View>
       <MessagesModal
-        successMessage={successMessage}
-        clearMessage={() => setSuccessMessage("")}
+        successMessage={message.successMessage}
+        errorMessage={message.errorMessage}
+        clearMessage={() =>
+          setMessage({ successMessage: "", errorMessage: "" })
+        }
       />
       <SubmitButton buttonText="Submit" onPress={() => handleSubmit()} />
     </SafeScrollView>

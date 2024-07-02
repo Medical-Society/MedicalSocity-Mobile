@@ -13,13 +13,13 @@ const usePaginatedFetch = (url, value) => {
     fetchData();
   }, [currentPage]);
 
-  const reFetchData = () => {
+  const reFetchData = useCallback(() => {
     setData([]);
     setCurrentPage(1);
     fetchData();
-  };
+  }, [fetchData]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(url, {
@@ -48,7 +48,7 @@ const usePaginatedFetch = (url, value) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage, state.token, url, value]);
 
   const handleLoadMore = useCallback(() => {
     if (currentPage < totalPages) {
