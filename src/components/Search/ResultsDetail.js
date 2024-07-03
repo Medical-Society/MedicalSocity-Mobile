@@ -1,7 +1,15 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 import { colors, responsiveHeight } from "../../../AppStyles";
+import FilledStarIcon from "../../../assets/SvgIcons/FilledStarIcon";
 const ResultsDetail = ({ doctor }) => {
+  const ratingBuilder = (rating) => {
+    let ratingArray = [];
+    for (let i = 0; i < rating; i++) {
+      ratingArray.push(<FilledStarIcon key={i} />);
+    }
+    return ratingArray;
+  };
   return (
     <View style={styles.info}>
       <Image
@@ -12,10 +20,8 @@ const ResultsDetail = ({ doctor }) => {
       />
       <View style={styles.doctorInfo}>
         <Text style={styles.infoText}>{doctor.englishFullName}</Text>
-
-        <Text style={styles.infoText}>{doctor.price}250 LE</Text>
-
         <Text style={styles.address}>{doctor.clinicAddress}</Text>
+        <View style={styles.rating}>{ratingBuilder(doctor.averageReview)}</View>
       </View>
     </View>
   );
@@ -26,17 +32,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    elevation: 5,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-
-    borderRadius: 10,
     backgroundColor: colors.White,
-    margin: 10,
-    padding: 10,
+    borderRadius: 10,
+    borderColor: colors.GreyII,
+    borderWidth: 0.3,
+    marginVertical: 5,
     marginBottom: responsiveHeight(10),
+    padding: 8,
   },
 
   doctorInfo: {
@@ -49,13 +51,22 @@ const styles = StyleSheet.create({
     color: colors.BlueI,
   },
   image: {
-    height: 96,
-    width: 72,
+    height: 86,
+    width: 62,
+    margin: 5,
+    borderRadius: 5,
+    borderColor: colors.GreyII,
+    borderWidth: 1,
   },
   address: {
     fontSize: 14,
     fontFamily: "Cairo-Regular",
-    color: colors.BlueI,
+    color: colors.DarkBlack,
+    marginVertical: 5,
+  },
+  rating: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 

@@ -61,6 +61,7 @@ const Calendar = ({ navigation }) => {
 
     return unsubscribe;
   }, [fetchAppointments, navigation]);
+  
   return (
     <SafeScrollView
       header={<Header title="Calendar" navigation={navigation} />}>

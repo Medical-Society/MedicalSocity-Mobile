@@ -58,7 +58,6 @@ const DoctorScreen = ({ navigation, route }) => {
     const doctorWeekdays = { ...doctor.availableTime.weekdays };
     const removedMinutes = removeMinute(doctorWeekdays);
     const mergeSameTimeDays = mergeSameDays(removedMinutes);
-    console.log(mergeSameTimeDays);
     setWeekdays(mergeSameTimeDays);
   }, [doctor]);
 
@@ -120,14 +119,12 @@ const DoctorScreen = ({ navigation, route }) => {
             />
             <View style={styles.doctorInfo}>
               <Text style={styles.infoText}>{doctor.englishFullName}</Text>
-              <Text style={styles.infoText}>{doctor.specialization}</Text>
+              <Text style={styles.specialization}>{doctor.specialization}</Text>
               <Text style={styles.address}>{doctor.clinicAddress}</Text>
             </View>
           </View>
           <Spacer />
           <View>
-            <Text style={styles.title}>About</Text>
-            <Text style={styles.about}>{doctor.about}</Text>
             <Button
               buttonText="Reviews"
               onPress={() => navigation.navigate("Reviews", { doctorId })}
@@ -193,6 +190,12 @@ const styles = StyleSheet.create({
     color: colors.BlueI,
     marginBottom: responsiveHeight(10),
   },
+  specialization: {
+    fontSize: responsiveFontSize(16),
+    fontFamily: "Cairo-Regular",
+    color: colors.DarkGrey,
+    marginBottom: responsiveHeight(10),
+  },
   info: {
     flexDirection: "row",
     marginTop: 20,
@@ -200,6 +203,9 @@ const styles = StyleSheet.create({
   image: {
     height: 96,
     width: 72,
+    borderRadius: 5,
+    borderColor: colors.GreyII,
+    borderWidth: 1,
   },
   date: {
     padding: 13,
@@ -215,15 +221,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Cairo-SemiBold",
-    fontSize: 24,
+    fontSize: responsiveFontSize(18),
     color: colors.BlueI,
     marginBottom: 5,
-  },
-  about: {
-    fontFamily: "Cairo-Regular",
-    fontSize: 18,
-    color: colors.GreyI,
-    lineHeight: 20,
   },
   address: {
     fontSize: responsiveFontSize(14),
@@ -235,12 +235,12 @@ const styles = StyleSheet.create({
   },
   dayText: {
     fontFamily: "Cairo-SemiBold",
-    fontSize: 20,
+    fontSize: responsiveFontSize(16),
     color: colors.DarkGrey,
   },
   dayTimeText: {
     fontFamily: "Cairo-Regular",
-    fontSize: 18,
+    fontSize: responsiveFontSize(16),
     color: colors.DarkGrey,
     marginLeft: 10,
   },

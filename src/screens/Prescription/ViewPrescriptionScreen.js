@@ -58,10 +58,6 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
     [patientId, token]
   );
 
-  useEffect(() => {
-    console.log(prescription);
-  }, [prescription]);
-
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -77,14 +73,15 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
           <InfoField title="Diagnose" value={diagnose} />
           <View
             style={{
-              height: 20,
+              height: 10,
             }}
           />
           <View
             style={{
               borderBottomWidth: 1,
               borderBottomColor: colors.GreyII,
-              marginVertical: 10,
+              marginTop: 10,
+              marginBottom: 20,
             }}
           />
           <FlatList

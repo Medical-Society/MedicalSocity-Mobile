@@ -5,6 +5,7 @@ import {
   StyleSheet,
   StatusBar,
   Platform,
+  ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
@@ -14,11 +15,7 @@ import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import { Context as AuthContext } from "../context/AuthContext";
 import MessagesModal from "../components/MessagesModal";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import {
-  colors,
-  responsiveFontSize,
-  responsiveHeight,
-} from "../../AppStyles";
+import { colors, responsiveFontSize, responsiveHeight } from "../../AppStyles";
 import GenderInput from "../components/GenderInput";
 import SafeScrollView from "../components/SafeScrollView";
 import Header from "../components/Header";
@@ -27,16 +24,19 @@ const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
 
-  const initialSignUpData = React.useMemo(() => ({
-    patientName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    birthdate: new Date(),
-    gender: "",
-    address: "",
-    phoneNumber: "",
-  }), []);
+  const initialSignUpData = React.useMemo(
+    () => ({
+      patientName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      birthdate: new Date(),
+      gender: "",
+      address: "",
+      phoneNumber: "",
+    }),
+    []
+  );
   const [signUpData, setSignUpData] = useState(initialSignUpData);
 
   useEffect(() => {
@@ -45,11 +45,7 @@ const SignUp = ({ navigation }) => {
       setSignUpData(initialSignUpData);
     });
     return unsubscribe;
-  }, [navigation, clearMessage, initialSignUpData]);
-
-  // useEffect(() => {
-  //   console.log(signUpData);
-  // }, [signUpData]);
+  }, [navigation, initialSignUpData]);
 
   const handleInputChange = useCallback((fieldName, text) => {
     setSignUpData((prevState) => ({ ...prevState, [fieldName]: text }));
@@ -159,40 +155,52 @@ const SignUp = ({ navigation }) => {
 
   return (
     <SafeScrollView
+      marginBottom={0}
       header={
-        <Header title="SignUp" backButtonHandler={() => navigation.goBack()} />
-      }>
-      <KeyboardAvoidingView
-        style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
-        behavior="padding"
-        enabled
-        keyboardVerticalOffset={20}>
-        {signupInputs}
-        <GenderInput
-          gender={signUpData.gender}
-          handleInputChange={handleInputChange}
-        />
-        <DatePicker />
-        <Button
-          onPress={handleSignUp}
-          buttonText="SignUp"
-          isLoading={isLoading}
-        />
-
-        <HaveAccOrNot
-          text="Already have an account?"
-          routeName="Login"
-          navigation={navigation}
-        />
-        {state.errorMessage || state.successMessage ? (
-          <MessagesModal
-            errorMessage={state.errorMessage}
-            successMessage={state.successMessage}
-            clearMessage={clearMessage}
+        <>
+          <Header
+            title="SignUp"
+            backButtonHandler={() => navigation.goBack()}
           />
-        ) : null}
-      </KeyboardAvoidingView>
-    </SafeScrollView>
+          <KeyboardAvoidingView
+            style={{
+              flex: 1,
+              flexDirection: "column",
+              justifyContent: "center",
+              marginHorizontal: 10,
+            }}
+            behavior="padding"
+            enabled
+            keyboardVerticalOffset={20}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {signupInputs}
+              <GenderInput
+                gender={signUpData.gender}
+                handleInputChange={handleInputChange}
+              />
+              <DatePicker />
+              <Button
+                onPress={handleSignUp}
+                buttonText="SignUp"
+                isLoading={isLoading}
+              />
+
+              <HaveAccOrNot
+                text="Already have an account?"
+                routeName="Login"
+                navigation={navigation}
+              />
+              {state.errorMessage || state.successMessage ? (
+                <MessagesModal
+                  errorMessage={state.errorMessage}
+                  successMessage={state.successMessage}
+                  clearMessage={clearMessage}
+                />
+              ) : null}
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </>
+      }></SafeScrollView>
   );
 };
 
@@ -260,7 +268,6 @@ const styles = StyleSheet.create({
     height: 260,
     display: "flex",
     justifyContent: "center",
-    alignItems: "flex-start",
   },
   dateText: {
     fontSize: 18,

@@ -1,19 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
-import { ref, onValue } from "firebase/database";
-import { database } from "../../services/firebase";
-import { Context as UserContext } from "../../context/UserContext";
+import React, { useState, useContext } from "react";
+import { StyleSheet } from "react-native";
 import SafeScrollView from "../../components/SafeScrollView";
 import Header from "../../components/Header";
 import InputField from "../../components/auth/InputField";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Context as IotContext } from "../../context/IotContext";
 import Button from "../../components/SubmitButton";
 
 const LoginSensorScreen = ({ navigation }) => {
   const { loginWithSensorId } = useContext(IotContext);
-
   const [sensorId, setSensorId] = useState("");
+  
   return (
     <SafeScrollView
       header={

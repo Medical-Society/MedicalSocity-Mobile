@@ -27,7 +27,6 @@ const Header = ({ title, backButtonHandler }) => {
   );
 };
 
-// define your styles
 const styles = StyleSheet.create({
   header: {
     marginHorizontal: responsiveWidth(12),
@@ -37,7 +36,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontFamily: "Cairo-SemiBold",
-    fontSize: responsiveFontSize(24),
+    fontSize: responsiveFontSize(20),
     color: colors.BlueI,
   },
   iconButton: {

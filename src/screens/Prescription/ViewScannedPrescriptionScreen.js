@@ -87,12 +87,8 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
     [patientId, token]
   );
 
-  useEffect(() => {
-    console.log(prescription);
-  }, [prescription]);
-
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {isLoading ? (
         <Skeleton />
       ) : (
@@ -124,12 +120,12 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
             <TouchableOpacity
               style={styles.editButton}
               onPress={() => setMode("Edit")}>
-              <MaterialIcons name="edit" size={35} color={colors.White} />
+              <MaterialIcons name="edit" size={30} color={colors.White} />
             </TouchableOpacity>
           )}
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -163,7 +159,7 @@ const styles = StyleSheet.create({
   editButton: {
     position: "absolute",
     bottom: 10,
-    right: 10,
+    right: 0,
     backgroundColor: colors.BlueII,
     padding: 10,
     borderRadius: 50,

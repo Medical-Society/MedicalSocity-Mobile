@@ -14,8 +14,8 @@ import axios from "axios";
 import MessagesModal from "../../components/MessagesModal";
 import { Context as AuthContext } from "../../context/AuthContext";
 import { Context as UserContext } from "../../context/UserContext";
-import FilledStarIcon from "../../../assets/SvgIcons.js/FilledStarIcon";
-import EmptyStarIcon from "../../../assets/SvgIcons.js/EmptyStarIcon";
+import FilledStarIcon from "../../../assets/SvgIcons/FilledStarIcon";
+import EmptyStarIcon from "../../../assets/SvgIcons/EmptyStarIcon";
 import usePaginatedFetch from "../../hooks/usePaginatedFetch";
 import MultiLineTextInput from "../../components/MultiLineTextInput";
 

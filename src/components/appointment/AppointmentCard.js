@@ -19,13 +19,13 @@ const buildButtonStatusBased = (status) => {
     case "FINISHED":
       return {
         buttonText: "Finished",
-        mainColor: colors.BlueI,
+        mainColor: colors.Green,
         backgroundColor: colors.LightGrey,
       };
     case "CANCELED":
       return {
         buttonText: "Canceled",
-        mainColor: colors.White,
+        mainColor: colors.DarkRed,
         backgroundColor: colors.DarkRed,
       };
   }
@@ -38,32 +38,27 @@ const AppointmentCard = ({ appointment, onPress }) => {
   const { buttonText, mainColor, backgroundColor } =
     buildButtonStatusBased(status);
 
-  useEffect(() => {
-    getNumberOfPatientsBeforeYou();
-  }, [getNumberOfPatientsBeforeYou]);
+  console.log("Button Text: ", buttonText);
 
-  const getNumberOfPatientsBeforeYou = useCallback(async () => {
-    try {
-      // /appointments/:appointmentId/beforeYou
-      const response = await patientsApi.get(
-        `/appointments/${appointment._id}/beforeYou`
-      );
-      console.log(response.data.data.appointmentsBeforeYou);
-      setNumberOfPatientsBeforeYou(response.data.data.appointmentsBeforeYou);
-    } catch (error) {
-      console.log(error.response.data.message);
-    }
+  useEffect(() => {
+    const getNumberOfPatientsBeforeYou = async () => {
+      try {
+        // /appointments/:appointmentId/beforeYou
+        const response = await patientsApi.get(
+          `/appointments/${appointment._id}/beforeYou`
+        );
+        console.log(response.data.data.appointmentsBeforeYou);
+        setNumberOfPatientsBeforeYou(response.data.data.appointmentsBeforeYou);
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
+    };
+
+    getNumberOfPatientsBeforeYou();
   }, [appointment._id]);
 
   return (
-    <View
-      style={[
-        styles.card,
-        {
-          backgroundColor:
-            status === "PENDING" ? colors.White : colors.LightGrey,
-        },
-      ]}>
+    <View style={styles.card}>
       <View style={styles.header}>
         <Text style={styles.doctorName}>{doctor.englishFullName}</Text>
         <Text style={styles.date}>{formattedDYM(date)}</Text>
@@ -83,14 +78,24 @@ const AppointmentCard = ({ appointment, onPress }) => {
       </View>
 
       <Text style={styles.description}>{description}</Text>
-      <TouchableOpacity
-        onPress={onPress}
-        style={{
-          ...styles.button,
-          borderColor: mainColor,
-          backgroundColor: backgroundColor,
-        }}
-        disabled={status !== "PENDING"}>
+      {appointment.status === "PENDING" && (
+        <TouchableOpacity
+          onPress={onPress}
+          style={{
+            ...styles.button,
+            borderColor: mainColor,
+            backgroundColor: backgroundColor,
+          }}>
+          <Text
+            style={{
+              ...styles.buttonText,
+              color: mainColor,
+            }}>
+            {buttonText}
+          </Text>
+        </TouchableOpacity>
+      )}
+      {appointment.status !== "PENDING" && (
         <Text
           style={{
             ...styles.buttonText,
@@ -98,7 +103,7 @@ const AppointmentCard = ({ appointment, onPress }) => {
           }}>
           {buttonText}
         </Text>
-      </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -109,10 +114,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     backgroundColor: colors.White,
-    borderColor: colors.LightGrey,
+    borderColor: colors.GreyII,
     borderWidth: 0.3,
-    shadowColor: colors.Black,
-    elevation: 3,
     marginVertical: 5,
   },
   header: {
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   price: {
-    color: "#060B73",
+    color: colors.DarkBlack,
     fontSize: 16,
     flex: 1,
     fontFamily: "Cairo-Regular",
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   patientsBefore: {
-    color: "#060B73",
+    color: colors.DarkBlack,
     fontSize: 16,
     lineHeight: 30,
   },

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { TextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -11,7 +11,15 @@ import {
 
 // eslint-disable-next-line react/display-name
 const InputField = React.memo(
-  ({ value, label, onChangeText, secureTextEntry, editable }) => {
+  ({
+    value,
+    label,
+    onChangeText,
+    secureTextEntry,
+    editable,
+    placeholder,
+    lastField = false,
+  }) => {
     const [showPassword, setShowPassword] = useState(!secureTextEntry);
 
     const toggleShowPassword = () => {
@@ -19,13 +27,27 @@ const InputField = React.memo(
     };
 
     return (
-      <View style={styles.container}>
+      <View
+        style={
+          lastField
+            ? { ...styles.container, marginBottom: responsiveHeight(10) }
+            : { ...styles.container, marginBottom: responsiveHeight(15) }
+        }>
+        <Text
+          style={{
+            fontSize: responsiveFontSize(18),
+            fontFamily: "Cairo-Regular",
+            paddingBottom: 5,
+          }}>
+          {label}
+        </Text>
         <TextInput
           style={styles.inputField}
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={!showPassword}
-          label={label}
+          // label={label}
+          placeholder={placeholder}
           editable={editable}
         />
         {secureTextEntry && (
@@ -44,11 +66,8 @@ const InputField = React.memo(
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 10,
     paddingHorizontal: 10,
-    height: 70,
     justifyContent: "center",
-    marginBottom: 15,
     width: "100%",
   },
   inputField: {
@@ -57,6 +76,8 @@ const styles = StyleSheet.create({
     color: colors.Black,
     borderWidth: StyleSheet.hairlineWidth,
     backgroundColor: colors.White,
+    fontSize: responsiveFontSize(16),
+    justifyContent: "center",
   },
   icon: {
     position: "absolute",

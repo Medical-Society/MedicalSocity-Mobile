@@ -86,7 +86,7 @@ export const colors = {
   WhiteI: "#F9F9F9",
   OffWhite: "#F0EEEE",
   Black: "#000000",
-  DarkBlack: "#1E1E1Es",
+  DarkBlack: "#1E1E1E",
   DarkCyan: "#003441",
   Cyan: "#55C4E0",
   LightSeaGreen: "#1B7B94",

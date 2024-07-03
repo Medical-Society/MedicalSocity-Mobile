@@ -14,12 +14,8 @@ const IotStack = () => {
 
   useEffect(() => {
     loadSensorIdFromStorage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log("state", state);
-  }, [state]);
 
   return (
     <Stack.Navigator

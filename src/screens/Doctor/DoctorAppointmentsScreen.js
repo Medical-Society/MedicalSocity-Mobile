@@ -17,9 +17,7 @@ import {
 } from "../../../AppStyles";
 import doctorApi from "../../services/doctor";
 import patientApi from "../../services/patient";
-import {
-  Context as AuthContext,
-} from "../../context/AuthContext";
+import { Context as AuthContext } from "../../context/AuthContext";
 import Header from "../../components/Header";
 import Button from "../../components/SubmitButton";
 import MessagesModal from "../../components/MessagesModal";
@@ -228,7 +226,7 @@ const styles = StyleSheet.create({
   textDate: {
     fontSize: responsiveFontSize(16),
     fontFamily: "Cairo-Regular",
-    color: colors.BlueI,
+    color: colors.Black,
     textAlign: "center",
   },
   selectedTextDate: {

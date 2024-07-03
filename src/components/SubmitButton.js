@@ -10,7 +10,10 @@ const Button = ({
   color = "default",
   disabled = false,
 }) => (
-  <TouchableOpacity onPress={onPress} disabled={disabled || isLoading}>
+  <TouchableOpacity
+    onPress={onPress}
+    disabled={disabled || isLoading}
+    activeOpacity={0.8}>
     <LinearGradient
       colors={
         color === "default"
@@ -44,17 +47,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: responsiveHeight(14),
-    borderRadius: 30,
     shadowColor: colors.Black,
     shadowOffset: {
       width: 0,
       height: 0,
     },
+    overflow: "hidden",
     marginVertical: 5,
-
-    shadowOpacity: 0.25,
-    shadowRadius: 3,
-    elevation: 5,
+    borderRadius: 10,
   },
   buttonText: {
     color: colors.White,

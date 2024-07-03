@@ -7,11 +7,12 @@ import {
   responsiveWidth,
 } from "../../../AppStyles";
 
-import FilledStarIcon from "../../../assets/SvgIcons.js/FilledStarIcon";
+import FilledStarIcon from "../../../assets/SvgIcons/FilledStarIcon";
 
 // eslint-disable-next-line react/display-name
 const Review = memo(({ review: { patient, rating, comment } }) => {
-  const [patientName, setPatientName] = useState("Peter");
+  const [patientName, setPatientName] = useState("");
+
   useEffect(() => {
     setPatientName(patient.patientName);
   }, [patient.patientName]);
@@ -23,6 +24,7 @@ const Review = memo(({ review: { patient, rating, comment } }) => {
     }
     return ratingArray;
   };
+
   return (
     <View>
       <View style={styles.header}>
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
   },
   reviewContent: {
     marginHorizontal: responsiveWidth(12),
-    marginVertical: responsiveHeight(10),
+    marginVertical: responsiveHeight(6),
     borderWidth: 1,
     borderColor: colors.Grey,
     borderRadius: 10,

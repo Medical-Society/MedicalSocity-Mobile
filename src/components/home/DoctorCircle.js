@@ -7,7 +7,7 @@ const DoctorCircle = ({ doctor, navigation }) => {
     doctorCircle: {
       justifyContent: "center",
       alignItems: "center",
-      margin: 10,
+      marginHorizontal: 10,
     },
     image: {
       width: 85,
@@ -31,10 +31,20 @@ const DoctorCircle = ({ doctor, navigation }) => {
     <View>
       <TouchableOpacity
         style={styles.doctorCircle}
-        onPress={() => navigation.navigate("Doctor", { doctor })}>
-        <Image source={doctor.image} style={styles.image} />
-        <Text style={styles.name}>{doctor.name}</Text>
-        <Text style={styles.specialty}>{doctor.specialty}</Text>
+        onPress={() =>
+          navigation.navigate("DoctorStack", {
+            screen: "Doctor",
+            params: { doctorId: doctor?._id },
+          })
+        }>
+        <Image
+          source={{
+            uri: doctor?.avatar,
+          }}
+          style={styles.image}
+        />
+        <Text style={styles.name}>{doctor?.englishFullName}</Text>
+        <Text style={styles.specialty}>{doctor?.specialization}</Text>
       </TouchableOpacity>
     </View>
   );

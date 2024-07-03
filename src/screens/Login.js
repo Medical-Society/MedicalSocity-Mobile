@@ -12,11 +12,7 @@ import InputField from "../components/auth/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import { Context as AuthContext } from "../context/AuthContext";
 import MessagesModal from "../components/MessagesModal";
-import {
-  colors,
-  responsiveFontSize,
-  responsiveHeight,
-} from "../../AppStyles";
+import { colors, responsiveFontSize, responsiveHeight } from "../../AppStyles";
 import SafeScrollView from "../components/SafeScrollView";
 import Header from "../components/Header";
 
@@ -34,7 +30,7 @@ const Login = ({ navigation }) => {
       setIsLoading(false);
     });
     return unsubscribe;
-  }, [clearMessage, navigation]);
+  }, [navigation]);
 
   const handleLogin = useCallback(() => {
     login({ email, password }, setIsLoading);
@@ -59,6 +55,7 @@ const Login = ({ navigation }) => {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          lastField={true}
         />
         <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
           <Text style={styles.forgetPassword}>Forget your password</Text>
@@ -99,10 +96,11 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(20),
   },
   forgetPassword: {
-    textAlign: "left",
+    paddingHorizontal: 10,
     marginBottom: responsiveHeight(10),
     fontSize: responsiveFontSize(16),
     color: colors.DarkGrey,
+    lineHeight: 24,
   },
 });
 

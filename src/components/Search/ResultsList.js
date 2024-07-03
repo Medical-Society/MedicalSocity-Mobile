@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import ResultsDetail from "./ResultsDetail";
 
 const ResultsList = ({ results, navigation }) => {
@@ -13,28 +8,26 @@ const ResultsList = ({ results, navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        vertical
-        showsHorizontalScrollIndicator={false}
-        data={results}
-        keyExtractor={(result) => result._id}
-        renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() =>
-                navigation.navigate("DoctorStack", {
-                  screen: "Doctor",
-                  params: { doctorId: item._id },
-                })
-              }>
-              <ResultsDetail doctor={item} />
-            </TouchableOpacity>
-          );
-        }}
-      />
-    </View>
+    <FlatList
+      vertical
+      showsVerticalScrollIndicator={false}
+      data={results}
+      keyExtractor={(result) => result._id}
+      renderItem={({ item }) => {
+        return (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              navigation.navigate("DoctorStack", {
+                screen: "Doctor",
+                params: { doctorId: item._id },
+              })
+            }>
+            <ResultsDetail doctor={item} />
+          </TouchableOpacity>
+        );
+      }}
+    />
   );
 };
 

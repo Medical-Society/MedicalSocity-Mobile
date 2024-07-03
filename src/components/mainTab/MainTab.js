@@ -8,10 +8,10 @@ import AiChatbot from "../../screens/Chat/AiChatbot";
 import { colors, responsiveWidth } from "../../../AppStyles";
 import { Ionicons } from "@expo/vector-icons";
 import ChatsScreen from "../../screens/Chat/ChatsScreen";
-import HomeIcon from "../../../assets/SvgIcons.js/HomeIcon";
-import CalendarIcon from "../../../assets/SvgIcons.js/CalendarIcon";
-import ChatsIcon from "../../../assets/SvgIcons.js/ChatsIcon";
-import AiIcon from "../../../assets/SvgIcons.js/AiIcon";
+import HomeIcon from "../../../assets/SvgIcons/HomeIcon";
+import CalendarIcon from "../../../assets/SvgIcons/CalendarIcon";
+import ChatsIcon from "../../../assets/SvgIcons/ChatsIcon";
+import AiIcon from "../../../assets/SvgIcons/AiIcon";
 import Calendar from "../../screens/Calendar";
 
 const Tab = createBottomTabNavigator();

@@ -24,7 +24,6 @@ const loginWithSensorId = (dispatch) => {
     onValue(dbRef, async (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        dispatch({ type: "SET_DATA", payload: data });
         dispatch({ type: "SET_ERROR_MESSAGE", payload: "" });
         try {
           await AsyncStorage.setItem("sensorId", sensorId);

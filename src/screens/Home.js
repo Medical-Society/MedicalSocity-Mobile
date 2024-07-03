@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, View, FlatList } from "react-native";
+import { Text, StyleSheet, View, FlatList, Image } from "react-native";
 import { useContext } from "react";
 import { Context as AuthContext } from "../context/AuthContext";
 import SearchBar from "../components/Search/SearchBar";
@@ -9,70 +9,26 @@ import { colors, responsiveFontSize } from "../../AppStyles";
 import SafeScrollView from "../components/SafeScrollView";
 import HomeCard from "../components/home/HomeCard";
 import DoctorCircle from "../components/home/DoctorCircle";
-import DoctorIcon from "../../assets/SvgIcons.js/DoctorIcon";
-
+import DoctorIcon from "../../assets/SvgIcons/DoctorIcon";
+import usePaginatedFetch from "../hooks/usePaginatedFetch";
 const Home = ({ navigation }) => {
   const [term, setTerm] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [searchApi, results, , setResults] = useResults();
   const token = useContext(AuthContext).state.token;
 
-  const doctors = [
-    {
-      name: "Dr. Peter Joseph",
-      specialty: "Cardiologist",
-      address:
-        "His Address in details His Address in details His Address in details",
-      price: 200,
-      about:
-        "about about him about him about him about him about him about him about him about him about him about him about him about him him about him about him about him about",
-      schedule: [
-        {
-          id: 1,
-          day: "Mon",
-          date: "12",
-        },
-        {
-          id: 2,
-          day: "Tue",
-          date: "13",
-        },
-        {
-          id: 3,
-          day: "Wed",
-          date: "14",
-        },
-        {
-          id: 4,
-          day: "Thu",
-          date: "15",
-        },
-        {
-          id: 5,
-          day: "Sat",
-          date: "17",
-        },
-        {
-          id: 6,
-          day: "Sun",
-          date: "18",
-        },
-      ],
-      appointments: {
-        morning: "9:00 AM - 12:00 PM",
-        evening: "5:00 PM - 7:00 PM",
-      },
-      image: require("../../assets/doctor2.png"),
-    },
-  ];
+  const { data: doctors } = usePaginatedFetch(
+    "https://api.medical-society.fr.to/api/v1/doctors",
+    "doctors"
+  );
 
-  // make on the screen focus, setResults to empty array
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
+      setTerm("");
       setResults([]);
     });
     return unsubscribe;
-  }, [navigation, setResults]);
+  }, [navigation]);
 
   useEffect(() => {
     if (results.length !== 0) {
@@ -84,13 +40,8 @@ const Home = ({ navigation }) => {
     <SafeScrollView
       header={
         <>
-          <SearchBar
-            term={term}
-            onTermChange={setTerm}
-            setResults={setResults}
-            onTermSubmit={() => searchApi(term, token)}
-            placeholder={"Search for doctors, clinics, etc."}
-          />
+          <Text style={styles.appTitle}>Medical Society</Text>
+
           <OcrModal
             navigation={navigation}
             isVisible={modalVisible}
@@ -98,11 +49,15 @@ const Home = ({ navigation }) => {
           />
         </>
       }>
-      <View>
-        <View style={styles.headBestDoctorsSection}>
-          <Text style={styles.headBestDoctors}>Best Doctors</Text>
-          {/* <Text style={styles.headAllDoctors}>All Doctors</Text> */}
-        </View>
+      <SearchBar
+        term={term}
+        onTermChange={setTerm}
+        setResults={setResults}
+        onTermSubmit={() => searchApi(term, token)}
+        placeholder={"Search for Doctor, Address"}
+      />
+      <View style={styles.headBestDoctorsSection}>
+        <Text style={styles.headBestDoctors}>Best Doctors</Text>
       </View>
       <FlatList
         horizontal
@@ -112,6 +67,7 @@ const Home = ({ navigation }) => {
         renderItem={({ item }) => {
           return <DoctorCircle doctor={item} navigation={navigation} />;
         }}
+        style={styles.doctorsList}
       />
       <HomeCard
         feature={{
@@ -165,21 +121,32 @@ const Home = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  appTitle: {
+    color: colors.BlueI,
+    fontSize: 18,
+    alignSelf: "center",
+    fontFamily: "Cinzel",
+    lineHeight: 22,
+    marginVertical: 16,
+  },
   headBestDoctorsSection: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginHorizontal: 20,
     marginVertical: 10,
   },
   headBestDoctors: {
-    fontSize: responsiveFontSize(16),
-    fontFamily: "Cairo-Bold",
+    fontSize: responsiveFontSize(18),
+    fontFamily: "Cairo-Medium",
     color: colors.BlueII,
+    lineHeight: 34,
   },
   headAllDoctors: {
     fontSize: responsiveFontSize(15),
     color: "#060B73",
     fontFamily: "Cairo-Regular",
+  },
+  doctorsList: {
+    marginBottom: 10,
   },
 });
 

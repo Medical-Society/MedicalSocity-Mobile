@@ -13,6 +13,7 @@ import LoadingModal from "../../components/LoadingModal";
 import Header from "../../components/Header";
 import InputField from "../../components/auth/InputField";
 import SafeScrollView from "../../components/SafeScrollView";
+import Button from "../../components/SubmitButton";
 
 const COLORS = {
   primary: "#242760",
@@ -112,8 +113,8 @@ const EditProfile = ({ navigation }) => {
             onChangeText={(value) => setPhoneNumber(value)}
           />
 
-          <TouchableOpacity
-            style={styles.saveButton}
+          <Button
+            buttonText="Save"
             onPress={() =>
               updateUserDataServer(
                 {
@@ -124,9 +125,8 @@ const EditProfile = ({ navigation }) => {
                 navigation,
                 setLoading
               )
-            }>
-            <Text style={styles.saveButtonText}>Save Change</Text>
-          </TouchableOpacity>
+            }
+          />
         </View>
       </KeyboardAvoidingView>
     </SafeScrollView>

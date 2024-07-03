@@ -7,17 +7,19 @@ const SafeScrollView = ({ children, header, marginBottom = 60 }) => {
   return (
     <SafeAreaView style={styles.container}>
       {header}
-      <ScrollView
-        style={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            ...styles.marginedContainer,
-            marginBottom: marginBottom,
-          }}>
-          {children}
-        </View>
-      </ScrollView>
+      {children && (
+        <ScrollView
+          style={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}>
+          <View
+            style={{
+              ...styles.marginedContainer,
+              marginBottom: marginBottom,
+            }}>
+            {children}
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

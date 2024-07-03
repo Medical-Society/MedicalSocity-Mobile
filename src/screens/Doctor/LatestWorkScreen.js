@@ -6,6 +6,7 @@ import Work from "../../components/doctor/Work";
 import { ActivityIndicator } from "react-native-paper";
 import { colors } from "../../../AppStyles";
 import usePaginatedFetch from "../../hooks/usePaginatedFetch";
+import SafeFlatListView from "../../components/SafeFlatListView";
 
 const LatestWorkScreen = ({ navigation, route }) => {
   const backButtonHandler = () => {
@@ -24,8 +25,11 @@ const LatestWorkScreen = ({ navigation, route }) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header title="Latest Work" backButtonHandler={backButtonHandler} />
+    <SafeFlatListView
+      header={
+        <Header title="Latest Work" backButtonHandler={backButtonHandler} />
+      }
+      marginBottom={10}>
       <View style={styles.works}>
         <FlatList
           data={posts}
@@ -49,7 +53,7 @@ const LatestWorkScreen = ({ navigation, route }) => {
           showsVerticalScrollIndicator={false}
         />
       </View>
-    </SafeAreaView>
+    </SafeFlatListView>
   );
 };
 
@@ -60,7 +64,6 @@ const styles = StyleSheet.create({
   },
   works: {
     flex: 1,
-    marginHorizontal: 10,
   },
 });
 

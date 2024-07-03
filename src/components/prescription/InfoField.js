@@ -18,12 +18,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   mainText: {
-    fontSize: 20,
+    fontSize: 18,
     color: colors.BlueI,
     fontFamily: "Cairo-Medium",
   },
   valueText: {
-    fontSize: 18,
+    fontSize: 16,
     color: colors.GreyI,
     fontFamily: "Cairo-Medium",
   },

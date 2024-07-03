@@ -1,20 +1,14 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import React, { useContext } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Context as AuthContext } from "../../context/AuthContext";
 import Header from "../../components/Header";
-import { colors } from "../../../AppStyles";
+import { colors, responsiveFontSize } from "../../../AppStyles";
 import SafeScrollView from "../../components/SafeScrollView";
-import PrescriptionIcon from "../../../assets/SvgIcons.js/PrescriptionIcon";
-import PersonIcon from "../../../assets/SvgIcons.js/PersonIcon";
-import AppointmentsIcon from "../../../assets/SvgIcons.js/AppointmentsIcon";
-import LogoutIcon from "../../../assets/SvgIcons.js/LogoutIcon";
+import PrescriptionIcon from "../../../assets/SvgIcons/PrescriptionIcon";
+import PersonIcon from "../../../assets/SvgIcons/PersonIcon";
+import AppointmentsIcon from "../../../assets/SvgIcons/AppointmentsIcon";
+import LogoutIcon from "../../../assets/SvgIcons/LogoutIcon";
 const Profile = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
 
@@ -186,7 +180,7 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontFamily: "Cairo-Medium",
-    fontSize: 20,
+    fontSize: responsiveFontSize(18),
     marginVertical: 10,
     color: colors.BlueI,
   },
@@ -198,7 +192,7 @@ const styles = StyleSheet.create({
   },
   listItemText: {
     fontFamily: "Cairo-Regular",
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     marginLeft: 6,
     lineHeight: 30,
   },

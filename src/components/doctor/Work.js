@@ -1,19 +1,81 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import { colors } from "../../../AppStyles";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const Album = ({ beforeImage, afterImage }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [image, setImage] = useState("");
+
   return (
     <View style={styles.album}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+        style={styles.modal}>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => {
+            setModalVisible(!modalVisible);
+          }}>
+          <AntDesign name="close" size={24} color={colors.White} />
+        </TouchableOpacity>
+
+        <Image
+          source={{ uri: image }}
+          style={styles.clickedImage}
+          resizeMode="contain"
+        />
+        {beforeImage && afterImage && (
+          <TouchableOpacity
+            style={styles.leftArrow}
+            onPress={() => {
+              setImage(beforeImage);
+            }}>
+            <AntDesign name="left" size={24} color={colors.White} />
+          </TouchableOpacity>
+        )}
+        {beforeImage && afterImage && (
+          <TouchableOpacity
+            style={styles.rightArrow}
+            onPress={() => {
+              setImage(afterImage);
+            }}>
+            <AntDesign name="right" size={24} color={colors.White} />
+          </TouchableOpacity>
+        )}
+      </Modal>
+
       {beforeImage ? (
-        <View style={styles.imageContainer}>
+        <TouchableOpacity
+          style={styles.imageContainer}
+          onPress={() => {
+            setModalVisible(true);
+            setImage(beforeImage);
+          }}>
           <Image source={{ uri: beforeImage }} style={styles.image} />
-        </View>
+        </TouchableOpacity>
       ) : null}
       {afterImage ? (
-        <View style={styles.imageContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            setModalVisible(true);
+            setImage(afterImage);
+          }}
+          style={styles.imageContainer}>
           <Image source={{ uri: afterImage }} style={styles.image} />
-        </View>
+        </TouchableOpacity>
       ) : null}
     </View>
   );
@@ -21,7 +83,7 @@ const Album = ({ beforeImage, afterImage }) => {
 
 const Work = ({ beforeImage, afterImage, description }) => {
   return (
-    <View>
+    <View style={styles.postContainer}>
       <Album beforeImage={beforeImage} afterImage={afterImage} />
       <Text style={styles.description}>{description}</Text>
     </View>
@@ -29,6 +91,22 @@ const Work = ({ beforeImage, afterImage, description }) => {
 };
 
 const styles = StyleSheet.create({
+  postContainer: {
+    backgroundColor: colors.WhiteI,
+    borderRadius: 10,
+    borderColor: colors.GreyII,
+    borderWidth: 1,
+    marginVertical: 10,
+    marginHorizontal: 5,
+  },
+  closeButton: {
+    backgroundColor: colors.Black,
+    padding: 10,
+    borderRadius: 50,
+    position: "absolute",
+    right: 0,
+    zIndex: 1,
+  },
   album: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -36,25 +114,44 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginVertical: 5,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   image: {
     width: "100%",
     height: 260,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   description: {
-    marginTop: 6,
     fontSize: 16,
-    color: colors.BlueII,
+    color: colors.DarkBlack,
     fontFamily: "Cairo-Regular",
-    lineHeight: 24,
+    lineHeight: 30,
+    padding: 10,
   },
-  title: {
-    fontSize: 18,
-    color: colors.BlueI,
-    fontFamily: "Cairo-Bold",
-    textAlign: "center",
-    marginBottom: 10,
+  modal: {
+    flex: 1,
+    backgroundColor: colors.Black,
+    padding: 20,
+  },
+  clickedImage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.Black,
+  },
+  rightArrow: {
+    position: "absolute",
+    right: 0,
+    top: "50%",
+    backgroundColor: colors.Black,
+  },
+  leftArrow: {
+    position: "absolute",
+    left: 0,
+    top: "50%",
+    backgroundColor: colors.Black,
   },
 });
 

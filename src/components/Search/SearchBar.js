@@ -22,36 +22,42 @@ const SearchBar = ({
         onChangeText={onTermChange}
         onEndEditing={onTermSubmit}
       />
-      <TouchableOpacity
-        style={{ alignSelf: "center" }}
-        onPress={() => {
-          onTermChange("");
-          setResults([]);
-        }}>
-        <Feather name="x" style={styles.iconStyle} />
-      </TouchableOpacity>
+      {term !== "" && (
+        <TouchableOpacity
+          style={{ alignSelf: "center" }}
+          onPress={() => {
+            onTermChange("");
+            setResults([]);
+          }}>
+          <Feather name="x" style={styles.iconStyle} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   backgroundStyle: {
-    backgroundColor: colors.OffWhite,
+    backgroundColor: colors.WhiteI,
     height: 40,
     borderRadius: 5,
     marginHorizontal: 10,
     flexDirection: "row",
-    marginBottom: 10,
+    borderColor: colors.LightGrey,
+    borderWidth: 1,
+    marginBottom: 5,
   },
   inputStyle: {
     flex: 1,
     fontFamily: "Cairo-Regular",
     fontSize: 18,
+    color: colors.DarkGrey,
   },
   iconStyle: {
     fontSize: 25,
     alignSelf: "center",
     marginHorizontal: 15,
+    color: colors.DarkGrey,
   },
 });
 
