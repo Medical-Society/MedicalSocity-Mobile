@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import SafeScrollView from "../components/SafeScrollView";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import SafeFlatListView from "../components/SafeFlatListView";
 import Header from "../components/Header";
 import patientApi from "../services/patient";
 import { Context as AuthContext } from "../context/AuthContext";
@@ -61,10 +61,11 @@ const Calendar = ({ navigation }) => {
 
     return unsubscribe;
   }, [fetchAppointments, navigation]);
-  
+
   return (
-    <SafeScrollView
-      header={<Header title="Calendar" navigation={navigation} />}>
+    <SafeFlatListView
+      header={<Header title="Calendar" navigation={navigation} />}
+      marginBottom={60}>
       <View style={styles.scheduleItem}>
         <Text style={styles.title}>Time</Text>
         <Text style={styles.title}>Appointments</Text>
@@ -72,15 +73,19 @@ const Calendar = ({ navigation }) => {
       </View>
 
       <View style={styles.scheduleContainer}>
-        {appointments.map((item, index) => (
-          <View key={index} style={styles.scheduleItem}>
-            <Text style={styles.text}>{item.time}</Text>
-            <Text style={styles.text}>{item.doctor}</Text>
-            <Text style={styles.text}>{item.day}</Text>
-          </View>
-        ))}
+        <FlatList
+          data={appointments}
+          renderItem={({ item }) => (
+            <View style={styles.scheduleItem}>
+              <Text style={styles.text}>{item.time}</Text>
+              <Text style={styles.text}>{item.doctor}</Text>
+              <Text style={styles.text}>{item.day}</Text>
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
-    </SafeScrollView>
+    </SafeFlatListView>
   );
 };
 
@@ -108,6 +113,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#cce5ff",
   },
   scheduleContainer: {
+    flex: 1,
     flexDirection: "column",
   },
   scheduleItem: {

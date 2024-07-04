@@ -51,6 +51,7 @@ const HomeCard = ({ feature, onPress, svgIcon }) => {
             style={styles.image}
             placeholder={{ blurhash }}
             transition={500}
+            contentFit="contain"
           />
         ) : (
           svgIcon
@@ -112,7 +113,6 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain", // Ensure the image maintains its aspect ratio
 
     borderRadius: 10,
   },

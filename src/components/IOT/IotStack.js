@@ -14,8 +14,7 @@ const IotStack = () => {
 
   useEffect(() => {
     loadSensorIdFromStorage();
-  }, []);
-
+  });
 
   return (
     <Stack.Navigator

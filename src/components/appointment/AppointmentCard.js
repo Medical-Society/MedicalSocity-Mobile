@@ -52,9 +52,9 @@ const AppointmentCard = ({ appointment, onPress }) => {
     };
 
     getNumberOfPatientsBeforeYou();
-  }, [appointment._id]);
+  });
 
-  const [formattedTime, formattedYMD] = convertTo12HourFormat(date);
+  const [, formattedTime, formattedYMD] = convertTo12HourFormat(date);
 
   return (
     <View style={styles.card}>

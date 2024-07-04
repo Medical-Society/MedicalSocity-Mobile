@@ -19,7 +19,14 @@ const authReducer = (state, action) => {
         errorMessage: "",
       };
     case "SIGNOUT":
-      return { ...state, token: null, errorMessage: "" };
+      return {
+        ...state,
+        token: null,
+        socket: null,
+        errorMessage: "",
+        successMessage: "",
+        isLoading: false,
+      };
     case "ADD_ERROR":
       return { ...state, errorMessage: action.payload };
     case "ADD_SUCCESS":
@@ -159,6 +166,8 @@ const forgetPassword = (dispatch) => {
 const signout = (dispatch) => {
   return async () => {
     await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem("userData");
+
     dispatch({ type: "SIGNOUT" });
   };
 };

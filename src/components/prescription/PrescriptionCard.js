@@ -4,7 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { colors, convertTo12HourFormat } from "../../../AppStyles";
 
 const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
-  const [day, formattedTime, formattedYMD] = convertTo12HourFormat(
+  const [, formattedTime, formattedYMD] = convertTo12HourFormat(
     prescription?.createdAt
   );
   const doctorName = prescription?.doctor?.englishFullName || "Dr. Unknown";

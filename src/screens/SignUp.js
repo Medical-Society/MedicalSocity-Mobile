@@ -205,51 +205,6 @@ const SignUp = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.White,
-    paddingTop: StatusBar.currentHeight,
-  },
-  head: {
-    fontSize: responsiveFontSize(30),
-    textAlign: "center",
-    color: colors.BlueI,
-    fontFamily: "Cairo-Medium",
-    marginBottom: responsiveHeight(20),
-  },
-  errorMessage: {
-    fontSize: 16,
-    color: colors.Red,
-    textAlign: "center",
-  },
-  successMessage: {
-    fontSize: 16,
-    color: colors.Green,
-    textAlign: "center",
-  },
-  genderContainer: {
-    marginBottom: 20,
-    flexDirection: "column",
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
-    color: colors.Violet,
-  },
-  radioButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  radioButtonText: {
-    fontSize: 16,
-    marginLeft: 8,
-  },
-  genderSelectors: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-
   pickedDateContainer: {
     padding: 20,
     backgroundColor: colors.OffWhite,
@@ -259,9 +214,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "black",
   },
-  btnContainer: {
-    padding: 30,
-  },
+
   // This only works on iOS
   datePicker: {
     width: 320,

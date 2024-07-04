@@ -4,14 +4,12 @@ import MessagesModal from "../MessagesModal";
 import LoadingModal from "../LoadingModal";
 import * as ImagePicker from "expo-image-picker";
 import { Context as AuthContext } from "../../context/AuthContext";
-import CameraIcon from "../../../assets/camera.png";
-import GalleryIcon from "../../../assets/gallery.png";
+import CameraIcon from "../../../assets/SvgIcons/CameraIcon";
+import GalleryIcon from "../../../assets/SvgIcons/GalleryIcon";
 import { colors } from "../../../AppStyles";
 import { Context as UserContext } from "../../context/UserContext";
 import { createFormData } from "../../../AppStyles";
 import axios from "axios";
-import { Image } from "expo-image";
-import { blurhash } from "../../../AppStyles";
 
 const postImage = async (
   uri,
@@ -139,12 +137,8 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
                 onPress={() => {
                   handlePermission();
                 }}>
-                <Image
-                  source={CameraIcon}
-                  style={styles.icon}
-                  placeholder={{ blurhash }}
-                  transition={500}
-                />
+                <CameraIcon width={40} height={40} />
+                <Text style={styles.textStyle}>Camera</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -153,12 +147,8 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
                   setModalVisible(false);
                   handleGalleryUpload();
                 }}>
-                <Image
-                  source={GalleryIcon}
-                  style={styles.icon}
-                  placeholder={{ blurhash }}
-                  transition={500}
-                />
+                <GalleryIcon width={40} height={40} fill={colors.Black} />
+                <Text style={styles.textStyle}>Gallery</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
@@ -180,14 +170,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
   },
   modalView: {
-    margin: 50,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 20,
-    paddingVertical: 30,
+    paddingVertical: 10,
     alignItems: "center",
     shadowColor: colors.Black,
     shadowOffset: {
@@ -205,9 +193,10 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   textStyle: {
-    color: "white",
+    color: "black",
     fontWeight: "bold",
     textAlign: "center",
+    marginTop: 10,
   },
   modalText: {
     marginBottom: 15,
@@ -218,11 +207,11 @@ const styles = StyleSheet.create({
     height: 50,
   },
   button: {
-    backgroundColor: "#F194FF",
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
     margin: 10,
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });
 

@@ -44,10 +44,7 @@ const DoctorScreen = ({ navigation, route }) => {
       try {
         const response = await doctorApi.get(`/${doctorId}`);
         setDoctor(response.data.data.doctor);
-        console.log(
-          "Doctor is:",
-          JSON.stringify(response.data.data.doctor, null, 2)
-        );
+
         setLoading(false);
       } catch (err) {
         console.log(err.response);
@@ -57,6 +54,7 @@ const DoctorScreen = ({ navigation, route }) => {
   }, [doctorId]);
 
   useEffect(() => {
+    console.log("Fetching doctor weekdays", doctor);
     const doctorWeekdays = { ...doctor.availableTime.weekdays };
     const removedMinutes = removeMinute(doctorWeekdays);
     const mergeSameTimeDays = mergeSameDays(removedMinutes);
@@ -66,14 +64,14 @@ const DoctorScreen = ({ navigation, route }) => {
   const ListOfDays = () => {
     const weekDaysArray = Object.keys(weekdays);
     const weekDaysArrayValues = Object.values(weekdays);
-    console.log("weekDaysArray", weekDaysArray);
-    console.log("weekDaysArrayValues", weekDaysArrayValues);
 
     const convertHourTo12 = (hour) => {
-      if (hour > 12) {
-        return `${hour - 12} PM`;
+      if (hour === 0) {
+        return "12 AM";
       } else if (hour === 12) {
-        return `${hour} PM`;
+        return "12 PM";
+      } else if (hour > 12) {
+        return `${hour - 12} PM`;
       } else {
         return `${hour} AM`;
       }

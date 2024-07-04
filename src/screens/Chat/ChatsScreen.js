@@ -1,18 +1,17 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { colors } from "../../../AppStyles";
 import SearchBar from "../../components/Search/SearchBar";
 import SafeFlatListView from "../../components/SafeFlatListView";
 import chatsApi from "../../services/chats";
 import { Context as AuthContext } from "../../context/AuthContext";
-import { Image } from "expo-image";
-import { blurhash } from "../../../AppStyles";
 
 const messagesDataBuilder = (chats) => {
   return chats.map((chat) => {
@@ -33,6 +32,7 @@ const messagesDataBuilder = (chats) => {
       fullName: chat.doctor.englishFullName,
       userImage: chat.doctor.avatar,
       doctorId: chat.doctor._id,
+      isOnline: true,
       lastMessage: lastMessage.text,
       lastMessageTime,
       messageInQueue,
@@ -47,7 +47,7 @@ const ChatsScreen = ({ navigation }) => {
   const { state } = useContext(AuthContext);
   const { token, socket } = state;
 
-  const getChats = useCallback(async () => {
+  const getChats = async () => {
     try {
       const response = await chatsApi.get("/", {
         headers: {
@@ -58,22 +58,22 @@ const ChatsScreen = ({ navigation }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [token]);
+  };
 
   useEffect(() => {
     getChats();
-  }, [getChats]);
+  }, [token]);
 
   useEffect(() => {
-    const subscriber = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       getChats();
     });
-    return subscriber;
-  }, [getChats, navigation]);
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     if (socket) {
-      socket.on("listen message", ({ _id, text, createdAt, userId }) => {
+      const messageListener = ({ _id, text, createdAt, userId }) => {
         console.log("listen message", _id, text, createdAt, userId);
         setChats((previousChats) => {
           const newChats = previousChats.map((chat) => {
@@ -97,7 +97,11 @@ const ChatsScreen = ({ navigation }) => {
           });
           return newChats;
         });
-      });
+      };
+      socket.on("listen message", messageListener);
+      return () => {
+        socket.off("listen message", messageListener);
+      };
     }
   }, [socket]);
 
@@ -114,76 +118,82 @@ const ChatsScreen = ({ navigation }) => {
     setResults(filteredChats);
   };
 
-  const renderItem = ({ item, index }) => {
-    console.log("item", item);
-    return (
-      <TouchableOpacity
-        key={index}
-        onPress={() => navigation.navigate("Chat", { chatId: item.chatId })}
-        style={[
-          styles.userContainer,
-          index % 2 !== 0 ? styles.oddBackground : styles.evenBackground,
-        ]}>
-        <View style={styles.userImageContainer}>
-          <Image
-            source={item.userImage}
-            style={styles.userImage}
-            placeholder={{ blurhash }}
-            transition={500}
-            contentFit="contain"
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}>
-          <View style={styles.userInfoContainer}>
-            <Text style={styles.userName}>{item.fullName}</Text>
-            <Text style={styles.lastSeen}>{item.lastMessage}</Text>
-          </View>
-
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "space-between",
-              height: 50,
-            }}>
-            <Text
-              style={{
-                ...styles.lastMessageTime,
-                fontFamily: item.messageInQueue ? "Cairo-Bold" : "Cairo-Medium",
-                color: item.messageInQueue ? colors.BlueI : colors.Black,
-              }}>
-              {item.lastMessageTime}
-            </Text>
-            <View
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 10,
-                backgroundColor: item.messageInQueue
-                  ? colors.BlueI
-                  : "transparent",
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
-              <Text style={styles.messageInQueue}>{item.messageInQueue}</Text>
-            </View>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
   const renderContent = () => {
     return (
       <FlatList
         data={results.length > 0 && term.length > 0 ? results : chats}
         showsVerticalScrollIndicator={false}
-        renderItem={renderItem}
+        renderItem={({ item, index }) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              onPress={() =>
+                navigation.navigate("Chat", { chatId: item.chatId })
+              }
+              style={[
+                styles.userContainer,
+                index % 2 !== 0 ? styles.oddBackground : styles.evenBackground,
+              ]}>
+              <View style={styles.userImageContainer}>
+                {item.isOnline && item.isOnline === true && (
+                  <View style={styles.onLineIndicator} />
+                )}
+                <Image
+                  source={{
+                    uri: item.userImage,
+                  }}
+                  resizeMode="contain"
+                  style={styles.userImage}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}>
+                <View style={styles.userInfoContainer}>
+                  <Text style={styles.userName}>{item.fullName}</Text>
+                  <Text style={styles.lastSeen}>{item.lastMessage}</Text>
+                </View>
+
+                <View
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    height: 50,
+                  }}>
+                  <Text
+                    style={{
+                      ...styles.lastMessageTime,
+                      fontFamily: item.messageInQueue
+                        ? "Cairo-Bold"
+                        : "Cairo-Medium",
+                      color: item.messageInQueue ? colors.BlueI : colors.Black,
+                    }}>
+                    {item.lastMessageTime}
+                  </Text>
+                  <View
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: 10,
+                      backgroundColor: item.messageInQueue
+                        ? colors.BlueI
+                        : "transparent",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}>
+                    <Text style={styles.messageInQueue}>
+                      {item.messageInQueue}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
         style={{ flex: 1 }}
       />
     );

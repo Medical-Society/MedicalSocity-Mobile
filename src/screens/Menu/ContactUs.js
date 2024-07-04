@@ -71,11 +71,13 @@ const ContactUs = ({ navigation }) => {
           label="Name"
           value={patientData.name}
           onChangeText={(name) => setPatientData({ ...patientData, name })}
+          placeholder="Enter your name"
         />
         <InputField
           label="Email"
           value={patientData.email}
           onChangeText={(email) => setPatientData({ ...patientData, email })}
+          placeholder="Enter your email"
         />
 
         <MultiLineTextInput

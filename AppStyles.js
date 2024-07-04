@@ -297,15 +297,6 @@ export const mergeSameDays = (schedule) => {
   return mergedSchedule;
 };
 
-export const formattedDYM = (date) => {
-  const newDate = new Date(date);
-  const DYM = `${newDate.getDate()}/${
-    newDate.getMonth() + 1
-  }/${newDate.getFullYear()}`;
-  const timeIn12Hour = convertTo12HourFormat(date);
-  return;
-};
-
 export const createFormData = async (uri) => {
   try {
     const fileName = uri.split("/").pop(); // Get the file name from the URI

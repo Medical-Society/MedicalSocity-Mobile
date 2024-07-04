@@ -104,13 +104,11 @@ const ReviewsScreen = ({ navigation, route }) => {
       <Header title="Reviews" backButtonHandler={backButtonHandler} />
       {!isPatientReviewed && (
         <>
-          <View style={styles.addReviewContainer}>
-            <MultiLineTextInput
-              placeholder="Write your review here"
-              value={reviewContent}
-              handleTextChange={handleTextChange}
-            />
-          </View>
+          <MultiLineTextInput
+            placeholder="Write your review here"
+            value={reviewContent}
+            handleTextChange={handleTextChange}
+          />
           <View style={styles.rateContainer}>
             <Text style={styles.rateText}>Tap to rate</Text>
             <CustomRatingBar />

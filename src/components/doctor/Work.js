@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     position: "absolute",
     right: 0,
+    top: 20,
     zIndex: 1,
   },
   album: {
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     backgroundColor: colors.Black,
-    padding: 20,
+    paddingVertical: 50,
   },
   clickedImage: {
     flex: 1,

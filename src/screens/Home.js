@@ -57,9 +57,11 @@ const Home = ({ navigation }) => {
         onTermSubmit={() => searchApi(term, token)}
         placeholder={"Search for Doctor, Address"}
       />
-      <View style={styles.headBestDoctorsSection}>
-        <Text style={styles.headBestDoctors}>Best Doctors</Text>
-      </View>
+      {doctors && doctors.length > 0 && (
+        <View style={styles.headBestDoctorsSection}>
+          <Text style={styles.headBestDoctors}>Best Doctors</Text>
+        </View>
+      )}
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}

@@ -10,6 +10,7 @@ import { Context as AuthContext } from "../../context/AuthContext";
 import Header from "../../components/Header";
 import InfoField from "../../components/prescription/InfoField";
 import MedicineField from "../../components/prescription/MedicineField";
+import uuid from "react-native-uuid";
 
 const ViewPrescriptionScreen = ({ navigation, route }) => {
   const [prescription, setPrescription] = useState({
@@ -87,7 +88,7 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
           <FlatList
             data={medicines}
             showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item.name}
+            keyExtractor={(item) => `${item.name} + ${uuid.v4()}`}
             renderItem={({ item }) => (
               <MedicineField name={item.name} nOfTimes={item.time} />
             )}

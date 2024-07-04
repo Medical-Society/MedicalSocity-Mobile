@@ -6,7 +6,7 @@ import chatsApi from "../../services/chats";
 import { GiftedChat } from "react-native-gifted-chat";
 
 const ChatScreen = ({ navigation, route }) => {
-  const chatId = route.params.chatId;
+  const { chatId } = route.params;
   const { state } = useContext(AuthContext);
   const { token, socket } = state;
   const [doctor, setDoctor] = useState({});
@@ -21,23 +21,21 @@ const ChatScreen = ({ navigation, route }) => {
         },
       });
 
-      const buildMessages = response.data.data.messages.map((message) => {
-        return {
-          _id: message._id,
-          text: message.text,
-          createdAt: new Date(message.createdAt),
-          user: {
-            _id: message.userId,
-            avatar: message.userAvatar,
-          },
-        };
-      });
+      const buildMessages = response.data.data.messages.map((message) => ({
+        _id: message._id,
+        text: message.text,
+        createdAt: new Date(message.createdAt),
+        user: {
+          _id: message.userId,
+          avatar: message.userAvatar,
+        },
+      }));
 
       setDoctor(response.data.data.doctor);
       setPatient(response.data.data.patient);
       setMessages(buildMessages.reverse());
     } catch (error) {
-      console.log(error);
+      console.error("Failed to fetch chat data:", error);
     }
   }, [chatId, token]);
 
@@ -47,9 +45,9 @@ const ChatScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (socket) {
-      socket.on("listen message", ({ _id, text, createdAt, userId }) => {
+      const messageListener = ({ _id, text, createdAt, userId }) => {
         const newMessage = {
-          _id: _id,
+          _id,
           text,
           createdAt: new Date(createdAt),
           user: {
@@ -61,29 +59,36 @@ const ChatScreen = ({ navigation, route }) => {
         setMessages((previousMessages) =>
           GiftedChat.append(previousMessages, newMessage)
         );
-      });
+      };
+
+      socket.on("listen message", messageListener);
+
+      return () => {
+        socket.off("listen message", messageListener);
+      };
     }
   }, [patient.avatar, patient.patientName, socket]);
 
   const onSend = (newMessages) => {
-    console.log("newMessages", newMessages[0]);
-    socket.emit("send message", {
-      chatId,
-      message: newMessages[0].text,
-    });
+    if (socket && newMessages.length > 0) {
+      socket.emit("send message", {
+        chatId,
+        message: newMessages[0].text,
+      });
+    }
   };
 
   return (
     <SafeFlatListView
       header={
         <Header
-          title={doctor.englishFullName ? `${doctor.englishFullName}` : "Chat"}
+          title={doctor.englishFullName ? `Dr/ ${doctor.englishFullName}` : "Chat"}
           backButtonHandler={() => navigation.goBack()}
         />
       }>
       <GiftedChat
         messages={messages}
-        onSend={(newMessages) => onSend(newMessages)}
+        onSend={onSend}
         user={{
           _id: patient._id,
           name: patient.patientName,

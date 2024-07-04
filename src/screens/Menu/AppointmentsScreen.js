@@ -1,5 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import Header from "../../components/Header";
 import AppointmentCard from "../../components/appointment/AppointmentCard";
 import SafeFlatListView from "../../components/SafeFlatListView";
@@ -10,6 +17,12 @@ import LoadingModal from "../../components/LoadingModal";
 import MessagesModal from "../../components/MessagesModal";
 import ConfirmModal from "../../components/ConfirmModal";
 import patientApi from "../../services/patient";
+import {
+  colors,
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from "../../../AppStyles";
 
 const AppointmentsScreen = ({ navigation }) => {
   const {
@@ -27,6 +40,7 @@ const AppointmentsScreen = ({ navigation }) => {
   const [deleteAppointmentId, setDeleteAppointmentId] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
+  const [selectedState, setSelectedState] = useState("All");
   const [message, setMessage] = useState({
     successMessage: "",
     errorMessage: "",
@@ -50,6 +64,53 @@ const AppointmentsScreen = ({ navigation }) => {
     setDeleteAppointmentId("");
     setIsLoading(false);
     setModalVisible(false);
+  };
+
+  // Status FINISHED, CANCELED, PENDING, IN_PROGRESS
+
+  const statusButtons = {
+    Finished: "FINISHED",
+    Canceled: "CANCELED",
+    Pending: "PENDING",
+    InProgress: "IN_PROGRESS",
+  };
+
+  const handlePressedButton = (status) => {
+    if (status === selectedState) {
+      setSelectedState("All");
+    } else {
+      setSelectedState(status);
+    }
+  };
+
+  const ListOfStatus = () => {
+    return (
+      <FlatList
+        horizontal
+        data={Object.keys(statusButtons)}
+        style={styles.statusList}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => handlePressedButton(statusButtons[item])}
+            style={[
+              styles.status,
+              // selectedState === item && styles.selectedStatus,
+              selectedState === statusButtons[item] && styles.selectedStatus,
+            ]}>
+            <Text
+              style={[
+                styles.textStatus,
+                selectedState === statusButtons[item] &&
+                  styles.selectedTextStatus,
+              ]}>
+              {statusButtons[item]}
+            </Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item}
+      />
+    );
   };
 
   const onRefresh = useCallback(() => {
@@ -84,8 +145,17 @@ const AppointmentsScreen = ({ navigation }) => {
           refreshAppointments();
         }}
       />
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <ListOfStatus />
+      </View>
       <FlatList
-        data={appointments}
+        data={
+          selectedState === "All"
+            ? appointments
+            : appointments.filter(
+                (appointment) => appointment.status === selectedState
+              )
+        }
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <AppointmentCard
@@ -109,5 +179,33 @@ const AppointmentsScreen = ({ navigation }) => {
     </SafeFlatListView>
   );
 };
+
+const styles = StyleSheet.create({
+  statusList: {
+    marginVertical: responsiveHeight(20),
+  },
+  status: {
+    paddingHorizontal: responsiveWidth(10),
+    paddingVertical: responsiveHeight(10),
+    borderRadius: 30,
+    marginRight: responsiveWidth(10),
+    borderColor: colors.GreyI,
+    borderWidth: 1,
+  },
+  selectedStatus: {
+    borderColor: colors.BlueI,
+    borderWidth: 1.3,
+  },
+  textStatus: {
+    fontSize: responsiveFontSize(16),
+    fontFamily: "Cairo-Regular",
+    color: colors.Black,
+    textAlign: "center",
+  },
+  selectedTextStatus: {
+    color: colors.BlueI,
+    fontSize: responsiveFontSize(16),
+  },
+});
 
 export default AppointmentsScreen;

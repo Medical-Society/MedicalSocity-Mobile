@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Skeleton from "../../components/Skeleton";
 import { Context as UserContext } from "../../context/UserContext";
 import { Context as AuthContext } from "../../context/AuthContext";
+import uuid from "react-native-uuid";
 
 const InfoField = ({ title, value }) => {
   return (
@@ -111,7 +112,7 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
           <FlatList
             data={medicines}
             showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item.name}
+            keyExtractor={(item) => `${item.name} + ${uuid.v4()}`}
             renderItem={({ item }) => (
               <MedicineField name={item.name} nOfTimes={item.time} />
             )}
