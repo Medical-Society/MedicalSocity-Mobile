@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Medical Society",
-    "slug": "medicalsociety",
+    "slug": "MedicalSociety",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/msslogo.png",

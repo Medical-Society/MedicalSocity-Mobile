@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { colors, formattedDYM } from "../../../AppStyles";
+import { colors, convertTo12HourFormat } from "../../../AppStyles";
 import patientsApi from "../../services/patient";
 const buildButtonStatusBased = (status) => {
   switch (status) {
@@ -38,8 +38,6 @@ const AppointmentCard = ({ appointment, onPress }) => {
   const { buttonText, mainColor, backgroundColor } =
     buildButtonStatusBased(status);
 
-  console.log("Button Text: ", buttonText);
-
   useEffect(() => {
     const getNumberOfPatientsBeforeYou = async () => {
       try {
@@ -47,7 +45,6 @@ const AppointmentCard = ({ appointment, onPress }) => {
         const response = await patientsApi.get(
           `/appointments/${appointment._id}/beforeYou`
         );
-        console.log(response.data.data.appointmentsBeforeYou);
         setNumberOfPatientsBeforeYou(response.data.data.appointmentsBeforeYou);
       } catch (error) {
         console.log(error.response.data.message);
@@ -57,11 +54,13 @@ const AppointmentCard = ({ appointment, onPress }) => {
     getNumberOfPatientsBeforeYou();
   }, [appointment._id]);
 
+  const [formattedTime, formattedYMD] = convertTo12HourFormat(date);
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <Text style={styles.doctorName}>{doctor.englishFullName}</Text>
-        <Text style={styles.date}>{formattedDYM(date)}</Text>
+        <Text style={styles.date}>{`${formattedYMD}`}</Text>
       </View>
 
       {appointment.status === "PENDING" && (
@@ -69,6 +68,7 @@ const AppointmentCard = ({ appointment, onPress }) => {
           <Text style={styles.patientsBefore}>
             {numberOfPatientsBeforeYou} patients before you
           </Text>
+          <Text style={styles.date}>{`${formattedTime}`}</Text>
         </View>
       )}
 
@@ -137,6 +137,8 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   price: {
     color: colors.DarkBlack,

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, View, Image, FlatList } from "react-native";
+import { Text, StyleSheet, View, FlatList } from "react-native";
 import Button from "../../components/SubmitButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Skeleton from "../../components/Skeleton";
 import {
+  blurhash,
   colors,
   mergeSameDays,
   removeMinute,
@@ -13,6 +14,7 @@ import {
 } from "../../../AppStyles";
 import doctorApi from "../../services/doctor";
 import Header from "../../components/Header";
+import { Image } from "expo-image";
 const Spacer = () => {
   return <View style={{ margin: 10 }} />;
 };
@@ -112,10 +114,10 @@ const DoctorScreen = ({ navigation, route }) => {
         <View style={styles.scrollViewContainer}>
           <View style={styles.info}>
             <Image
-              source={{
-                uri: doctor.avatar,
-              }}
+              source={doctor.avatar}
               style={styles.image}
+              placeholder={{ blurhash }}
+              transition={500}
             />
             <View style={styles.doctorInfo}>
               <Text style={styles.infoText}>{doctor.englishFullName}</Text>

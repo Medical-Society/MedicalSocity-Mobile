@@ -299,9 +299,11 @@ export const mergeSameDays = (schedule) => {
 
 export const formattedDYM = (date) => {
   const newDate = new Date(date);
-  return `${newDate.getDate()}/${
+  const DYM = `${newDate.getDate()}/${
     newDate.getMonth() + 1
   }/${newDate.getFullYear()}`;
+  const timeIn12Hour = convertTo12HourFormat(date);
+  return;
 };
 
 export const createFormData = async (uri) => {
@@ -337,3 +339,5 @@ export const createFormData = async (uri) => {
     throw error; // Rethrow the error to be caught by the calling function
   }
 };
+
+export const blurhash = "";

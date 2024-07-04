@@ -3,10 +3,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Menu from "../../screens/Menu/MenuScreen";
 import EditProfile from "../../screens/Menu/YouAccountScreen";
-import HelpSupportScreen from "../../screens/Menu/HelpSupportScreen";
 import ReportProblemScreen from "../../screens/Menu/ReportProblemScreen";
 import TermsPoliciesScreen from "../../screens/Menu/TermsPoliciesScreen";
 import ContactUs from "../../screens/Menu/ContactUs";
+import AboutUs from "../../screens/Menu/AboutUsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,10 +23,10 @@ const MenuStack = ({ navigation }) => {
         component={EditProfile}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Help&Support" component={HelpSupportScreen} />
       <Stack.Screen name="TermsAndPolicies" component={TermsPoliciesScreen} />
       <Stack.Screen name="ReportProblem" component={ReportProblemScreen} />
       <Stack.Screen name="ContactUs" component={ContactUs} />
+      <Stack.Screen name="AboutUs" component={AboutUs} />
     </Stack.Navigator>
   );
 };

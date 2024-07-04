@@ -7,7 +7,7 @@ export default () => {
 
   const searchApi = async (searchTerm, token) => {
     const toSearchWith = searchTerm === "All" ? "" : searchTerm;
-    console.log("SearchTerm: ", toSearchWith);
+    console.log("Searching with:", toSearchWith)
     try {
       const response = await doctorApi.get("/", {
         params: {

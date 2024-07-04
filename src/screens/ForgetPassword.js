@@ -6,7 +6,7 @@ import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import { Context as AuthContext } from "../context/AuthContext";
 import Button from "../components/SubmitButton";
 
-import InputField from "../components/auth/InputField";
+import InputField from "../components/InputField";
 import MessagesModal from "../components/MessagesModal";
 import { colors, responsiveFontSize, responsiveHeight } from "../../AppStyles";
 import SafeScrollView from "../components/SafeScrollView";

@@ -2,14 +2,14 @@ import React, { useState, useContext } from "react";
 import { StyleSheet } from "react-native";
 import SafeScrollView from "../../components/SafeScrollView";
 import Header from "../../components/Header";
-import InputField from "../../components/auth/InputField";
+import InputField from "../../components/InputField";
 import { Context as IotContext } from "../../context/IotContext";
 import Button from "../../components/SubmitButton";
 
 const LoginSensorScreen = ({ navigation }) => {
   const { loginWithSensorId } = useContext(IotContext);
   const [sensorId, setSensorId] = useState("");
-  
+
   return (
     <SafeScrollView
       header={

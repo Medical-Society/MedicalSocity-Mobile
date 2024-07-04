@@ -1,13 +1,17 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, formattedDYM } from "../../../AppStyles";
+import { colors, convertTo12HourFormat } from "../../../AppStyles";
+import { AntDesign } from "@expo/vector-icons";
 
 const ScannedPrescriptionCard = ({
   prescription,
   handlePressedPrescription,
+  handleDeletePrescription,
 }) => {
-  const date = formattedDYM(prescription?.createdAt);
+  const [day, formattedTime, formattedYMD] = convertTo12HourFormat(
+    prescription?.createdAt
+  );
   const doctorName = prescription?.doctorName || "Unknown";
   const patientName = prescription?.patientName || "Unknown";
 
@@ -17,14 +21,21 @@ const ScannedPrescriptionCard = ({
       activeOpacity={0.7}
       onPress={handlePressedPrescription}>
       <View style={styles.card}>
-        <Text style={styles.date}>{date}</Text>
         <View style={styles.rowOne}>
           <Text style={styles.name}>Dr/ {doctorName}</Text>
         </View>
         <View style={styles.rowOne}>
           <Text style={styles.specialization}>Mr/Mrs. {patientName}</Text>
+          <TouchableOpacity onPress={handleDeletePrescription}>
+            <AntDesign name="delete" size={24} color={colors.Red} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.lastRow}>
+          <Text style={styles.date}>{formattedYMD}</Text>
+          <Text style={styles.date}>{formattedTime}</Text>
         </View>
       </View>
+
       <View style={styles.goToButton}>
         <Text style={styles.goToText}>View Details</Text>
         <MaterialIcons
@@ -104,6 +115,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     lineHeight: 40,
     fontFamily: "Cairo-Regular",
+  },
+  lastRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 6,
   },
 });
 

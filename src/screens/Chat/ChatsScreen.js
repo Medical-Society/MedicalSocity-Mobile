@@ -5,13 +5,14 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import { colors } from "../../../AppStyles";
 import SearchBar from "../../components/Search/SearchBar";
 import SafeFlatListView from "../../components/SafeFlatListView";
 import chatsApi from "../../services/chats";
 import { Context as AuthContext } from "../../context/AuthContext";
+import { Image } from "expo-image";
+import { blurhash } from "../../../AppStyles";
 
 const messagesDataBuilder = (chats) => {
   return chats.map((chat) => {
@@ -32,7 +33,6 @@ const messagesDataBuilder = (chats) => {
       fullName: chat.doctor.englishFullName,
       userImage: chat.doctor.avatar,
       doctorId: chat.doctor._id,
-      isOnline: true,
       lastMessage: lastMessage.text,
       lastMessageTime,
       messageInQueue,
@@ -125,15 +125,12 @@ const ChatsScreen = ({ navigation }) => {
           index % 2 !== 0 ? styles.oddBackground : styles.evenBackground,
         ]}>
         <View style={styles.userImageContainer}>
-          {item.isOnline && item.isOnline === true && (
-            <View style={styles.onLineIndicator} />
-          )}
           <Image
-            source={{
-              uri: item.userImage,
-            }}
-            resizeMode="contain"
+            source={item.userImage}
             style={styles.userImage}
+            placeholder={{ blurhash }}
+            transition={500}
+            contentFit="contain"
           />
         </View>
         <View

@@ -7,6 +7,8 @@ import usePaginatedFetch from "../../hooks/usePaginatedFetch";
 import { Context as UserContext } from "../../context/UserContext";
 import SafeFlatListView from "../../components/SafeFlatListView";
 import ScannedPrescriptionCard from "../../components/prescription/ScannedPrescriptionCard";
+import patientApi from "../../services/patient";
+import { Context as AuthContext } from "../../context/AuthContext";
 
 const ScannedPrescriptionsScreen = ({ navigation }) => {
   const { state: userState } = useContext(UserContext);
@@ -17,12 +19,32 @@ const ScannedPrescriptionsScreen = ({ navigation }) => {
     data: prescriptions,
     isLoading,
     handleLoadMore,
+    reFetchData: reFetchPrescriptions,
   } = usePaginatedFetch(
     `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/`,
     "scannedPrescriptions"
   );
+
   const backButtonHandler = () => {
     navigation.goBack();
+  };
+
+  const { state } = useContext(AuthContext);
+  const { token } = state;
+  const handleDeletePrescription = async (prescriptionId) => {
+    try {
+      await patientApi.delete(
+        `/${patientId}/scanned-prescriptions/${prescriptionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      reFetchPrescriptions();
+    } catch (error) {
+      console.log(error.response.data);
+    }
   };
 
   return (
@@ -46,7 +68,7 @@ const ScannedPrescriptionsScreen = ({ navigation }) => {
                 mode: "View",
               })
             }
-            isScanned={true}
+            handleDeletePrescription={() => handleDeletePrescription(item._id)}
           />
         )}
         keyExtractor={(item) => item._id}

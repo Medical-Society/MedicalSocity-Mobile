@@ -7,7 +7,7 @@ import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
-} from "../../../AppStyles";
+} from "../../AppStyles";
 
 // eslint-disable-next-line react/display-name
 const InputField = React.memo(
@@ -41,24 +41,26 @@ const InputField = React.memo(
           }}>
           {label}
         </Text>
-        <TextInput
-          style={styles.inputField}
-          value={value}
-          onChangeText={onChangeText}
-          secureTextEntry={!showPassword}
-          // label={label}
-          placeholder={placeholder}
-          editable={editable}
-        />
-        {secureTextEntry && (
-          <MaterialCommunityIcons
-            name={!showPassword ? "eye-off" : "eye"}
-            size={24}
-            color={colors.LightGrey}
-            style={styles.icon}
-            onPress={toggleShowPassword}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputField}
+            value={value}
+            onChangeText={onChangeText}
+            secureTextEntry={!showPassword}
+            // label={label}
+            placeholder={placeholder}
+            editable={editable}
           />
-        )}
+          {secureTextEntry && (
+            <MaterialCommunityIcons
+              name={!showPassword ? "eye-off" : "eye"}
+              size={24}
+              color={colors.LightGrey}
+              style={styles.icon}
+              onPress={toggleShowPassword}
+            />
+          )}
+        </View>
       </View>
     );
   }
@@ -71,13 +73,18 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   inputField: {
+    flex: 1,
     paddingHorizontal: responsiveWidth(10),
     height: responsiveHeight(60),
     color: colors.Black,
     borderWidth: StyleSheet.hairlineWidth,
     backgroundColor: colors.White,
     fontSize: responsiveFontSize(16),
-    justifyContent: "center",
+  },
+  inputContainer: {
+    position: "relative",
+    flexDirection: "row",
+    alignItems: "center",
   },
   icon: {
     position: "absolute",

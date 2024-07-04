@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
-import { colors } from "../../../AppStyles";
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
+import { blurhash, colors } from "../../../AppStyles";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { Image } from "expo-image";
 
 const Album = ({ beforeImage, afterImage }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,9 +27,11 @@ const Album = ({ beforeImage, afterImage }) => {
         </TouchableOpacity>
 
         <Image
-          source={{ uri: image }}
+          source={image}
           style={styles.clickedImage}
-          resizeMode="contain"
+          contentFit="contain"
+          placeholder={{ blurhash }}
+          transition={500}
         />
         {beforeImage && afterImage && (
           <TouchableOpacity
@@ -64,7 +60,13 @@ const Album = ({ beforeImage, afterImage }) => {
             setModalVisible(true);
             setImage(beforeImage);
           }}>
-          <Image source={{ uri: beforeImage }} style={styles.image} />
+          <Image
+            source={beforeImage}
+            style={styles.image}
+            contentFit="contain"
+            placeholder={{ blurhash }}
+            transition={500}
+          />
         </TouchableOpacity>
       ) : null}
       {afterImage ? (
@@ -74,7 +76,13 @@ const Album = ({ beforeImage, afterImage }) => {
             setImage(afterImage);
           }}
           style={styles.imageContainer}>
-          <Image source={{ uri: afterImage }} style={styles.image} />
+          <Image
+            source={afterImage}
+            style={styles.image}
+            contentFit="contain"
+            placeholder={{ blurhash }}
+            transition={500}
+          />
         </TouchableOpacity>
       ) : null}
     </View>

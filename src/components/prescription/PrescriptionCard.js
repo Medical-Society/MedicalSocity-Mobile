@@ -1,10 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, formattedDYM } from "../../../AppStyles";
+import { colors, convertTo12HourFormat } from "../../../AppStyles";
 
 const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
-  const date = formattedDYM(prescription?.createdAt);
+  const [day, formattedTime, formattedYMD] = convertTo12HourFormat(
+    prescription?.createdAt
+  );
   const doctorName = prescription?.doctor?.englishFullName || "Dr. Unknown";
   const specialization = prescription?.doctor?.specialization || "Unknown";
   const address = prescription?.doctor?.clinicAddress || "Unknown";
@@ -15,7 +17,6 @@ const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
       activeOpacity={0.7}
       onPress={handlePressedPrescription}>
       <View style={styles.card}>
-        <Text style={styles.date}>{date}</Text>
         <View style={styles.rowOne}>
           <Text style={styles.name}>Dr/ {doctorName}</Text>
           <Text style={styles.specialization}>{specialization}</Text>
@@ -24,6 +25,10 @@ const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
           <Text style={styles.address}>
             {address?.length > 30 ? `${address?.substring(0, 30)}...` : address}
           </Text>
+        </View>
+        <View style={styles.lastRow}>
+          <Text style={styles.date}>{formattedYMD}</Text>
+          <Text style={styles.date}>{formattedTime}</Text>
         </View>
       </View>
       <View style={styles.goToButton}>
@@ -105,6 +110,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     lineHeight: 40,
     fontFamily: "Cairo-Regular",
+  },
+  lastRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 6,
   },
 });
 

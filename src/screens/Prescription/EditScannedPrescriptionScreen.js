@@ -18,6 +18,8 @@ import { Context as AuthContext } from "../../context/AuthContext";
 import SubmitButton from "../../components/SubmitButton";
 import axios from "axios";
 import uuid from "react-native-uuid";
+import InputField from "../../components/InputField";
+import MessagesModal from "../../components/MessagesModal";
 
 const COLORS = {
   primary: "#242760",
@@ -116,14 +118,15 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { state: authState } = useContext(AuthContext);
   const { state: userState } = useContext(UserContext);
+  const [message, setMessage] = useState({
+    successMessage: "",
+    errorMessage: "",
+  });
   const patientId = userState.userData._id;
   const token = authState.token;
 
   const getScannedPrescriptionById = useCallback(
     async (prescriptionId) => {
-      console.log("prescriptionId", prescriptionId);
-      console.log("patientId", patientId);
-      console.log("token", token);
       setIsLoading(true);
       try {
         const response = await axios.get(
@@ -141,6 +144,8 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
             _id: uuid.v4(),
           })),
           patientName: response.data.data.patientName,
+          diagnose: response.data.data.diagnose,
+          diseases: response.data.data.diseases,
         });
       } catch (error) {
         console.log("Error fetching scanned prescription:", error);
@@ -177,9 +182,6 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
   );
 
   const patchPrescription = async (newPrescription, callback) => {
-    console.log("newPrescription", newPrescription);
-    console.log("token", token);
-    console.log("patientId", patientId);
     try {
       const response = await axios.patch(
         `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/${prescriptionId}`,
@@ -187,6 +189,8 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
           patientName: newPrescription.patientName,
           doctorName: newPrescription.doctorName,
           medicines: newPrescription.medicines,
+          diagnose: newPrescription.diagnose,
+          diseases: newPrescription.diseases,
         },
         {
           headers: {
@@ -197,11 +201,7 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
       if (callback) callback();
       console.log("response", response.data);
     } catch (error) {
-      console.log(
-        "Error updating prescription:",
-
-        error.response.data
-      );
+      console.log("Error updating prescription:", error.response.data);
     }
   };
 
@@ -218,11 +218,6 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
   };
 
   const handleSubmit = () => {
-    // const newMedicines = localData.medicines.filter(
-    //   (medicine) => medicine.name !== ""
-    // );
-    // const
-    // create new prescription object without id field for each medicine and remove empty medicines
     const newMedicines = localData.medicines.filter(
       (medicine) => medicine.name !== ""
     );
@@ -230,6 +225,15 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
       ...localData,
       medicines: newMedicines.map(({ _id, ...rest }) => rest),
     };
+
+    if (newPrescription.medicines.length === 0) {
+      setMessage({
+        successMessage: "",
+        errorMessage: "Please add at least one medicine",
+      });
+      return;
+    }
+
     patchPrescription(newPrescription, setMode("view"));
   };
 
@@ -252,36 +256,45 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
 
   return (
     <View style={styles.container}>
+      <MessagesModal
+        successMessage={message.successMessage}
+        errorMessage={message.errorMessage}
+        clearMessage={() =>
+          setMessage({ successMessage: "", errorMessage: "" })
+        }
+      />
+
       {isLoading ? (
         <Skeleton />
       ) : (
         <View style={styles.innerContainer}>
-          <Text style={styles.headerText}>Info</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Doctor Name"
-            value={localData.doctorName}
-            onChangeText={(text) =>
-              setLocalData({ ...localData, doctorName: text })
-            }
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Name of Patient"
-            value={localData.patientName}
-            onChangeText={(text) =>
-              setLocalData({ ...localData, patientName: text })
-            }
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Age"
-            value={localData.age}
-            onChangeText={(text) => setLocalData({ ...localData, age: text })}
-          />
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={{ flex: 1 }}>
+            <InputField
+              label="Doctor Name"
+              placeholder="Enter Doctor Name"
+              value={localData.doctorName}
+              onChangeText={(text) =>
+                setLocalData({ ...localData, doctorName: text })
+              }
+            />
+            <InputField
+              label="Diseases"
+              placeholder="Enter Diseases"
+              value={localData.diseases}
+              onChangeText={(text) =>
+                setLocalData({ ...localData, diseases: text })
+              }
+            />
+            <InputField
+              label="Diagnose"
+              placeholder="Enter Diagnose"
+              value={localData.diagnose}
+              onChangeText={(text) =>
+                setLocalData({ ...localData, diagnose: text })
+              }
+            />
             <VirtualizedList
               data={localData.medicines}
               renderItem={renderItem}

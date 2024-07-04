@@ -1,12 +1,5 @@
 import React, { useState, useContext } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import MessagesModal from "../MessagesModal";
 import LoadingModal from "../LoadingModal";
 import * as ImagePicker from "expo-image-picker";
@@ -17,6 +10,8 @@ import { colors } from "../../../AppStyles";
 import { Context as UserContext } from "../../context/UserContext";
 import { createFormData } from "../../../AppStyles";
 import axios from "axios";
+import { Image } from "expo-image";
+import { blurhash } from "../../../AppStyles";
 
 const postImage = async (
   uri,
@@ -144,7 +139,12 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
                 onPress={() => {
                   handlePermission();
                 }}>
-                <Image source={CameraIcon} style={styles.icon} />
+                <Image
+                  source={CameraIcon}
+                  style={styles.icon}
+                  placeholder={{ blurhash }}
+                  transition={500}
+                />
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -153,7 +153,12 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
                   setModalVisible(false);
                   handleGalleryUpload();
                 }}>
-                <Image source={GalleryIcon} style={styles.icon} />
+                <Image
+                  source={GalleryIcon}
+                  style={styles.icon}
+                  placeholder={{ blurhash }}
+                  transition={500}
+                />
               </TouchableOpacity>
             </View>
             <TouchableOpacity

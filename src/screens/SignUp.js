@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import Button from "../components/SubmitButton";
-import InputField from "../components/auth/InputField";
+import InputField from "../components/InputField";
 import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import { Context as AuthContext } from "../context/AuthContext";
 import MessagesModal from "../components/MessagesModal";

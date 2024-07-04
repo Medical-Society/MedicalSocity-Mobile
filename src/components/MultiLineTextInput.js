@@ -1,28 +1,48 @@
 import React from "react";
-import { TextInput, StyleSheet } from "react-native";
+import { TextInput, StyleSheet, View, Text } from "react-native";
+import { responsiveFontSize } from "../../AppStyles";
 
-const MultiLineTextInput = ({ placeholder, value, handleTextChange }) => {
+const MultiLineTextInput = ({
+  label = "",
+  placeholder,
+  value,
+  handleTextChange,
+}) => {
   return (
-    <TextInput
-      style={styles.multiLineTextInput}
-      placeholder={placeholder}
-      value={value}
-      multiline={true}
-      onChangeText={handleTextChange}
-    />
+    <View style={styles.multiLineTextInputContainer}>
+      <Text
+        style={{
+          fontSize: responsiveFontSize(18),
+          fontFamily: "Cairo-Regular",
+          paddingBottom: 5,
+        }}>
+        {label}
+      </Text>
+      <TextInput
+        style={styles.multiLineTextInput}
+        placeholder={placeholder}
+        value={value}
+        multiline={true}
+        onChangeText={handleTextChange}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  multiLineTextInput: {
-    flex: 1,
+  multiLineTextInputContainer: {
     width: "100%",
+    marginVertical: 10,
+  },
+  multiLineTextInput: {
+    marginHorizontal: 10,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 5,
     textAlignVertical: "top",
     padding: 10,
     paddingVertical: 20,
+    maxHeight: 100,
   },
 });
 

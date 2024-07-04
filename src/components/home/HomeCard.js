@@ -3,11 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   Dimensions,
 } from "react-native";
 import { responsiveFontSize } from "../../../AppStyles";
+import { Image } from "expo-image";
+import { blurhash } from "../../../AppStyles";
 
 const { width } = Dimensions.get("window");
 
@@ -45,7 +46,12 @@ const HomeCard = ({ feature, onPress, svgIcon }) => {
           },
         ]}>
         {feature.image ? (
-          <Image source={feature.image} style={styles.image} />
+          <Image
+            source={feature.image}
+            style={styles.image}
+            placeholder={{ blurhash }}
+            transition={500}
+          />
         ) : (
           svgIcon
         )}

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React, { useContext } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Context as AuthContext } from "../../context/AuthContext";
@@ -9,6 +9,7 @@ import PrescriptionIcon from "../../../assets/SvgIcons/PrescriptionIcon";
 import PersonIcon from "../../../assets/SvgIcons/PersonIcon";
 import AppointmentsIcon from "../../../assets/SvgIcons/AppointmentsIcon";
 import LogoutIcon from "../../../assets/SvgIcons/LogoutIcon";
+
 const Profile = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
 
@@ -17,7 +18,6 @@ const Profile = ({ navigation }) => {
   };
 
   const navigateToEditProfile = () => navigateTo("EditProfile");
-  const navigateToSupport = () => navigateTo("Help&Support");
   const navigateToTermsAndPolicies = () => navigateTo("TermsAndPolicies");
   const navigateToPrescriptions = () => navigateTo("Prescriptions");
   const navigateToScannedPrescriptions = () =>
@@ -25,15 +25,6 @@ const Profile = ({ navigation }) => {
   const navigateToAppointmentsScreen = () => navigateTo("Appointments");
   const navigateToReportProblem = () => navigateTo("ReportProblem");
   const navigateToContactUs = () => navigateTo("ContactUs");
-
-  // const RecentlyDoctorIcon = (props) => (
-  //   <SvgIconBuilder {...props}>
-  //     <Path
-  //       d="M13.5 21.975c-1.867 0-3.417-.654-4.65-1.963C7.617 18.704 7 17.142 7 15.325v-.875c-1.417-.183-2.604-.814-3.563-1.893C2.48 11.48 2 10.21 2 8.75v-5c0-.212.072-.39.216-.534A.726.726 0 012.75 3H5v-.25c0-.212.072-.39.217-.534A.732.732 0 015.754 2a.731.731 0 01.746.75v2c0 .2-.072.375-.217.525a.717.717 0 01-.537.225A.731.731 0 015 4.75V4.5H3.5v4.25c0 1.183.413 2.188 1.237 3.012C5.563 12.587 6.567 13 7.75 13c1.183 0 2.188-.412 3.012-1.238C11.587 10.938 12 9.933 12 8.75V4.5h-1.5v.25c0 .2-.072.375-.217.525a.717.717 0 01-.537.225A.731.731 0 019 4.75v-2c0-.212.072-.39.217-.534A.732.732 0 019.754 2a.731.731 0 01.746.75V3h2.25c.213 0 .39.072.534.216a.726.726 0 01.216.534v5c0 1.46-.48 2.729-1.438 3.807-.958 1.079-2.145 1.71-3.562 1.893v.875c0 1.417.47 2.63 1.412 3.637.942 1.009 2.138 1.513 3.588 1.513 1.35 0 2.52-.501 3.512-1.504.992-1.002 1.488-2.22 1.488-3.652V13.4a2.725 2.725 0 01-1.438-.975 2.656 2.656 0 01-.562-1.675c0-.764.268-1.413.803-1.948A2.656 2.656 0 0119.253 8c.765 0 1.414.267 1.947.802.533.535.8 1.184.8 1.948 0 .633-.188 1.192-.563 1.675A2.725 2.725 0 0120 13.4v1.925c0 1.85-.637 3.42-1.913 4.713-1.274 1.291-2.804 1.937-4.587 1.937zM19.246 12c.353 0 .65-.12.892-.358.241-.239.362-.535.362-.888 0-.352-.12-.65-.358-.891a1.198 1.198 0 00-.888-.363c-.353 0-.65.12-.892.358a1.198 1.198 0 00-.362.888c0 .352.12.65.358.891.239.242.535.363.888.363z"
-  //       fill="#000"
-  //     />
-  //   </SvgIconBuilder>
-  // );
 
   const accountItems = [
     {
@@ -89,7 +80,6 @@ const Profile = ({ navigation }) => {
   ];
 
   const supportItems = [
-    { text: "Help & Support", action: navigateToSupport },
     {
       text: "Terms and Policies",
       action: navigateToTermsAndPolicies,
@@ -111,10 +101,10 @@ const Profile = ({ navigation }) => {
     },
   ];
 
-  const renderSettingsItem = ({ icon, image, text, action, component }) => (
+  const renderSettingsItem = ({ icon, text, action, component }) => (
     <TouchableOpacity onPress={action} style={styles.listItem}>
-      {icon && <MaterialIcons name={icon} size={24} color={colors.BlueI} />}
-      {image && <Image source={image} style={styles.iconImage} />}
+      <MaterialIcons name={icon} size={24} color={colors.BlueI} />
+
       {component && component(30, 30, colors.BlueI, styles.iconImage)}
       <Text
         style={{

@@ -11,6 +11,7 @@ import HomeCard from "../components/home/HomeCard";
 import DoctorCircle from "../components/home/DoctorCircle";
 import DoctorIcon from "../../assets/SvgIcons/DoctorIcon";
 import usePaginatedFetch from "../hooks/usePaginatedFetch";
+
 const Home = ({ navigation }) => {
   const [term, setTerm] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -28,7 +29,7 @@ const Home = ({ navigation }) => {
       setResults([]);
     });
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, setResults]);
 
   useEffect(() => {
     if (results.length !== 0) {
@@ -63,7 +64,7 @@ const Home = ({ navigation }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         data={doctors}
-        key={Math.random().toString(36).substring(7)}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => {
           return <DoctorCircle doctor={item} navigation={navigation} />;
         }}

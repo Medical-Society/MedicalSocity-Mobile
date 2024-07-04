@@ -1,7 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { colors } from "../../../AppStyles";
 import { responsiveFontSize } from "../../../AppStyles";
+import { Image } from "expo-image";
+import { blurhash } from "../../../AppStyles";
 const DoctorCircle = ({ doctor, navigation }) => {
   const styles = StyleSheet.create({
     doctorCircle: {
@@ -38,10 +40,10 @@ const DoctorCircle = ({ doctor, navigation }) => {
           })
         }>
         <Image
-          source={{
-            uri: doctor?.avatar,
-          }}
+          source={doctor?.avatar}
           style={styles.image}
+          placeholder={{ blurhash }}
+          transition={500}
         />
         <Text style={styles.name}>{doctor?.englishFullName}</Text>
         <Text style={styles.specialty}>{doctor?.specialization}</Text>

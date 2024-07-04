@@ -6,6 +6,7 @@ import MultiLineTextInput from "../../components/MultiLineTextInput";
 import SubmitButton from "../../components/SubmitButton";
 import MessagesModal from "../../components/MessagesModal";
 const ReportProblemScreen = ({ navigation }) => {
+  
   const [problem, setProblem] = useState("");
   const [message, setMessage] = useState({
     successMessage: "",

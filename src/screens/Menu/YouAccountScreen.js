@@ -11,7 +11,7 @@ import { Context as UserContext } from "../../context/UserContext";
 import MessagesModal from "../../components/MessagesModal";
 import LoadingModal from "../../components/LoadingModal";
 import Header from "../../components/Header";
-import InputField from "../../components/auth/InputField";
+import InputField from "../../components/InputField";
 import SafeScrollView from "../../components/SafeScrollView";
 import Button from "../../components/SubmitButton";
 
