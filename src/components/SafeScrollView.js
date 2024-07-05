@@ -3,13 +3,24 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../AppStyles";
 
-const SafeScrollView = ({ children, header, marginBottom = 60 }) => {
+const SafeScrollView = ({
+  children,
+  header,
+  marginBottom = 60,
+  alignItems = "stretch",
+  justifyContent = "flex-start",
+}) => {
   return (
     <SafeAreaView style={styles.container}>
       {header}
       {children && (
         <ScrollView
-          style={styles.scrollContainer}
+          contentContainerStyle={{
+            ...styles.scrollContainer,
+            alignItems: alignItems,
+            // check if justifyContent is not empty
+            justifyContent: justifyContent ? justifyContent : "flex-start",
+          }}
           showsVerticalScrollIndicator={false}>
           <View
             style={{
@@ -30,7 +41,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.White,
   },
   scrollContainer: {
-    flex: 1,
+    flexGrow: 1,
     marginHorizontal: 10,
   },
   marginedContainer: {

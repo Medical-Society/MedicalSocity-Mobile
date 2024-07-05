@@ -35,7 +35,7 @@ const ChatScreen = ({ navigation, route }) => {
       setPatient(response.data.data.patient);
       setMessages(buildMessages.reverse());
     } catch (error) {
-      console.error("Failed to fetch chat data:", error);
+      console.log("Failed to fetch chat data:", error);
     }
   }, [chatId, token]);
 
@@ -82,7 +82,11 @@ const ChatScreen = ({ navigation, route }) => {
     <SafeFlatListView
       header={
         <Header
-          title={doctor.englishFullName ? `Dr/ ${doctor.englishFullName}` : "Chat"}
+          title={
+            doctor?.englishFullName
+              ? `Dr/ ${doctor?.englishFullName}`
+              : "MSS Doctor"
+          }
           backButtonHandler={() => navigation.goBack()}
         />
       }>

@@ -45,7 +45,8 @@ const postImage = async (
       errorMessage: "",
       successMessage: "",
     });
-  } catch (_) {
+  } catch (error) {
+    console.log(error.response.data)
     setMessage({
       errorMessage: "Error submitting prescription",
       successMessage: "",
@@ -104,7 +105,7 @@ const OcrModalScreen = ({ navigation, isVisible, setModalVisible }) => {
     if (!result.canceled) {
       setModalVisible(false);
       postImage(
-        result.uri,
+        result.assets[0].uri,
         navigation,
         setLoading,
         setMessage,

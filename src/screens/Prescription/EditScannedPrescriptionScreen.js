@@ -77,7 +77,6 @@ const MedicineFields = ({
   handleDelete,
   idx,
 }) => {
-  console.log("id", id);
   return (
     <View style={styles.medicineField}>
       <Text style={styles.headerText}>Medicine {idx + 1}</Text>
@@ -111,22 +110,7 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
   };
 
   useEffect(() => {
-    getScannedPrescriptionById(prescriptionId);
-  }, [getScannedPrescriptionById, prescriptionId]);
-
-  const [localData, setLocalData] = useState(prescription);
-  const [isLoading, setIsLoading] = useState(true);
-  const { state: authState } = useContext(AuthContext);
-  const { state: userState } = useContext(UserContext);
-  const [message, setMessage] = useState({
-    successMessage: "",
-    errorMessage: "",
-  });
-  const patientId = userState.userData._id;
-  const token = authState.token;
-
-  const getScannedPrescriptionById = useCallback(
-    async (prescriptionId) => {
+    const getScannedPrescriptionById = async (prescriptionId) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
@@ -152,13 +136,23 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
       } finally {
         setIsLoading(false);
       }
-    },
-    [patientId, token]
-  );
+    };
+    getScannedPrescriptionById(prescriptionId);
+  }, [patientId, prescriptionId, token]);
+
+  const [localData, setLocalData] = useState(prescription);
+  const [isLoading, setIsLoading] = useState(true);
+  const { state: authState } = useContext(AuthContext);
+  const { state: userState } = useContext(UserContext);
+  const [message, setMessage] = useState({
+    successMessage: "",
+    errorMessage: "",
+  });
+  const patientId = userState.userData._id;
+  const token = authState.token;
 
   const handleDelete = useCallback(
     (id) => {
-      console.log("id", id);
       const newMedicines = localData.medicines.filter(
         (medicine) => medicine._id !== id
       );
@@ -169,7 +163,6 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
 
   const handleChange = useCallback(
     (id, field, value) => {
-      console.log("id", id, "field", field, "value", value);
       const newMedicines = localData.medicines.map((medicine) => {
         if (medicine._id === id) {
           return { ...medicine, [field]: value };
@@ -186,7 +179,6 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
       const response = await axios.patch(
         `https://api.medical-society.fr.to/api/v1/patients/${patientId}/scanned-prescriptions/${prescriptionId}`,
         {
-          patientName: newPrescription.patientName,
           doctorName: newPrescription.doctorName,
           medicines: newPrescription.medicines,
           diagnose: newPrescription.diagnose,
@@ -199,7 +191,6 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
         }
       );
       if (callback) callback();
-      console.log("response", response.data);
     } catch (error) {
       console.log("Error updating prescription:", error.response.data);
     }
@@ -239,7 +230,6 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
 
   const renderItem = useCallback(
     ({ item, index }) => {
-      console.log("item", item, "index", index);
       return (
         <MedicineFields
           name={item.name}

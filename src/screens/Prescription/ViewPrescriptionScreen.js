@@ -1,5 +1,11 @@
 import React, { useCallback } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Share,
+  TouchableOpacity,
+} from "react-native";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { colors } from "../../../AppStyles";
@@ -11,6 +17,7 @@ import Header from "../../components/Header";
 import InfoField from "../../components/prescription/InfoField";
 import MedicineField from "../../components/prescription/MedicineField";
 import uuid from "react-native-uuid";
+import { AntDesign } from "@expo/vector-icons";
 
 const ViewPrescriptionScreen = ({ navigation, route }) => {
   const [prescription, setPrescription] = useState({
@@ -47,7 +54,8 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
         );
         console.log(response.data);
         setPrescription({
-          doctorName: response.data.data.doctor.englishFullName,
+          doctorName:
+            response.data.data?.doctor?.englishFullName || "MSS Doctor",
           ...response.data.data,
         });
       } catch (error) {
@@ -58,6 +66,35 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
     },
     [patientId, token]
   );
+
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Prescription Details:
+        Doctor Name: ${doctorName}
+        Diseases: ${diseases}
+        Diagnose: ${diagnose}
+
+        Medicines:
+        ${medicines.map((medicine) => {
+          return `${medicine.name} - ${medicine.time}\n`;
+        })}
+Shared From Medical Society App.
+You can view them by downloading the Medical Society app.`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -93,6 +130,16 @@ const ViewPrescriptionScreen = ({ navigation, route }) => {
               <MedicineField name={item.name} nOfTimes={item.time} />
             )}
           />
+
+          <TouchableOpacity
+            onPress={handleShare}
+            style={{
+              position: "absolute",
+              bottom: 10,
+              right: 10,
+            }}>
+            <AntDesign name="sharealt" size={35} color="#1A4992" />
+          </TouchableOpacity>
         </View>
       )}
     </SafeAreaView>

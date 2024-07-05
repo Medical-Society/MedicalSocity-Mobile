@@ -28,7 +28,7 @@ const ResolveAuthScreen = () => {
     if (fontsLoaded && introFinished) {
       tryLocalSignin();
     }
-  }, [fontsLoaded, introFinished]);
+  }, [fontsLoaded, introFinished, tryLocalSignin]);
 
   return (
     <View style={styles.container}>

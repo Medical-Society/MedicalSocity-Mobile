@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
 import SafeScrollView from "../../components/SafeScrollView";
 import Header from "../../components/Header";
 import MultiLineTextInput from "../../components/MultiLineTextInput";
@@ -29,21 +29,29 @@ const ReportProblemScreen = ({ navigation }) => {
           backButtonHandler={() => navigation.goBack()}
         />
       }>
-      <View style={styles.reportProblemContainer}>
-        <MultiLineTextInput
-          placeholder="Write your problem here"
-          value={problem}
-          handleTextChange={setProblem}
-        />
-      </View>
-      <MessagesModal
-        successMessage={message.successMessage}
-        errorMessage={message.errorMessage}
-        clearMessage={() =>
-          setMessage({ successMessage: "", errorMessage: "" })
-        }
-      />
-      <SubmitButton buttonText="Submit" onPress={() => handleSubmit()} />
+      <KeyboardAvoidingView
+        style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
+        behavior="padding"
+        enabled
+        keyboardVerticalOffset={100}>
+        <View>
+          <View style={styles.reportProblemContainer}>
+            <MultiLineTextInput
+              placeholder="Write your problem here"
+              value={problem}
+              handleTextChange={setProblem}
+            />
+          </View>
+          <MessagesModal
+            successMessage={message.successMessage}
+            errorMessage={message.errorMessage}
+            clearMessage={() =>
+              setMessage({ successMessage: "", errorMessage: "" })
+            }
+          />
+          <SubmitButton buttonText="Submit" onPress={() => handleSubmit()} />
+        </View>
+      </KeyboardAvoidingView>
     </SafeScrollView>
   );
 };

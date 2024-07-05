@@ -15,7 +15,12 @@ import HaveAccOrNot from "../components/auth/HaveAccOrNot";
 import { Context as AuthContext } from "../context/AuthContext";
 import MessagesModal from "../components/MessagesModal";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { colors, responsiveFontSize, responsiveHeight } from "../../AppStyles";
+import {
+  colors,
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from "../../AppStyles";
 import GenderInput from "../components/GenderInput";
 import SafeScrollView from "../components/SafeScrollView";
 import Header from "../components/Header";
@@ -126,7 +131,8 @@ const SignUp = ({ navigation }) => {
 
   const DatePicker = () => {
     return (
-      <>
+      <View style={styles.mainDateContainer}>
+        <Text style={styles.label}>Birthdate:</Text>
         <View style={styles.pickedDateContainer}>
           <TouchableOpacity style={styles.pickedDate} onPress={showPicker}>
             <Text style={styles.dateText}>
@@ -149,7 +155,7 @@ const SignUp = ({ navigation }) => {
             style={styles.datePicker}
           />
         )}
-      </>
+      </View>
     );
   };
 
@@ -172,7 +178,11 @@ const SignUp = ({ navigation }) => {
             behavior="padding"
             enabled
             keyboardVerticalOffset={20}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{
+                flex: 1,
+              }}>
               {signupInputs}
               <GenderInput
                 gender={signUpData.gender}
@@ -200,28 +210,38 @@ const SignUp = ({ navigation }) => {
             </ScrollView>
           </KeyboardAvoidingView>
         </>
-      }></SafeScrollView>
+      }>
+        
+      </SafeScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  mainDateContainer: {
+    margin: 10,
+    justifyContent: "center",
+  },
+  label: {
+    fontSize: responsiveFontSize(18),
+    fontFamily: "Cairo-Regular",
+    paddingBottom: 5,
+  },
   pickedDateContainer: {
-    padding: 20,
-    backgroundColor: colors.OffWhite,
+    paddingHorizontal: responsiveWidth(10),
+
+    height: responsiveHeight(60),
+    color: colors.Black,
     borderRadius: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    backgroundColor: colors.White,
+    fontSize: responsiveFontSize(16),
+    justifyContent: "center",
   },
   pickedDate: {
     fontSize: 18,
     color: "black",
   },
 
-  // This only works on iOS
-  datePicker: {
-    width: 320,
-    height: 260,
-    display: "flex",
-    justifyContent: "center",
-  },
   dateText: {
     fontSize: 18,
     color: "black",

@@ -16,8 +16,14 @@ const Button = ({
     activeOpacity={0.8}>
     <LinearGradient
       colors={
-        color === "default"
+        // color === "default"
+        //   ? [colors.BlueI, colors.BlueII]
+        //   : [colors.White, colors.White]
+        //   color: disabled ? colors.GreyII : colors.BlueI,
+        color === "default" && !disabled
           ? [colors.BlueI, colors.BlueII]
+          : disabled
+          ? [colors.GreyII, colors.GreyII]
           : [colors.White, colors.White]
       }
       start={{ x: 0, y: 0 }}

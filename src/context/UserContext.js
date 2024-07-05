@@ -75,6 +75,16 @@ const updateUserDataServer = (dispatch) => {
     setLoading(true);
     try {
       const { patientName, address, phoneNumber } = userData;
+
+      if (!patientName || !address || !phoneNumber) {
+        dispatch({
+          type: "ADD_ERROR_MESSAGE",
+          payload: "Please fill all the fields",
+        });
+        setLoading(false);
+        return;
+      }
+
       const token = await AsyncStorage.getItem("token");
       const response = await patientApi.patch(
         "/updateMe",

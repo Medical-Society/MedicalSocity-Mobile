@@ -20,9 +20,6 @@ const ConfirmModal = ({
       animationType="fade"
       transparent={true}
       visible={visibility}
-      //   onRequestClose={() => {
-      //     setModalVisible(!modalVisible);
-      //   }}
       onRequestClose={handleVisibility}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
@@ -74,9 +71,11 @@ const ConfirmModal = ({
 
 const styles = StyleSheet.create({
   modalContainer: {
+    // center it on the screen
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   iconsView: {

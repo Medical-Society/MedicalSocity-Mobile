@@ -35,6 +35,7 @@ const DoctorScreen = ({ navigation, route }) => {
     status: "",
     avatar: "",
     about: "",
+    price: 0,
     availableTime: {},
   });
   const [weekdays, setWeekdays] = useState([]);
@@ -44,7 +45,6 @@ const DoctorScreen = ({ navigation, route }) => {
       try {
         const response = await doctorApi.get(`/${doctorId}`);
         setDoctor(response.data.data.doctor);
-
         setLoading(false);
       } catch (err) {
         console.log(err.response);
@@ -54,8 +54,7 @@ const DoctorScreen = ({ navigation, route }) => {
   }, [doctorId]);
 
   useEffect(() => {
-    console.log("Fetching doctor weekdays", doctor);
-    const doctorWeekdays = { ...doctor.availableTime.weekdays };
+    const doctorWeekdays = { ...doctor?.availableTime.weekdays };
     const removedMinutes = removeMinute(doctorWeekdays);
     const mergeSameTimeDays = mergeSameDays(removedMinutes);
     setWeekdays(mergeSameTimeDays);
@@ -112,15 +111,16 @@ const DoctorScreen = ({ navigation, route }) => {
         <View style={styles.scrollViewContainer}>
           <View style={styles.info}>
             <Image
-              source={doctor.avatar}
+              source={doctor?.avatar}
               style={styles.image}
               placeholder={{ blurhash }}
               transition={500}
             />
             <View style={styles.doctorInfo}>
-              <Text style={styles.infoText}>{doctor.englishFullName}</Text>
-              <Text style={styles.specialization}>{doctor.specialization}</Text>
-              <Text style={styles.address}>{doctor.clinicAddress}</Text>
+              <Text style={styles.infoText}>{doctor?.englishFullName}</Text>
+              <Text style={styles.infoText}>{doctor?.availableTime.price} LE</Text>
+              <Text style={styles.specialization}>{doctor?.specialization}</Text>
+              <Text style={styles.address}>{doctor?.clinicAddress}</Text>
             </View>
           </View>
           <Spacer />

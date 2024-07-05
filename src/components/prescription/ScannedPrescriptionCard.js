@@ -12,7 +12,7 @@ const ScannedPrescriptionCard = ({
   const [, formattedTime, formattedYMD] = convertTo12HourFormat(
     prescription?.createdAt
   );
-  const doctorName = prescription?.doctorName || "Unknown";
+  const doctorName = prescription?.doctorName || "Ai";
   const patientName = prescription?.patientName || "Unknown";
 
   return (

@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { RadioButton } from "react-native-paper";
-import {
-  colors,
-  responsiveFontSize,
-  responsiveHeight,
-  responsiveWidth,
-} from "../../AppStyles";
+import { colors, responsiveFontSize, responsiveHeight } from "../../AppStyles";
 
 const GenderInput = ({ gender, handleInputChange }) => {
   return (
@@ -21,7 +15,6 @@ const GenderInput = ({ gender, handleInputChange }) => {
           <Text
             style={[
               styles.textStatus,
-              // selectedState === statusButtons[item] &&
               gender === "MALE" && styles.selectedTextStatus,
             ]}>
             Male
@@ -52,8 +45,8 @@ const GenderInput = ({ gender, handleInputChange }) => {
 
 const styles = StyleSheet.create({
   genderContainer: {
-    marginVertical: responsiveHeight(10),
     justifyContent: "center",
+    paddingHorizontal: 10,
   },
   mainContainer: {
     flexDirection: "row",
@@ -69,9 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: responsiveHeight(20),
     borderRadius: 10,
-    marginRight: responsiveWidth(10),
     borderColor: colors.GreyI,
     borderWidth: 1,
+    marginHorizontal: 5,
   },
   selectedStatus: {
     borderColor: colors.BlueI,
@@ -86,6 +79,7 @@ const styles = StyleSheet.create({
   selectedTextStatus: {
     color: colors.BlueI,
     fontSize: responsiveFontSize(16),
+    fontFamily: "Cairo-SemiBold",
   },
 });
 

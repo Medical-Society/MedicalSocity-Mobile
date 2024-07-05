@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useContext } from "react";
 import axios from "axios";
 import { Context as AuthContext } from "../context/AuthContext";
 
-const usePaginatedFetch = (url, value, limit = 10) => {
+const usePaginatedFetch = (url, value) => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -25,7 +25,7 @@ const usePaginatedFetch = (url, value, limit = 10) => {
       const response = await axios.get(url, {
         params: {
           page: currentPage,
-          limit: limit,
+          limit: 10,
         },
         headers: {
           Authorization: `Bearer ${state.token}`,
@@ -41,7 +41,7 @@ const usePaginatedFetch = (url, value, limit = 10) => {
 
       setTotalPages(response.data.data.totalPages);
     } catch (error) {
-      console.error(
+      console.log(
         "Error fetching data:",
         error.response ? error.response.data : error.message
       );

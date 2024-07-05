@@ -167,7 +167,7 @@ const signout = (dispatch) => {
   return async () => {
     await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("userData");
-
+    await AsyncStorage.removeItem("sensorId");
     dispatch({ type: "SIGNOUT" });
   };
 };

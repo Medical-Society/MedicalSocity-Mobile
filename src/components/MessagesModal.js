@@ -7,8 +7,7 @@ const MessagesModal = ({ errorMessage, successMessage, clearMessage }) => {
     <Modal
       visible={message ? true : false}
       animationType="fade"
-      transparent={true}
-    >
+      transparent={true}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={{ ...styles.iconsView, padding: errorMessage ? 5 : 5 }}>
@@ -25,8 +24,7 @@ const MessagesModal = ({ errorMessage, successMessage, clearMessage }) => {
             style={{
               ...styles.closeButton,
               backgroundColor: errorMessage ? "red" : "green",
-            }}
-          >
+            }}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
         </View>

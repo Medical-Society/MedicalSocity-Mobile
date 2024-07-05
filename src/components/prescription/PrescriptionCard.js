@@ -7,9 +7,9 @@ const PrescriptionCard = ({ prescription, handlePressedPrescription }) => {
   const [, formattedTime, formattedYMD] = convertTo12HourFormat(
     prescription?.createdAt
   );
-  const doctorName = prescription?.doctor?.englishFullName || "Dr. Unknown";
-  const specialization = prescription?.doctor?.specialization || "Unknown";
-  const address = prescription?.doctor?.clinicAddress || "Unknown";
+  const doctorName = prescription?.doctor?.englishFullName || "MSS Doctor";
+  const specialization = prescription?.doctor?.specialization || "";
+  const address = prescription?.doctor?.clinicAddress || "";
 
   return (
     <TouchableOpacity

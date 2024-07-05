@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Modal } from "react-native";
 import { Context as IotContext } from "../../context/IotContext";
 import { Context as UserContext } from "../../context/UserContext";
 import SafeScrollView from "../../components/SafeScrollView";
@@ -8,6 +8,7 @@ import { ref, onValue } from "firebase/database";
 import { database } from "../../services/firebase";
 import HeartRateIcon from "../../../assets/SvgIcons/HeartRateIcon";
 import { colors } from "../../../AppStyles";
+
 const db = database;
 
 const handleCase = (age, bpm) => {
@@ -120,6 +121,7 @@ const HomeIotScreen = ({ navigation }) => {
   const age = new Date().getFullYear() - birthdate.getFullYear();
 
   const [data, setData] = useState(null);
+  const [prevData, setPrevData] = useState(null);
 
   useEffect(() => {
     const dbRef = ref(db, sensorId);
@@ -133,6 +135,12 @@ const HomeIotScreen = ({ navigation }) => {
     };
   }, [sensorId]);
 
+  useEffect(() => {
+    if (data !== prevData) {
+      setPrevData(data);
+    }
+  }, [data, prevData]);
+
   return (
     <SafeScrollView
       header={
@@ -140,14 +148,35 @@ const HomeIotScreen = ({ navigation }) => {
           title="Home Iot"
           backButtonHandler={() => navigation.goBack()}
         />
-      }>
+      }
+      alignItems="center"
+      justifyContent="center"
+      marginBottom={0}>
       <View style={styles.container}>
         <HeartRateIcon />
-        <Text style={styles.titleText}>Your Heart Rate</Text>
-        <Text style={styles.text}>{data?.BPM} BPM</Text>
-        <Text style={styles.text}>Finger: {data?.Finger}</Text>
+        {/* <Text style={styles.titleText}>Your Heart Rate</Text> */}
+        <Text style={styles.text}>
+          {data?.Finger === "No finger?"
+            ? ""
+            : data?.Finger === "Finger" && data?.BPM === 49
+            ? ""
+            : "Your Heart Rate"}
+        </Text>
 
-        <Text style={styles.case}>{handleCase(age, data?.BPM)}</Text>
+        <Text style={styles.text}>
+          {data?.Finger === "No finger?"
+            ? "Please put your finger on the sensor"
+            : data?.Finger === "Finger" && data?.BPM === 49
+            ? "Calculating your heart rate"
+            : data?.BPM}
+        </Text>
+        <Text>
+          {data?.Finger === "No finger?"
+            ? ""
+            : data?.Finger === "Finger" && data?.BPM === 49
+            ? ""
+            : handleCase(age, data?.BPM)}
+        </Text>
       </View>
     </SafeScrollView>
   );
@@ -157,6 +186,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    alignSelf: "center",
     alignItems: "center",
     padding: 16,
   },

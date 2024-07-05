@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  Share,
 } from "react-native";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
@@ -15,6 +16,7 @@ import Skeleton from "../../components/Skeleton";
 import { Context as UserContext } from "../../context/UserContext";
 import { Context as AuthContext } from "../../context/AuthContext";
 import uuid from "react-native-uuid";
+import { AntDesign } from "@expo/vector-icons";
 
 const InfoField = ({ title, value }) => {
   return (
@@ -36,7 +38,7 @@ const MedicineField = ({ name, nOfTimes, note }) => {
   );
 };
 
-const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
+const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode, mode }) => {
   const [prescription, setPrescription] = useState({
     doctorName: "",
     medicines: [],
@@ -50,17 +52,11 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
   const { state: authState } = useContext(AuthContext);
   const { state: userState } = useContext(UserContext);
   const patientId = userState.userData._id;
-  console.log("patientId", patientId);
 
   const token = authState.token;
 
   useEffect(() => {
-    getScannedPrescriptionById(prescriptionId);
-  }, [getScannedPrescriptionById, prescriptionId]);
-
-  const getScannedPrescriptionById = useCallback(
-    async (prescriptionId) => {
-      console.log("prescriptionId", prescriptionId);
+    const getScannedPrescriptionById = async (prescriptionId) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
@@ -71,7 +67,6 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
             },
           }
         );
-        console.log(response.data);
         setPrescription({
           doctorName: response.data.data.doctorName,
           ...response.data.data,
@@ -84,9 +79,40 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
       } finally {
         setIsLoading(false);
       }
-    },
-    [patientId, token]
-  );
+    };
+    getScannedPrescriptionById(prescriptionId);
+  }, [prescriptionId, patientId, token]);
+
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Prescription Details:
+          Doctor Name: ${doctorName}
+          Diseases: ${diseases}
+          Diagnose: ${diagnose}
+
+          Medicines:
+          ${medicines.map((medicine) => {
+            return `${medicine.name} - ${
+              medicine.time ? medicine.time : "X times"
+            }\n`;
+          })}
+Shared From Medical Society App.
+You can view them by downloading the Medical Society app.`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          //
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -94,9 +120,9 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
         <Skeleton />
       ) : (
         <View style={styles.innerContainer}>
-          <InfoField title="Doctor Name" value={doctorName} />
-          <InfoField title="Diseases" value={diseases} />
-          <InfoField title="Diagnose" value={diagnose} />
+          <InfoField title="Doctor Name" value={doctorName || "Ai"} />
+          <InfoField title="Diseases" value={diseases || "No diseases found"} />
+          <InfoField title="Diagnose" value={diagnose || "No diagnose found"} />
           <View
             style={{
               height: 20,
@@ -126,6 +152,15 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
           )}
         </View>
       )}
+      <TouchableOpacity
+        onPress={handleShare}
+        style={{
+          position: "absolute",
+          bottom: 10,
+          right: 10,
+        }}>
+        <AntDesign name="sharealt" size={35} color="#1A4992" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -160,7 +195,7 @@ const styles = StyleSheet.create({
   editButton: {
     position: "absolute",
     bottom: 10,
-    right: 0,
+    left: 0,
     backgroundColor: colors.BlueII,
     padding: 10,
     borderRadius: 50,

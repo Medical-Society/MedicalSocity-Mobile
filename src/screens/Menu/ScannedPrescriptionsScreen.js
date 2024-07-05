@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import Header from "../../components/Header";
@@ -47,6 +47,14 @@ const ScannedPrescriptionsScreen = ({ navigation }) => {
     }
   };
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      reFetchPrescriptions();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <SafeFlatListView
       header={
@@ -56,6 +64,11 @@ const ScannedPrescriptionsScreen = ({ navigation }) => {
         />
       }
       marginBottom={10}>
+      {!isLoading && prescriptions.length === 0 && (
+        <View style={styles.mainContainer}>
+          <Text style={styles.mainText}>No scanned prescriptions found</Text>
+        </View>
+      )}
       <FlatList
         data={prescriptions}
         showsVerticalScrollIndicator={false}
@@ -76,11 +89,6 @@ const ScannedPrescriptionsScreen = ({ navigation }) => {
         onEndReachedThreshold={0.1}
         ListFooterComponent={isLoading && <ActivityIndicator size="large" />}
       />
-      {!isLoading && prescriptions.length === 0 && (
-        <View style={styles.mainContainer}>
-          <Text style={styles.mainText}>No scanned prescriptions found</Text>
-        </View>
-      )}
     </SafeFlatListView>
   );
 };

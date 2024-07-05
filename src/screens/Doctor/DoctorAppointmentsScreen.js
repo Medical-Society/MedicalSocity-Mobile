@@ -59,7 +59,7 @@ const DoctorAppointmentsScreen = ({
           Authorization: `Bearer ${token}`,
         },
       });
-      setWeekDays(response.data.data);
+      setWeekDays(response.data.data.availableTimeSlots);
     } catch (error) {
       console.log("error", error);
     } finally {
@@ -112,12 +112,14 @@ const DoctorAppointmentsScreen = ({
         <>
           <View
             style={{
-              marginHorizontal: responsiveWidth(20),
+              paddingHorizontal: responsiveWidth(10),
             }}>
             <View style={styles.flatList}>
-              <Text style={styles.title}>
-                Choose the day of your appointment
-              </Text>
+              {keys.length > 0 && (
+                <Text style={styles.title}>
+                  Choose the day of your appointment
+                </Text>
+              )}
               <FlatList
                 data={keys}
                 horizontal
@@ -175,9 +177,11 @@ const DoctorAppointmentsScreen = ({
             />
 
             <View>
-              <Text style={styles.title}>
-                Choose the time of your appointment
-              </Text>
+              {weekDays[selectedDay] && weekDays[selectedDay].length > 0 && (
+                <Text style={styles.title}>
+                  Choose the time of your appointment
+                </Text>
+              )}
               <FlatList
                 data={weekDays[selectedDay]}
                 numColumns={4}

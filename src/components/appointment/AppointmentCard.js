@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Share, StyleSheet, TouchableOpacity } from "react-native";
 import { colors, convertTo12HourFormat } from "../../../AppStyles";
 import patientsApi from "../../services/patient";
+import { Ionicons } from "@expo/vector-icons";
+
 const buildButtonStatusBased = (status) => {
   switch (status) {
     case "PENDING":
@@ -31,17 +33,17 @@ const buildButtonStatusBased = (status) => {
   }
 };
 
-const AppointmentCard = ({ appointment, onPress }) => {
+const AppointmentCard = ({ appointment, onPress, goToDoctorProfile }) => {
   const { price, doctor, date, time, status, description } = appointment;
   const [numberOfPatientsBeforeYou, setNumberOfPatientsBeforeYou] = useState(0);
 
   const { buttonText, mainColor, backgroundColor } =
     buildButtonStatusBased(status);
 
+  const [, formattedTime, formattedYMD] = convertTo12HourFormat(date);
   useEffect(() => {
     const getNumberOfPatientsBeforeYou = async () => {
       try {
-        // /appointments/:appointmentId/beforeYou
         const response = await patientsApi.get(
           `/appointments/${appointment._id}/beforeYou`
         );
@@ -54,12 +56,37 @@ const AppointmentCard = ({ appointment, onPress }) => {
     getNumberOfPatientsBeforeYou();
   });
 
-  const [, formattedTime, formattedYMD] = convertTo12HourFormat(date);
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Appointment Details:
+          Doctor Name: ${doctor.englishFullName}
+          Date: ${formattedYMD}
+          Time: ${formattedTime}
+          Price: ${price} LE
+
+Shared From Medical Society App.
+You can view them by downloading the Medical Society app.`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <Text style={styles.doctorName}>{doctor.englishFullName}</Text>
+        <Text style={styles.doctorName} onPress={goToDoctorProfile}>
+          {doctor.englishFullName}
+        </Text>
         <Text style={styles.date}>{`${formattedYMD}`}</Text>
       </View>
 
@@ -72,12 +99,20 @@ const AppointmentCard = ({ appointment, onPress }) => {
         </View>
       )}
 
-      <View style={styles.row}>
+      <View style={styles.lastRow}>
         <Text style={styles.price}>{price} LE</Text>
         <Text style={styles.time}>{time}</Text>
+        {appointment.status === "PENDING" && (
+          <TouchableOpacity onPress={handleShare}>
+            <Ionicons
+              name="notifications-outline"
+              size={24}
+              color={colors.BlueI}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
-      <Text style={styles.description}>{description}</Text>
       {appointment.status === "PENDING" && (
         <TouchableOpacity
           onPress={onPress}
@@ -179,6 +214,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     paddingVertical: 16,
+  },
+  lastRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 10,
   },
 });
 

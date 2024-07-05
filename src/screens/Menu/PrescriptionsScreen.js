@@ -32,39 +32,40 @@ const PrescriptionsScreen = ({ navigation }) => {
         <Header title="Prescriptions" backButtonHandler={backButtonHandler} />
       }
       marginBottom={10}>
+      {!isLoading && prescriptions.length === 0 && (
+        <View style={styles.mainContainer}>
+          <Text style={styles.mainText}>No prescriptions found</Text>
+        </View>
+      )}
+
       <FlatList
+        style={{
+          flex: 1,
+        }}
         data={prescriptions}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <PrescriptionCard
-            prescription={item}
-            handlePressedPrescription={() =>
-              navigation.navigate("ViewPrescription", {
-                prescriptionId: item._id,
-              })
-            }
-          />
-        )}
+        renderItem={({ item }) => {
+          return (
+            <PrescriptionCard
+              prescription={item}
+              handlePressedPrescription={() =>
+                navigation.navigate("ViewPrescription", {
+                  prescriptionId: item._id,
+                })
+              }
+            />
+          );
+        }}
         keyExtractor={(item) => item._id}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         ListFooterComponent={isLoading && <ActivityIndicator size="large" />}
       />
-
-      {!isLoading && prescriptions.length === 0 && (
-        <View style={styles.mainContainer}>
-          <Text style={styles.mainText}>No scanned prescriptions found</Text>
-        </View>
-      )}
     </SafeFlatListView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.White,
-  },
   mainContainer: {
     flex: 1,
     justifyContent: "center",

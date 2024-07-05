@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  ScrollView,
+  Text,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from "react-native";
 import SafeScrollView from "../../components/SafeScrollView";
 import Header from "../../components/Header";
 import { Image } from "expo-image";
@@ -53,53 +58,75 @@ const ContactUs = ({ navigation }) => {
   return (
     <SafeScrollView
       header={
-        <Header title="Contact Us" backButtonHandler={navigation.goBack} />
-      }>
-      <View style={styles.container}>
-        <Image
-          source={require("../../../assets/contactUs.png")}
-          style={styles.image}
-          placeholder={{ blurhash }}
-          transition={500}
-          contentFit="contain"
-        />
-        <Text style={styles.header}>
-          Get in touch with us for any inquiries or support
-        </Text>
+        <>
+          <Header title="Contact Us" backButtonHandler={navigation.goBack} />
+          <KeyboardAvoidingView
+            style={{
+              flex: 1,
+              flexDirection: "column",
+              justifyContent: "center",
+              marginHorizontal: 10,
+            }}
+            behavior="padding"
+            enabled
+            keyboardVerticalOffset={10}>
+            <ScrollView
+              style={{
+                flex: 1,
+              }}>
+              <Image
+                source={require("../../../assets/contactUs.png")}
+                style={styles.image}
+                placeholder={{ blurhash }}
+                transition={500}
+                contentFit="contain"
+              />
+              <Text style={styles.header}>
+                Get in touch with us for any inquiries or support
+              </Text>
 
-        <InputField
-          label="Name"
-          value={patientData.name}
-          onChangeText={(name) => setPatientData({ ...patientData, name })}
-          placeholder="Enter your name"
-        />
-        <InputField
-          label="Email"
-          value={patientData.email}
-          onChangeText={(email) => setPatientData({ ...patientData, email })}
-          placeholder="Enter your email"
-        />
+              <InputField
+                label="Name"
+                value={patientData.name}
+                onChangeText={(name) =>
+                  setPatientData({ ...patientData, name })
+                }
+                placeholder="Enter your name"
+              />
+              <InputField
+                label="Email"
+                value={patientData.email}
+                onChangeText={(email) =>
+                  setPatientData({ ...patientData, email })
+                }
+                placeholder="Enter your email"
+              />
 
-        <MultiLineTextInput
-          label="Message"
-          placeholder="Write your message here"
-          value={patientData.writtenMessage}
-          handleTextChange={(writtenMessage) =>
-            setPatientData({ ...patientData, writtenMessage })
-          }
-        />
+              <MultiLineTextInput
+                label="Message"
+                placeholder="Write your message here"
+                value={patientData.writtenMessage}
+                handleTextChange={(writtenMessage) =>
+                  setPatientData({ ...patientData, writtenMessage })
+                }
+              />
 
-        <MessagesModal
-          successMessage={message.successMessage}
-          errorMessage={message.errorMessage}
-          clearMessage={() =>
-            setMessage({ successMessage: "", errorMessage: "" })
-          }
-        />
+              <MessagesModal
+                successMessage={message.successMessage}
+                errorMessage={message.errorMessage}
+                clearMessage={() =>
+                  setMessage({ successMessage: "", errorMessage: "" })
+                }
+              />
 
-        <SubmitButton buttonText="Submit" onPress={() => handleSubmit()} />
-      </View>
-    </SafeScrollView>
+              <SubmitButton
+                buttonText="Submit"
+                onPress={() => handleSubmit()}
+              />
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </>
+      }></SafeScrollView>
   );
 };
 

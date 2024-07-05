@@ -55,7 +55,7 @@ const Home = ({ navigation }) => {
         onTermChange={setTerm}
         setResults={setResults}
         onTermSubmit={() => searchApi(term, token)}
-        placeholder={"Search for Doctor, Address"}
+        placeholder={"Search for Doctor, Address and Specialization."}
       />
       {doctors && doctors.length > 0 && (
         <View style={styles.headBestDoctorsSection}>
@@ -85,7 +85,7 @@ const Home = ({ navigation }) => {
       />
       <HomeCard
         feature={{
-          title: "Try our bracelet and track your health",
+          title: "Try our IOT and track your health",
           text: " Your heart rate",
           button: "Try it now",
           screen: "Search",

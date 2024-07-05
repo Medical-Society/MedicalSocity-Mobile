@@ -75,6 +75,11 @@ const AppointmentsScreen = ({ navigation }) => {
     InProgress: "IN_PROGRESS",
   };
 
+  const capitalizeFirstLetter = (string) => {
+    string = string.toLowerCase().replace("_", " ");
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   const handlePressedButton = (status) => {
     if (status === selectedState) {
       setSelectedState("All");
@@ -104,7 +109,7 @@ const AppointmentsScreen = ({ navigation }) => {
                 selectedState === statusButtons[item] &&
                   styles.selectedTextStatus,
               ]}>
-              {statusButtons[item]}
+              {capitalizeFirstLetter(statusButtons[item])}
             </Text>
           </TouchableOpacity>
         )}
@@ -120,6 +125,14 @@ const AppointmentsScreen = ({ navigation }) => {
       setRefreshing(false);
     }, 2000);
   }, [refreshAppointments]);
+
+  const goToDoctorProfile = (doctorId) => {
+
+    navigation.navigate("DoctorStack", {
+      screen: "Doctor",
+      params: { doctorId },
+    });
+  };
 
   return (
     <SafeFlatListView
@@ -164,6 +177,7 @@ const AppointmentsScreen = ({ navigation }) => {
               setModalVisible(true);
               setDeleteAppointmentId(item._id);
             }}
+            goToDoctorProfile={() => goToDoctorProfile(item.doctor._id)}
           />
         )}
         refreshControl={

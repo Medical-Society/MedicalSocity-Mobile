@@ -23,13 +23,14 @@ const loginWithSensorId = (dispatch) => {
     const dbRef = ref(db, sensorId);
     onValue(dbRef, async (snapshot) => {
       const data = snapshot.val();
+      console.log("Data from Firebase", data);
       if (data) {
         dispatch({ type: "SET_ERROR_MESSAGE", payload: "" });
         try {
           await AsyncStorage.setItem("sensorId", sensorId);
-          console.log("Sensor ID saved to local storage");
+          dispatch({ type: "SET_SENSOR_ID", payload: sensorId });
         } catch (error) {
-          console.error("Error saving sensor ID to local storage", error);
+          console.log("Error saving sensor ID to local storage", error);
         }
       } else {
         dispatch({
@@ -38,7 +39,6 @@ const loginWithSensorId = (dispatch) => {
         });
       }
     });
-    dispatch({ type: "SET_SENSOR_ID", payload: sensorId });
   };
 };
 
@@ -50,7 +50,7 @@ const loadSensorIdFromStorage = (dispatch) => {
         dispatch({ type: "SET_SENSOR_ID", payload: sensorId });
       }
     } catch (error) {
-      console.error("Error loading sensor ID from local storage", error);
+      console.log("Error loading sensor ID from local storage", error);
     }
   };
 };

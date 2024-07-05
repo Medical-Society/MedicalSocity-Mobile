@@ -22,8 +22,10 @@ const Calendar = ({ navigation }) => {
   const [PendingAppointments, setPendingAppointments] = useState([]);
   const { state } = useContext(AuthContext);
   const { token } = state;
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchAppointments = useCallback(async () => {
+    setIsLoading(true);
     try {
       const response = await patientApi.get("/appointments", {
         headers: {
@@ -36,7 +38,9 @@ const Calendar = ({ navigation }) => {
         appointments.filter((appointment) => appointment.status === "PENDING")
       );
     } catch (error) {
-      console.error("Error fetching appointments:", error);
+      console.log("Error fetching appointments:", error);
+    } finally {
+      setIsLoading(false);
     }
   }, [setPendingAppointments, token]);
 
@@ -72,6 +76,12 @@ const Calendar = ({ navigation }) => {
         <Text style={styles.title}>Day</Text>
       </View>
 
+      {!isLoading && appointments.length === 0 && (
+        <View style={styles.mainContainer}>
+          <Text style={styles.mainText}>No appointments found</Text>
+        </View>
+      )}
+
       <View style={styles.scheduleContainer}>
         <FlatList
           data={appointments}
@@ -100,6 +110,14 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
+  },
+  mainContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  mainText: {
+    fontSize: 20,
   },
 
   day: {

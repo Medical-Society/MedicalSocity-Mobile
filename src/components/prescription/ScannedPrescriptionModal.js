@@ -6,7 +6,7 @@ import SafeFlatListView from "../SafeFlatListView";
 
 const ScannedPrescriptionModal = ({ navigation, route }) => {
   const prescriptionId = route.params.prescriptionId;
-  const defaultMode = route.params.mode;
+  const defaultMode = "View";
   const [mode, setMode] = useState(defaultMode);
 
   return (
@@ -25,11 +25,13 @@ const ScannedPrescriptionModal = ({ navigation, route }) => {
         <EditScannedPrescriptionScreen
           prescriptionId={prescriptionId}
           setMode={setMode}
+          editMode={mode}
         />
       ) : (
         <ViewScannedPrescriptionScreen
           prescriptionId={prescriptionId}
           setMode={setMode}
+          editMode={mode}
         />
       )}
     </SafeFlatListView>

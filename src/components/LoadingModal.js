@@ -1,14 +1,12 @@
 import React from "react";
-import { View, Text, Modal, StyleSheet } from "react-native";
+import { View, Text, Modal, StyleSheet, ActivityIndicator } from "react-native";
 import { colors } from "../../AppStyles";
-import { ActivityIndicator } from "react-native-paper";
 
 const LoadingModal = ({ loading }) => {
   return (
     <Modal animationType="slide" transparent={true} visible={loading}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalText}>Loading</Text>
           {loading && <ActivityIndicator animating={loading} />}
         </View>
       </View>
