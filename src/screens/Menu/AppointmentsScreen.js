@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
   FlatList,
   RefreshControl,
@@ -66,8 +66,6 @@ const AppointmentsScreen = ({ navigation }) => {
     setModalVisible(false);
   };
 
-  // Status FINISHED, CANCELED, PENDING, IN_PROGRESS
-
   const statusButtons = {
     Finished: "FINISHED",
     Canceled: "CANCELED",
@@ -127,7 +125,6 @@ const AppointmentsScreen = ({ navigation }) => {
   }, [refreshAppointments]);
 
   const goToDoctorProfile = (doctorId) => {
-
     navigation.navigate("DoctorStack", {
       screen: "Doctor",
       params: { doctorId },

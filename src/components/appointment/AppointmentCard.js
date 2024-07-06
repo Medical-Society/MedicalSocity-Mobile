@@ -34,13 +34,14 @@ const buildButtonStatusBased = (status) => {
 };
 
 const AppointmentCard = ({ appointment, onPress, goToDoctorProfile }) => {
-  const { price, doctor, date, time, status, description } = appointment;
+  const { price, doctor, date, time, status } = appointment;
   const [numberOfPatientsBeforeYou, setNumberOfPatientsBeforeYou] = useState(0);
 
   const { buttonText, mainColor, backgroundColor } =
     buildButtonStatusBased(status);
 
   const [, formattedTime, formattedYMD] = convertTo12HourFormat(date);
+
   useEffect(() => {
     const getNumberOfPatientsBeforeYou = async () => {
       try {
@@ -52,8 +53,7 @@ const AppointmentCard = ({ appointment, onPress, goToDoctorProfile }) => {
         console.log(error.response.data.message);
       }
     };
-
-    getNumberOfPatientsBeforeYou();
+    if (status === "PENDING") getNumberOfPatientsBeforeYou();
   });
 
   const handleShare = async () => {

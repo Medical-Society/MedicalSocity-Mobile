@@ -6,7 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { colors } from "../../../AppStyles";
+import { colors, responsiveFontSize } from "../../../AppStyles";
 import SearchBar from "../../components/Search/SearchBar";
 import SafeFlatListView from "../../components/SafeFlatListView";
 import chatsApi from "../../services/chats";
@@ -35,7 +35,7 @@ const messagesDataBuilder = (chats) => {
       userImage:
         chat.doctor?.avatar ||
         "https://bangkokmentalhealthhospital.com/wp-content/themes/bangkok-mental-health/images/blank-doctors.jpg",
-      doctorId: uuid.v4(),
+      doctorId: chat.doctor?._id || `${uuid.v4()}`,
       isOnline: true,
       lastMessage: lastMessage.text,
       lastMessageTime,
@@ -70,19 +70,20 @@ const ChatsScreen = ({ navigation }) => {
 
   useEffect(() => {
     getChats();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
+    setChats([]);
     const unsubscribe = navigation.addListener("focus", () => {
       getChats();
     });
+
     return unsubscribe;
   }, [navigation]);
 
   useEffect(() => {
     if (socket) {
       const messageListener = ({ _id, text, createdAt, userId }) => {
-        console.log("Doctor ID", chats[0].doctorId);
         setChats((previousChats) => {
           const newChats = previousChats.map((chat) => {
             if (chat.doctorId === userId) {
@@ -107,6 +108,7 @@ const ChatsScreen = ({ navigation }) => {
         });
       };
       socket.on("listen message", messageListener);
+
       return () => {
         socket.off("listen message", messageListener);
       };
@@ -137,7 +139,7 @@ const ChatsScreen = ({ navigation }) => {
               <TouchableOpacity
                 key={index}
                 onPress={() =>
-                  navigation.navigate("Chat", { chatId: item.chatId })
+                  navigation.navigate("Chat", { chatId: item?.chatId })
                 }
                 style={[
                   styles.userContainer,
@@ -146,12 +148,9 @@ const ChatsScreen = ({ navigation }) => {
                     : styles.evenBackground,
                 ]}>
                 <View style={styles.userImageContainer}>
-                  {item.isOnline && item.isOnline === true && (
-                    <View style={styles.onLineIndicator} />
-                  )}
                   <Image
                     source={{
-                      uri: item.userImage,
+                      uri: item?.userImage,
                     }}
                     contentFit="cover"
                     style={styles.userImage}
@@ -165,8 +164,12 @@ const ChatsScreen = ({ navigation }) => {
                     justifyContent: "space-between",
                   }}>
                   <View style={styles.userInfoContainer}>
-                    <Text style={styles.userName}>{item.fullName}</Text>
-                    <Text style={styles.lastSeen}>{item.lastMessage}</Text>
+                    <Text style={styles.userName}>{item?.fullName}</Text>
+                    <Text style={styles.lastSeen}>
+                      {item?.lastMessage.length > 30
+                        ? item?.lastMessage.slice(0, 30) + "..."
+                        : item?.lastMessage}
+                    </Text>
                   </View>
 
                   <View
@@ -178,28 +181,28 @@ const ChatsScreen = ({ navigation }) => {
                     <Text
                       style={{
                         ...styles.lastMessageTime,
-                        fontFamily: item.messageInQueue
+                        fontFamily: item?.messageInQueue
                           ? "Cairo-Bold"
                           : "Cairo-Medium",
-                        color: item.messageInQueue
+                        color: item?.messageInQueue
                           ? colors.BlueI
                           : colors.Black,
                       }}>
-                      {item.lastMessageTime}
+                      {item?.lastMessageTime}
                     </Text>
                     <View
                       style={{
                         width: 20,
                         height: 20,
                         borderRadius: 10,
-                        backgroundColor: item.messageInQueue
+                        backgroundColor: item?.messageInQueue
                           ? colors.BlueI
                           : "transparent",
                         alignItems: "center",
                         justifyContent: "center",
                       }}>
                       <Text style={styles.messageInQueue}>
-                        {item.messageInQueue}
+                        {item?.messageInQueue}
                       </Text>
                     </View>
                   </View>
@@ -286,6 +289,8 @@ const styles = StyleSheet.create({
   },
   userInfoContainer: {
     flexDirection: "column",
+    justifyContent: "center",
+    flex: 1,
   },
   userName: {
     fontSize: 14,
@@ -296,6 +301,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "Cairo-Regular",
     color: colors.Grey,
+    overflow: "hidden",
   },
   lastMessageTime: {
     fontSize: 12,

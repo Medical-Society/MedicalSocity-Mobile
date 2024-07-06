@@ -48,7 +48,7 @@ const usePaginatedFetch = (url, value) => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, state.token, url, value]);
+  }, [currentPage, url, value]);
 
   const handleLoadMore = useCallback(() => {
     if (currentPage < totalPages) {

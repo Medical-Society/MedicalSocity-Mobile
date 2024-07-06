@@ -31,7 +31,7 @@ const MultiLineTextInput = ({
 
 const styles = StyleSheet.create({
   multiLineTextInputContainer: {
-    marginVertical: 10,
+    marginBottom: 10,
     marginHorizontal: 10,
   },
   multiLineTextInput: {

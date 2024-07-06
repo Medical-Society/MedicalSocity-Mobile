@@ -68,8 +68,10 @@ const ViewScannedPrescriptionScreen = ({ prescriptionId, setMode, mode }) => {
           }
         );
         setPrescription({
-          doctorName: response.data.data.doctorName,
-          ...response.data.data,
+          doctorName: response.data.data.doctorName || "Ai",
+          medicines: response.data.data.medicines || [],
+          diagnose: response.data.data.diagnose || "No diagnose found",
+          diseases: response.data.data.diseases || "No diseases found",
         });
       } catch (error) {
         console.log(
@@ -120,9 +122,9 @@ You can view them by downloading the Medical Society app.`,
         <Skeleton />
       ) : (
         <View style={styles.innerContainer}>
-          <InfoField title="Doctor Name" value={doctorName || "Ai"} />
-          <InfoField title="Diseases" value={diseases || "No diseases found"} />
-          <InfoField title="Diagnose" value={diagnose || "No diagnose found"} />
+          <InfoField title="Doctor Name" value={doctorName} />
+          <InfoField title="Diseases" value={diseases} />
+          <InfoField title="Diagnose" value={diagnose} />
           <View
             style={{
               height: 20,

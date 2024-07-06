@@ -138,7 +138,7 @@ const EditScannedPrescriptionScreen = ({ prescriptionId, setMode }) => {
       }
     };
     getScannedPrescriptionById(prescriptionId);
-  }, [patientId, prescriptionId, token]);
+  }, [patientId, prescriptionId]);
 
   const [localData, setLocalData] = useState(prescription);
   const [isLoading, setIsLoading] = useState(true);

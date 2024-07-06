@@ -65,11 +65,11 @@ const DoctorAppointmentsScreen = ({
     } finally {
       setIsDoctorAppointmentsLoaded(true);
     }
-  }, [doctorId, token]);
+  }, [doctorId]);
 
   useEffect(() => {
     getDoctorAvailableTime();
-  }, [getDoctorAvailableTime, doctorId, token]);
+  }, [getDoctorAvailableTime, doctorId]);
 
   const keys = useMemo(() => Object.keys(weekDays), [weekDays]);
 

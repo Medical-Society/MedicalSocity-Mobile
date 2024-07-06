@@ -322,10 +322,6 @@ export const createFormData = async (uri) => {
       type: mimeType,
     };
 
-    // print image size
-    const fileInfo = await FileSystem.getInfoAsync(uri);
-    console.log(fileInfo.size / 1024 / 1024 + "MB)");
-
     formData.append("image", file);
 
     return formData;

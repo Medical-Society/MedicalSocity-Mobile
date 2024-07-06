@@ -1,7 +1,7 @@
 import React from "react";
 import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { colors } from "../../../AppStyles";
+import { colors, responsiveFontSize } from "../../../AppStyles";
 
 const SearchBar = ({
   term,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     flex: 1,
     fontFamily: "Cairo-Regular",
-    fontSize: 18,
+    fontSize: responsiveFontSize(16),
     color: colors.DarkGrey,
   },
   iconStyle: {

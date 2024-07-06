@@ -10,6 +10,13 @@ const ResultsDetail = ({ doctor }) => {
     }
     return ratingArray;
   };
+
+  let doctorDistance = doctor?.distance ? doctor.distance / 1000 : "Not";
+
+  let doctorDistanceText = "";
+  if (doctorDistance !== "Not") {
+    doctorDistanceText = doctorDistance.toFixed(2) + " KM away";
+  }
   return (
     <View style={styles.info}>
       <Image
@@ -21,7 +28,14 @@ const ResultsDetail = ({ doctor }) => {
       <View style={styles.doctorInfo}>
         <Text style={styles.infoText}>{doctor.englishFullName}</Text>
         <Text style={styles.address}>{doctor.clinicAddress}</Text>
-        <View style={styles.rating}>{ratingBuilder(doctor.averageReview)}</View>
+        {doctor.averageReview !== 0 && (
+          <View style={styles.rating}>
+            {ratingBuilder(doctor.averageReview)}
+          </View>
+        )}
+        {doctorDistanceText !== "" && (
+          <Text style={styles.infoText}>{doctorDistanceText}</Text>
+        )}
       </View>
     </View>
   );

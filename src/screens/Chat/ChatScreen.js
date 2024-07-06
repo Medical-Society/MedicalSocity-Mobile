@@ -15,6 +15,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   const getChatById = useCallback(async () => {
     try {
+      console.log("GETTING CHAT BY ID");
       const response = await chatsApi.get(`/${chatId}`, {
         headers: {
           Authorization: `Bearer ${token}`,

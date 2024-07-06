@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, View, FlatList } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  FlatList,
+  Linking,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import Button from "../../components/SubmitButton";
+import * as Device from "expo-device";
+import * as Location from "expo-location";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Skeleton from "../../components/Skeleton";
+import Entypo from "@expo/vector-icons/Entypo";
+
 import {
   blurhash,
   colors,
@@ -22,6 +34,7 @@ const Spacer = () => {
 const DoctorScreen = ({ navigation, route }) => {
   const doctorId = route.params.doctorId;
   const [loading, setLoading] = useState(true);
+
   const [doctor, setDoctor] = useState({
     _id: "",
     name: "",
@@ -37,6 +50,7 @@ const DoctorScreen = ({ navigation, route }) => {
     about: "",
     price: 0,
     availableTime: {},
+    location: {},
   });
   const [weekdays, setWeekdays] = useState([]);
 
@@ -102,6 +116,24 @@ const DoctorScreen = ({ navigation, route }) => {
     );
   };
 
+  const getUriOfLocation = () => {
+    const location = doctor?.location;
+    const lat = location?.coordinates[1];
+    const long = location?.coordinates[0];
+    const scheme = Platform.select({
+      ios: "maps://0,0?q=",
+      android: "geo:0,0?q=",
+    });
+    const latlong = `${lat},${long}`;
+    const label = "Doctor Location";
+
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latlong}`,
+      android: `${scheme}${latlong}(${label})`,
+    });
+    return url;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Doctor" backButtonHandler={() => navigation.goBack()} />
@@ -116,11 +148,31 @@ const DoctorScreen = ({ navigation, route }) => {
               placeholder={{ blurhash }}
               transition={500}
             />
+
+            <Spacer />
             <View style={styles.doctorInfo}>
-              <Text style={styles.infoText}>{doctor?.englishFullName}</Text>
-              <Text style={styles.infoText}>{doctor?.availableTime.price} LE</Text>
-              <Text style={styles.specialization}>{doctor?.specialization}</Text>
-              <Text style={styles.address}>{doctor?.clinicAddress}</Text>
+              <View style={styles.mainInfo}>
+                <View style={styles.leftInfo}>
+                  <Text style={styles.infoText}>{doctor?.englishFullName}</Text>
+                  <Text style={styles.specialization}>
+                    {doctor?.specialization}
+                  </Text>
+                </View>
+                <View style={styles.rightInfo}>
+                  <TouchableOpacity
+                    onPress={() => Linking.openURL(getUriOfLocation())}>
+                    <Entypo name="location" size={24} color={colors.BlueI} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.oneRow}>
+                <Text style={{ ...styles.infoText, flex: 1 }}>
+                  {doctor?.clinicAddress}
+                </Text>
+                <Text style={{ ...styles.infoText, flex: 1 / 3 }}>
+                  {doctor?.availableTime.price} LE
+                </Text>
+              </View>
             </View>
           </View>
           <Spacer />
@@ -141,14 +193,12 @@ const DoctorScreen = ({ navigation, route }) => {
             <Text style={styles.title}>Doctor's Schedule</Text>
 
             <ListOfDays />
-            <View style={styles.bookButton}>
-              <Button
-                buttonText="Book Appointment"
-                onPress={() =>
-                  navigation.navigate("DoctorAppointments", { doctorId })
-                }
-              />
-            </View>
+            <Button
+              buttonText="Book Appointment"
+              onPress={() =>
+                navigation.navigate("DoctorAppointments", { doctorId })
+              }
+            />
             <Spacer />
           </View>
         </View>
@@ -161,34 +211,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.White,
+    paddingHorizontal: responsiveWidth(20),
   },
   scrollViewContainer: {
     flex: 1,
-    paddingHorizontal: responsiveWidth(20),
+    marginTop: responsiveHeight(10),
   },
   doctorInfo: {
     marginLeft: responsiveWidth(10),
-  },
-  header: {
-    marginHorizontal: responsiveWidth(12),
-    marginVertical: responsiveHeight(10),
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  headerTitle: {
-    fontFamily: "Cairo-SemiBold",
-    fontSize: responsiveFontSize(24),
-    color: colors.BlueI,
-  },
-  iconButton: {
-    position: "absolute",
-    left: responsiveWidth(0),
+    flex: 1,
+    marginHorizontal: responsiveWidth(10),
   },
   infoText: {
     fontSize: responsiveFontSize(18),
     fontFamily: "Cairo-Regular",
     color: colors.BlueI,
-    marginBottom: responsiveHeight(10),
+    lineHeight: 34,
   },
   specialization: {
     fontSize: responsiveFontSize(16),
@@ -198,37 +236,19 @@ const styles = StyleSheet.create({
   },
   info: {
     flexDirection: "row",
-    marginTop: 20,
   },
   image: {
-    height: 96,
-    width: 72,
+    height: responsiveHeight(96),
+    width: responsiveHeight(72),
     borderRadius: 5,
     borderColor: colors.GreyII,
     borderWidth: 1,
-  },
-  date: {
-    padding: 13,
-    paddingVertical: 20,
-    borderRadius: 30,
-    marginRight: 10,
-    borderColor: colors.GreyI,
-    borderWidth: 1,
-  },
-  selectedDate: {
-    borderColor: colors.BlueI,
-    borderWidth: 2,
   },
   title: {
     fontFamily: "Cairo-SemiBold",
     fontSize: responsiveFontSize(18),
     color: colors.BlueI,
     marginBottom: 5,
-  },
-  address: {
-    fontSize: responsiveFontSize(14),
-    fontFamily: "Cairo-Regular",
-    color: colors.DarkGrey,
   },
   schedule: {
     flex: 1,
@@ -243,6 +263,24 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(16),
     color: colors.DarkGrey,
     marginLeft: 10,
+  },
+  oneRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  mainInfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  leftInfo: {
+    flex: 1,
+  },
+  rightInfo: {
+    flex: 1 / 3,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
