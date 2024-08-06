@@ -14,6 +14,8 @@ import Header from "../../components/Header";
 import InputField from "../../components/InputField";
 import SafeScrollView from "../../components/SafeScrollView";
 import Button from "../../components/SubmitButton";
+import { Image } from "expo-image";
+import * as ImagePicker from "expo-image-picker";
 
 const COLORS = {
   primary: "#242760",
@@ -63,13 +65,30 @@ const FONTS = {
 };
 
 const EditProfile = ({ navigation }) => {
-  const { state, updateUserDataServer, clearMessage } = useContext(UserContext);
+  const { state, updateUserDataServer, postImage, clearMessage } =
+    useContext(UserContext);
+
   const { userData, errorMessage, successMessage } = state;
 
   const [name, setName] = useState(userData?.patientName);
   const [address, setAddress] = useState(userData?.address);
   const [phoneNumber, setPhoneNumber] = useState(userData?.phoneNumber);
+  const [selectedImage, setSelectedImage] = useState(userData?.avatar);
   const [loading, setLoading] = useState(false);
+
+  const handleImageSelection = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      postImage(result.assets[0].uri, setLoading);
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
 
   return (
     <SafeScrollView
@@ -79,7 +98,7 @@ const EditProfile = ({ navigation }) => {
           backButtonHandler={() => navigation.goBack()}
         />
       }>
-      <LoadingModal loading={loading} />
+      {loading && <LoadingModal loading={true} />}
 
       {errorMessage || successMessage ? (
         <MessagesModal
@@ -95,6 +114,32 @@ const EditProfile = ({ navigation }) => {
         enabled
         keyboardVerticalOffset={100}>
         <View>
+          <View
+            style={{
+              alignItems: "center",
+              marginVertical: 22,
+            }}>
+            <Image
+              source={{ uri: selectedImage }}
+              style={{
+                height: 170,
+                width: 170,
+                borderRadius: 85,
+                borderWidth: 2,
+                borderColor: COLORS.primary,
+              }}
+            />
+            <TouchableOpacity onPress={handleImageSelection}>
+              <Text
+                style={{
+                  ...FONTS.body2,
+                  color: COLORS.primary,
+                  marginTop: 6,
+                }}>
+                Edit Image
+              </Text>
+            </TouchableOpacity>
+          </View>
           <InputField
             label="Name"
             value={name}

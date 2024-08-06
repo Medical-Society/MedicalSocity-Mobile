@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import { Context as AuthContext } from "../../context/AuthContext";
 import chatsApi from "../../services/chats";
 import { GiftedChat } from "react-native-gifted-chat";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ChatScreen = ({ navigation, route }) => {
   const { chatId } = route.params;
@@ -15,7 +16,6 @@ const ChatScreen = ({ navigation, route }) => {
 
   const getChatById = useCallback(async () => {
     try {
-      console.log("GETTING CHAT BY ID");
       const response = await chatsApi.get(`/${chatId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -40,9 +40,16 @@ const ChatScreen = ({ navigation, route }) => {
     }
   }, [chatId, token]);
 
-  useEffect(() => {
-    getChatById();
-  }, [getChatById]);
+  useFocusEffect(
+    useCallback(() => {
+      console.log("Chat screen focused");
+      getChatById();
+
+      return () => {
+        getChatById();
+      };
+    }, [getChatById])
+  );
 
   useEffect(() => {
     if (socket) {
@@ -53,8 +60,8 @@ const ChatScreen = ({ navigation, route }) => {
           createdAt: new Date(createdAt),
           user: {
             _id: userId,
-            name: patient.patientName,
-            avatar: patient.avatar,
+            name: doctor?.englishFullName || "MSS Doctor",
+            avatar: doctor.avatar || "",
           },
         };
         setMessages((previousMessages) =>
@@ -68,7 +75,7 @@ const ChatScreen = ({ navigation, route }) => {
         socket.off("listen message", messageListener);
       };
     }
-  }, [patient.avatar, patient.patientName, socket]);
+  }, [socket]);
 
   const onSend = (newMessages) => {
     if (socket && newMessages.length > 0) {
@@ -90,7 +97,8 @@ const ChatScreen = ({ navigation, route }) => {
           }
           backButtonHandler={() => navigation.goBack()}
         />
-      }>
+      }
+      marginBottom={0}>
       <GiftedChat
         messages={messages}
         onSend={onSend}

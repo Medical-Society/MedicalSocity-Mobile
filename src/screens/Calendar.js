@@ -4,6 +4,7 @@ import SafeFlatListView from "../components/SafeFlatListView";
 import Header from "../components/Header";
 import patientApi from "../services/patient";
 import { Context as AuthContext } from "../context/AuthContext";
+import { responsiveFontSize } from "../../AppStyles";
 
 function convertTimestamp(timestamp) {
   const dt = new Date(timestamp);
@@ -71,9 +72,9 @@ const Calendar = ({ navigation }) => {
       header={<Header title="Calendar" navigation={navigation} />}
       marginBottom={60}>
       <View style={styles.scheduleItem}>
-        <Text style={styles.title}>Time</Text>
-        <Text style={styles.title}>Appointments</Text>
+        <Text style={styles.title}>Name</Text>
         <Text style={styles.title}>Day</Text>
+        <Text style={styles.title}>Time</Text>
       </View>
 
       {!isLoading && appointments.length === 0 && (
@@ -87,9 +88,9 @@ const Calendar = ({ navigation }) => {
           data={appointments}
           renderItem={({ item }) => (
             <View style={styles.scheduleItem}>
-              <Text style={styles.text}>{item.time}</Text>
-              <Text style={styles.text}>{item.doctor}</Text>
+              <Text style={[styles.text]}>{item.doctor}</Text>
               <Text style={styles.text}>{item.day}</Text>
+              <Text style={styles.text}>{item.time}</Text>
             </View>
           )}
           keyExtractor={(item, index) => index.toString()}
@@ -137,18 +138,19 @@ const styles = StyleSheet.create({
   scheduleItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 16,
+    marginVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#e0e0e0",
+    alignItems: "center",
   },
   title: {
-    fontSize: 18,
+    fontSize: responsiveFontSize(16),
     flex: 1,
     fontFamily: "Cairo-Bold",
     textAlign: "center",
   },
   text: {
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     flex: 1,
     fontFamily: "Cairo-Regular",
     textAlign: "center",

@@ -23,6 +23,7 @@ import {
 import GenderInput from "../components/GenderInput";
 import SafeScrollView from "../components/SafeScrollView";
 import Header from "../components/Header";
+import { useFocusEffect } from "@react-navigation/native";
 
 const SignUp = ({ navigation }) => {
   const { signup, clearMessage, state } = useContext(AuthContext);
@@ -43,13 +44,20 @@ const SignUp = ({ navigation }) => {
   );
   const [signUpData, setSignUpData] = useState(initialSignUpData);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener("focus", () => {
+  //     clearMessage();
+  //     setSignUpData(initialSignUpData);
+  //   });
+  //   return unsubscribe;
+  // }, [navigation, initialSignUpData]);
+
+  useFocusEffect(
+    useCallback(() => {
       clearMessage();
       setSignUpData(initialSignUpData);
-    });
-    return unsubscribe;
-  }, [navigation, initialSignUpData]);
+    }, [])
+  );
 
   const handleInputChange = useCallback((fieldName, text) => {
     setSignUpData((prevState) => ({ ...prevState, [fieldName]: text }));
@@ -209,9 +217,7 @@ const SignUp = ({ navigation }) => {
             </ScrollView>
           </KeyboardAvoidingView>
         </>
-      }>
-        
-      </SafeScrollView>
+      }></SafeScrollView>
   );
 };
 

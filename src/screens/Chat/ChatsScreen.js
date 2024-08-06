@@ -13,6 +13,7 @@ import chatsApi from "../../services/chats";
 import { Context as AuthContext } from "../../context/AuthContext";
 import { Image } from "expo-image";
 import uuid from "react-native-uuid";
+import { useFocusEffect } from "@react-navigation/native";
 
 const messagesDataBuilder = (chats) => {
   return chats.map((chat) => {
@@ -68,18 +69,12 @@ const ChatsScreen = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    getChats();
-  }, []);
-
-  useEffect(() => {
-    setChats([]);
-    const unsubscribe = navigation.addListener("focus", () => {
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("Chats screen focused");
       getChats();
-    });
-
-    return unsubscribe;
-  }, [navigation]);
+    }, [])
+  );
 
   useEffect(() => {
     if (socket) {

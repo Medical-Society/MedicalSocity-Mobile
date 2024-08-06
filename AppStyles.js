@@ -16,17 +16,18 @@ export const dimensions = {
   fontScale: Dimensions.get("window").fontScale,
 };
 
-// get the dimensions of the screen
-export const UI_dimensions = {
-  heightMobileUI: 932,
-  widthMobileUI: 430,
-};
-
 // get the responsive font size
 export const responsiveFontSize = (size) => {
   return Math.floor(
     PixelRatio.roundToNearestPixel(size / dimensions.fontScale)
   );
+};
+
+// get the dimensions of the screen
+
+export const UI_dimensions = {
+  heightMobileUI: 932,
+  widthMobileUI: 430,
 };
 
 // get factor Scale for width and height

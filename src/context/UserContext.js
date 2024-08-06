@@ -1,6 +1,7 @@
 import createDataContext from "./createDataContext";
 import patientApi from "../services/patient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createFormData } from "../../AppStyles";
 
 const userReducer = (state, action) => {
   switch (action.type) {
@@ -23,31 +24,21 @@ const userReducer = (state, action) => {
   }
 };
 
-const createFormData = (uri) => {
-  const fileName = uri?.split("/")?.pop();
-  const fileType = fileName?.split(".")?.pop();
-  const formData = new FormData();
-  formData.append("image", {
-    name: fileName,
-    uri,
-    type: `image/${fileType}`,
-  });
-  return formData;
-};
-
 const postImage = (dispatch) => {
-  return async (uri, navigation, setLoading) => {
+  return async (uri, setLoading) => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem("token");
-      const data = createFormData(uri);
+      const data = await createFormData(uri);
       const response = await patientApi.post("/avatar", data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
+
       const avatar = response.data.data.avatar;
+      console.log("Recieved Data", response.data.data);
       dispatch({ type: "POST_IMAGE", payload: avatar });
       const userData = await AsyncStorage.getItem("userData");
       const parsedUserData = JSON.parse(userData);

@@ -11,6 +11,7 @@ import AppointmentsScreen from "../../screens/Menu/AppointmentsScreen";
 import ScannedPrescriptionModal from "../prescription/ScannedPrescriptionModal";
 import ChatScreen from "../../screens/Chat/ChatScreen";
 import IotStackProvider from "../IOT/IotStack";
+import EditProfile from "../../screens/Menu/YouAccountScreen";
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
@@ -44,6 +45,11 @@ const MainStack = () => {
       <Stack.Screen
         name="ViewPrescription"
         component={ViewPrescription}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
         options={{ headerShown: false }}
       />
       <Stack.Screen

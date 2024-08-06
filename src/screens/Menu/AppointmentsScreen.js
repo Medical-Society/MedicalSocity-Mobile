@@ -98,7 +98,6 @@ const AppointmentsScreen = ({ navigation }) => {
             onPress={() => handlePressedButton(statusButtons[item])}
             style={[
               styles.status,
-              // selectedState === item && styles.selectedStatus,
               selectedState === statusButtons[item] && styles.selectedStatus,
             ]}>
             <Text

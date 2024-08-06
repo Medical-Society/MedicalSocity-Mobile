@@ -25,7 +25,6 @@ const InputField = React.memo(
     const toggleShowPassword = () => {
       setShowPassword((prev) => !prev);
     };
-
     return (
       <View
         style={
@@ -47,9 +46,12 @@ const InputField = React.memo(
             value={value}
             onChangeText={onChangeText}
             secureTextEntry={!showPassword}
-            // label={label}
             placeholder={placeholder}
+            placeholderTextColor="#A9A9A9"
             editable={editable}
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColor="transparent"
           />
           {secureTextEntry && (
             <MaterialCommunityIcons

@@ -18,11 +18,7 @@ const MenuStack = ({ navigation }) => {
       }}
       initialRouteName="Menu">
       <Stack.Screen name="Menu" component={Menu} />
-      <Stack.Screen
-        name="EditProfile"
-        component={EditProfile}
-        options={{ headerShown: false }}
-      />
+
       <Stack.Screen name="TermsAndPolicies" component={TermsPoliciesScreen} />
       <Stack.Screen name="ReportProblem" component={ReportProblemScreen} />
       <Stack.Screen name="ContactUs" component={ContactUs} />

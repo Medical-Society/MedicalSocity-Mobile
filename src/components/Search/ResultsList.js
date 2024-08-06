@@ -1,12 +1,14 @@
 import React from "react";
-import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import ResultsDetail from "./ResultsDetail";
 
 const ResultsList = ({ results, navigation }) => {
-  if (!results.length) {
-    return null;
-  }
-
   return (
     <FlatList
       vertical

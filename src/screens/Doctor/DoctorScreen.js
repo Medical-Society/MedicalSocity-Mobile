@@ -9,8 +9,7 @@ import {
   Platform,
 } from "react-native";
 import Button from "../../components/SubmitButton";
-import * as Device from "expo-device";
-import * as Location from "expo-location";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import Skeleton from "../../components/Skeleton";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -52,7 +51,7 @@ const DoctorScreen = ({ navigation, route }) => {
     availableTime: {},
     location: {},
   });
-  const [weekdays, setWeekdays] = useState([]);
+  const [weekdays, setWeekdays] = useState({});
 
   useEffect(() => {
     const fetchDoctor = async () => {
@@ -95,6 +94,7 @@ const DoctorScreen = ({ navigation, route }) => {
         data={weekDaysArray}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => {
           return (
             <View>
@@ -191,10 +191,12 @@ const DoctorScreen = ({ navigation, route }) => {
 
           <View style={styles.schedule}>
             <Text style={styles.title}>Doctor's Schedule</Text>
-
             <ListOfDays />
             <Button
-              buttonText="Book Appointment"
+              buttonText={
+                Object.keys(weekdays).length === 0 ? "No Schedule" : "Book Now"
+              }
+              disabled={Object.keys(weekdays).length === 0}
               onPress={() =>
                 navigation.navigate("DoctorAppointments", { doctorId })
               }
@@ -211,7 +213,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.White,
-    paddingHorizontal: responsiveWidth(20),
+    paddingHorizontal: responsiveWidth(10),
   },
   scrollViewContainer: {
     flex: 1,
